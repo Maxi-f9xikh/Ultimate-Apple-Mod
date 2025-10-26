@@ -1,0 +1,19 @@
+{
+  "type": "forge:add_items",
+  "conditions": [
+    {
+      "condition": "random_chance",
+      "chance": 1.0
+    },
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/nether_bridge"
+    }
+  ],
+  "items": [
+    {
+      "item": "ultimate_apple_mod:blaze_apple",
+      "weight": 1
+    }
+  ]
+}

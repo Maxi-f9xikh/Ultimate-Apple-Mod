@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "ultimate_apple_mod:item/iron_apple"
+  }
+}
