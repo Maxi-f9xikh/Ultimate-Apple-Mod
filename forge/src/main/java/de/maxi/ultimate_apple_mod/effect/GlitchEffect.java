@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.phys.Vec3;
@@ -53,8 +54,9 @@ public class GlitchEffect extends MobEffect {
         if (entity.isInWall() && entity.position().distanceTo(entry) > MAX_DEPTH) {
             entity.noPhysics = false;
             entity.teleportTo(entry.x, entry.y, entry.z);
-            entity.removeEffect(this);
-            data.remove(ENTRY_KEY);
+            // Use addEffect with duration 1 to schedule safe expiry next tick,
+            // avoiding ConcurrentModificationException on the activeEffects iterator.
+            entity.addEffect(new MobEffectInstance(this, 1, amplifier, false, false));
         }
     }
 
