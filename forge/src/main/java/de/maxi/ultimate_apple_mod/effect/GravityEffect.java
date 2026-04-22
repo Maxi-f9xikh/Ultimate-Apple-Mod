@@ -35,7 +35,7 @@ public class GravityEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.level().isClientSide()) return;
-        entity.setNoGravity(true);
+        // 0.08 = vanilla gravity constant, 0.4 = vanilla terminal velocity (mirrored upward)
         var movement = entity.getDeltaMovement();
         entity.setDeltaMovement(movement.x, Math.min(movement.y + 0.08, 0.4), movement.z);
     }
