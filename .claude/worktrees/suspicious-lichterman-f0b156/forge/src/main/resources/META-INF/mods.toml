@@ -1,0 +1,39 @@
+modLoader="javafml"
+loaderVersion = "[47,)"
+#issueTrackerURL = ""
+license = "Internet Systems Consortium (ISC) License"
+
+[[mods]]
+modId = "ultimate_apple_mod"
+version = "1.20.1_1.0.0"
+displayName = "Ultimate Apple Mod"
+authors = "Maxi"
+description = """
+This mod adds new types of special apples, from ore apples to lucky blocks or apples with effects.
+Using a special table, you can craft an enchantment template apple with an item to apply a specific enchantment to the apple.
+You can combine the apple with a potion, meaning eating it will grant the effect, and much more.
+"""
+
+logoFile="logo.png"
+
+
+[[dependencies.ultimate_apple_mod]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ultimate_apple_mod]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ultimate_apple_mod]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "DAD",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "A": {
+      "item": "minecraft:apple"
+    }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:lapislazuli_apple"
+  }
+}

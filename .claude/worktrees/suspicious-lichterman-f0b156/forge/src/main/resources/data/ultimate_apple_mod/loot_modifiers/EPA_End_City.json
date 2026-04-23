@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_items",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/end_city_treasure"
+    }
+  ],
+  "items": [
+    {
+      "item": "ultimate_apple_mod:ender_pearl_apple",
+      "weight": 5
+    }
+  ]
+}

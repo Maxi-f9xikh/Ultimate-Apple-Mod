@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep *)",
+      "Bash(./gradlew :forge:build)",
+      "Read(//c/Program Files/Java//**)",
+      "Read(//c/Program Files/Eclipse Adoptium//**)",
+      "Read(//c/Users/Maxi/.gradle/jdks//**)",
+      "Read(//c/Users/Maxi/.jdks//**)",
+      "Bash(java -version)",
+      "Bash(jar xf *)",
+      "Bash(echo \"exit: $?\")",
+      "Read(//tmp/**)",
+      "Bash(javap -p \"net/minecraft/world/effect/MobEffectInstance.class\")",
+      "Bash(javap -c -p \"net/minecraft/world/effect/MobEffectInstance.class\")",
+      "Bash(javap -c -p \"net/minecraft/world/entity/LivingEntity.class\")",
+      "Bash(where python *)",
+      "Bash(where python3 *)",
+      "Bash(where py *)",
+      "Bash(C:Python314python.exe -c ' *)",
+      "Bash(/c/Python314/python.exe -c ' *)"
+    ]
+  }
+}
