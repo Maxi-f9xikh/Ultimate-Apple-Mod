@@ -42,10 +42,17 @@ public class CurseOfRotten extends MobEffect {
     @Override
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
+        entity.refreshDimensions();
         if (!entity.level().isClientSide() && entity.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(ParticleTypes.WITCH,
                 entity.getX(), entity.getY() + 1.0, entity.getZ(),
                 6, 0.3, 0.5, 0.3, 0.1);
         }
+    }
+
+    @Override
+    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
+        super.removeAttributeModifiers(entity, attributeMap, amplifier);
+        entity.refreshDimensions();
     }
 }
