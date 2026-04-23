@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "ultimate_apple_mod:iron_apple"
+  },
+  "result": "minecraft:iron_ingot",
+  "experience": 0.1,
+  "cookingtime": 100
+}

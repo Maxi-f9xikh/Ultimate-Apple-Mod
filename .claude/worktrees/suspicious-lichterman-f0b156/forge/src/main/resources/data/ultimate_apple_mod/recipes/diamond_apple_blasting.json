@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "ultimate_apple_mod:diamond_apple"
+  },
+  "result": "minecraft:diamond",
+  "experience": 0.1,
+  "cookingtime": 100
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EAE",
+    "APA",
+    "EAE"
+  ],
+  "key": {
+    "E": { "item": "minecraft:echo_shard" },
+    "A": { "item": "minecraft:amethyst_shard" },
+    "P": { "item": "minecraft:apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:echo_apple"
+  }
+}

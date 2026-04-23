@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smoking",
+  "ingredient": {
+    "item": "ultimate_apple_mod:roasted_apple"
+  },
+  "result": "ultimate_apple_mod:burnt_apple",
+  "experience": 0.1,
+  "cookingtime": 100
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "ultimate_apple_mod:baked_apple"
+  },
+  "result": "ultimate_apple_mod:burnt_apple",
+  "experience": 0.1,
+  "cookingtime": 600
+}
