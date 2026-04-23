@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GAG",
+    "GNG"
+  ],
+  "key": {
+    "G": { "item": "minecraft:golden_apple" },
+    "A": { "item": "minecraft:apple" },
+    "N": { "item": "minecraft:nether_star" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:nether_star_apple"
+  }
+}
