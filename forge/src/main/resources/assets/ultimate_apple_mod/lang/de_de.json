@@ -35,5 +35,15 @@
   "message.ultimate_apple_mod.nothing_can_grow": "Hier kann nichts wachsen.",
   "message.ultimate_apple_mod.echo_set": "Rückkehrpunkt gesetzt!",
   "message.ultimate_apple_mod.echo_return": "Echo!",
-  "message.ultimate_apple_mod.echo_wrong_dim": "Dimensionswechsel nicht möglich."
+  "message.ultimate_apple_mod.echo_wrong_dim": "Dimensionswechsel nicht möglich.",
+  "item.ultimate_apple_mod.wither_apple": "Witherapfel",
+  "item.ultimate_apple_mod.golden_carrot_apple": "Goldener Möhrenapfel",
+  "item.ultimate_apple_mod.honey_apple": "Honigapfel",
+  "item.ultimate_apple_mod.dragon_apple": "Drachenapfel",
+  "item.ultimate_apple_mod.nether_star_apple": "Netherstern-Apfel",
+  "item.ultimate_apple_mod.dirt_apple": "Dreckiger Apfel",
+  "tooltip.ultimate_apple_mod.honey_apple.line1": "§6Heilt sofort alle aktiven Effekte.",
+  "tooltip.ultimate_apple_mod.honey_apple.line2": "§7Macht dich danach kurz langsamer.",
+  "tooltip.ultimate_apple_mod.nether_star_apple.line1": "§62 Sekunden absolute Unverwundbarkeit.",
+  "tooltip.ultimate_apple_mod.nether_star_apple.line2": "§7Mit Vorsicht zu genießen."
 }
