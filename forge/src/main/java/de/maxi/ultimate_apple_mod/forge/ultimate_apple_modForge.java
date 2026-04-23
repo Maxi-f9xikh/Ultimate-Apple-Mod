@@ -9,6 +9,7 @@ import de.maxi.ultimate_apple_mod.item.BlazingAppleStewItem;
 import de.maxi.ultimate_apple_mod.item.EchoAppleItem;
 import de.maxi.ultimate_apple_mod.item.EnderPearlAppleItem;
 import de.maxi.ultimate_apple_mod.item.OrchardCallerItem;
+import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
