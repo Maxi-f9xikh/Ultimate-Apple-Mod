@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SBS",
+    "BAB",
+    "SBS"
+  ],
+  "key": {
+    "S": { "item": "minecraft:oak_sapling" },
+    "B": { "item": "minecraft:bone_meal" },
+    "A": { "item": "minecraft:apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:orchard_caller"
+  }
+}
