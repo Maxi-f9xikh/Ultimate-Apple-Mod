@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -7,12 +8,20 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import java.util.List;
 
 public class AppleBombItem extends Item {
 
     public AppleBombItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level,
+            List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.apple_bomb.line1"));
     }
 
     @Override
