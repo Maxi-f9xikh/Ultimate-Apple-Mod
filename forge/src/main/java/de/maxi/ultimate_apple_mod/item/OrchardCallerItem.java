@@ -64,6 +64,7 @@ public class OrchardCallerItem extends Item {
 
                 var groundState = serverLevel.getBlockState(groundPos);
                 if (!groundState.is(BlockTags.DIRT)) {
+                    // non-dirt solid ground is converted to grass so the sapling can grow — intentional design
                     serverLevel.setBlock(groundPos, Blocks.GRASS_BLOCK.defaultBlockState(), 3);
                 }
 
@@ -71,14 +72,12 @@ public class OrchardCallerItem extends Item {
                 var saplingState = serverLevel.getBlockState(saplingPos);
                 if (saplingState.getBlock() instanceof SaplingBlock saplingBlock) {
                     saplingBlock.performBonemeal(serverLevel, serverLevel.getRandom(), saplingPos, saplingState);
+                    serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                        saplingPos.getX() + 0.5, saplingPos.getY() + 0.5, saplingPos.getZ() + 0.5,
+                        5, 0.5, 0.5, 0.5, 0.1);
+                    treesPlanted++;
+                    break;
                 }
-
-                serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
-                    saplingPos.getX() + 0.5, saplingPos.getY() + 0.5, saplingPos.getZ() + 0.5,
-                    5, 0.5, 0.5, 0.5, 0.1);
-
-                treesPlanted++;
-                break;
             }
         }
 
