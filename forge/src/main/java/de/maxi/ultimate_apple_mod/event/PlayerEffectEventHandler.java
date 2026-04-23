@@ -16,7 +16,7 @@ public class PlayerEffectEventHandler {
         if (!(event.getEntity() instanceof Player player)) return;
         try {
             if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
-                event.setNewSize(EntityDimensions.scalable(0.3f, 0.9f));
+                event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f));
             }
         } catch (NullPointerException ignored) {
             // EntityEvent.Size fires during entity construction before LivingEntity.activeEffects is initialized
