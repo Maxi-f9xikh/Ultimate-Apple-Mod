@@ -13,9 +13,13 @@ public class PlayerEffectEventHandler {
 
     @SubscribeEvent
     public static void onEntitySize(EntityEvent.Size event) {
-        if (event.getEntity() instanceof Player player
-                && player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
-            event.setNewSize(EntityDimensions.scalable(0.3f, 0.9f));
+        if (!(event.getEntity() instanceof Player player)) return;
+        try {
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
+                event.setNewSize(EntityDimensions.scalable(0.3f, 0.9f));
+            }
+        } catch (NullPointerException ignored) {
+            // EntityEvent.Size fires during entity construction before LivingEntity.activeEffects is initialized
         }
     }
 }
