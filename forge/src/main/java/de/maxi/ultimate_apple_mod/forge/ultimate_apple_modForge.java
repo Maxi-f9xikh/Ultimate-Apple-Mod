@@ -222,7 +222,18 @@ public final class ultimate_apple_modForge {
                 .nutrition(4).saturationMod(0.3f).alwaysEat()
                 .effect(() -> new MobEffectInstance(GLITCH_EFFECT.get(), 100, 0), 1.0f)
                 .build())
-            .stacksTo(16)));
+            .stacksTo(16)) {
+            @Override
+            public void appendHoverText(ItemStack stack,
+                    @javax.annotation.Nullable net.minecraft.world.level.Level level,
+                    java.util.List<net.minecraft.network.chat.Component> components,
+                    net.minecraft.world.item.TooltipFlag flag) {
+                components.add(net.minecraft.network.chat.Component.translatable(
+                    "tooltip.ultimate_apple_mod.glitch_apple.line1"));
+                components.add(net.minecraft.network.chat.Component.translatable(
+                    "tooltip.ultimate_apple_mod.glitch_apple.line2"));
+            }
+        });
 
     public static final RegistryObject<Item> APPLE_BOMB =
         ITEMS.register("apple_bomb", () ->

@@ -10,7 +10,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import java.util.List;
 
 public class EchoAppleItem extends Item {
 
@@ -18,6 +20,13 @@ public class EchoAppleItem extends Item {
 
     public EchoAppleItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level,
+            List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line1"));
+        tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line2"));
     }
 
     @Override
