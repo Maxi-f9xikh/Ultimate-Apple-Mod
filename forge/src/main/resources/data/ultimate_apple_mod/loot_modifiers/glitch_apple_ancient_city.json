@@ -1,0 +1,19 @@
+{
+  "type": "forge:add_items",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/ancient_city"
+    },
+    {
+      "condition": "random_chance",
+      "chance": 0.25
+    }
+  ],
+  "items": [
+    {
+      "item": "ultimate_apple_mod:glitch_apple",
+      "weight": 1
+    }
+  ]
+}

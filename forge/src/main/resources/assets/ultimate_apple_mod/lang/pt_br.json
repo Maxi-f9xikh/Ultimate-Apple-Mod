@@ -9,5 +9,22 @@
   "item.ultimate_apple_mod.emerald_apple": "Maçã de Esmeralda",
   "item.ultimate_apple_mod.netherite_apple": "Maçã de Netherita",
   "item.ultimate_apple_mod.lapislazuli_apple": "Maçã de Lápis-Lazúli",
-  "item.ultimate_apple_mod.redstone_apple": "Maçã de Redstone"
+  "item.ultimate_apple_mod.redstone_apple": "Maçã de Redstone",
+  "item.ultimate_apple_mod.copper_apple": "Copper Apple",
+  "item.ultimate_apple_mod.gravity_apple": "Gravity Apple",
+  "item.ultimate_apple_mod.orchard_caller": "Orchard Caller",
+  "item.ultimate_apple_mod.echo_apple": "Echo Apple",
+  "item.ultimate_apple_mod.glitch_apple": "Glitch Apple",
+  "item.ultimate_apple_mod.apple_bomb": "Apple Bomb",
+  "effect.ultimate_apple_mod.gravity_inversion": "Gravity Inversion",
+  "effect.ultimate_apple_mod.glitch": "Glitch",
+  "tooltip.ultimate_apple_mod.echo_apple.line1": "§6First use sets a return point.",
+  "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Second use teleports you back.",
+  "tooltip.ultimate_apple_mod.glitch_apple.line1": "§6Phase through walls for 5 seconds.",
+  "tooltip.ultimate_apple_mod.glitch_apple.line2": "§7Max wall thickness: 2 blocks.",
+  "tooltip.ultimate_apple_mod.apple_bomb.line1": "§6Throw to grant nearby entities power.",
+  "message.ultimate_apple_mod.nothing_can_grow": "Nothing can grow here.",
+  "message.ultimate_apple_mod.echo_set": "Return point set!",
+  "message.ultimate_apple_mod.echo_return": "Echo!",
+  "message.ultimate_apple_mod.echo_wrong_dim": "Cannot teleport across dimensions."
 }
