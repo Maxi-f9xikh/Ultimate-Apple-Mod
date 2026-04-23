@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_items",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/stronghold_library"
+    }
+  ],
+  "items": [
+    {
+      "item": "ultimate_apple_mod:ender_pearl_apple",
+      "weight": 3
+    }
+  ]
+}
