@@ -34,7 +34,7 @@ public class ClientPlayerRenderHandler {
     @SubscribeEvent
     public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
         if (event.getEntity().hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
-            event.getPoseStack().scale(0.5f, 0.5f, 0.5f);
+            event.getPoseStack().scale(0.35f, 0.35f, 0.35f);
         }
     }
 }
