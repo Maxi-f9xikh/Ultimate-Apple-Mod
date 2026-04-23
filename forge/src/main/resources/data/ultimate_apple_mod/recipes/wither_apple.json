@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WAW",
+    "WWW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:wither_rose" },
+    "A": { "item": "minecraft:apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:wither_apple"
+  }
+}

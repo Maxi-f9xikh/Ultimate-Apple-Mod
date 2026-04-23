@@ -35,5 +35,15 @@
   "message.ultimate_apple_mod.nothing_can_grow": "Nothing can grow here.",
   "message.ultimate_apple_mod.echo_set": "Return point set!",
   "message.ultimate_apple_mod.echo_return": "Echo!",
-  "message.ultimate_apple_mod.echo_wrong_dim": "Cannot teleport across dimensions."
+  "message.ultimate_apple_mod.echo_wrong_dim": "Cannot teleport across dimensions.",
+  "item.ultimate_apple_mod.wither_apple": "Wither Apple",
+  "item.ultimate_apple_mod.golden_carrot_apple": "Golden Carrot Apple",
+  "item.ultimate_apple_mod.honey_apple": "Honey Apple",
+  "item.ultimate_apple_mod.dragon_apple": "Dragon Apple",
+  "item.ultimate_apple_mod.nether_star_apple": "Nether Star Apple",
+  "item.ultimate_apple_mod.dirt_apple": "Dirt Apple",
+  "tooltip.ultimate_apple_mod.honey_apple.line1": "§6Instantly cures all active effects.",
+  "tooltip.ultimate_apple_mod.honey_apple.line2": "§7Leaves you briefly slowed.",
+  "tooltip.ultimate_apple_mod.nether_star_apple.line1": "§62 seconds of true invincibility.",
+  "tooltip.ultimate_apple_mod.nether_star_apple.line2": "§7Handle with care."
 }
