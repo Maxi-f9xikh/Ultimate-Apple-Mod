@@ -126,6 +126,7 @@ public final class ultimate_apple_modForge {
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationMod(0.1f).alwaysEat()
                 .effect(() -> new MobEffectInstance(CURSE_OF_ROTTEN.get(), 400, 0, false, true), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 50 * 5, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
@@ -182,7 +183,7 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> COPPER_APPLE = ITEMS.register("copper_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(5).saturationMod(0.6f)
+                .nutrition(5).saturationMod(0.6f).alwaysEat()
                 .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 20, 1), 1.0f)
                 .effect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 20 * 30, 0), 1.0f)
                 .build())
