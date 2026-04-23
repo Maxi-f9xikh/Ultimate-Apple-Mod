@@ -71,7 +71,10 @@ public class OrchardCallerItem extends Item {
                 serverLevel.setBlock(saplingPos, Blocks.OAK_SAPLING.defaultBlockState(), 3);
                 var saplingState = serverLevel.getBlockState(saplingPos);
                 if (saplingState.getBlock() instanceof SaplingBlock saplingBlock) {
-                    saplingBlock.performBonemeal(serverLevel, serverLevel.getRandom(), saplingPos, saplingState);
+                    for (int attempt = 0; attempt < 10; attempt++) {
+                        saplingBlock.performBonemeal(serverLevel, serverLevel.getRandom(), saplingPos, saplingState);
+                        if (!(serverLevel.getBlockState(saplingPos).getBlock() instanceof SaplingBlock)) break;
+                    }
                     serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
                         saplingPos.getX() + 0.5, saplingPos.getY() + 0.5, saplingPos.getZ() + 0.5,
                         5, 0.5, 0.5, 0.5, 0.1);

@@ -15,7 +15,7 @@ public class ModClient {
 
     @SubscribeEvent
     public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> 0x9B00FF, ultimate_apple_modForge.GRAVITY_APPLE.get());
+        event.register((stack, tintIndex) -> 0xE0E8FF, ultimate_apple_modForge.GRAVITY_APPLE.get());
         event.register((stack, tintIndex) -> 0x44CC44, ultimate_apple_modForge.ORCHARD_CALLER.get());
         event.register((stack, tintIndex) -> 0x00CCDD, ultimate_apple_modForge.ECHO_APPLE.get());
         event.register((stack, tintIndex) -> 0x00FF41, ultimate_apple_modForge.GLITCH_APPLE.get());

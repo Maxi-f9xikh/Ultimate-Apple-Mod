@@ -198,7 +198,7 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationMod(0.6f).alwaysEat()
-                .effect(() -> new MobEffectInstance(GRAVITY_EFFECT.get(), 200, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.JUMP, 200, 2), 1.0f)
                 .build())
             .stacksTo(64)));
 
