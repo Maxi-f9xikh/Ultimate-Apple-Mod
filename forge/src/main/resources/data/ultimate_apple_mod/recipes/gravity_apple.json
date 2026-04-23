@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "PAP",
+    "PPP"
+  ],
+  "key": {
+    "P": { "item": "minecraft:phantom_membrane" },
+    "A": { "item": "minecraft:apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:gravity_apple"
+  }
+}

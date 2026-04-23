@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GBG",
+    "GAG"
+  ],
+  "key": {
+    "G": { "item": "minecraft:gunpowder" },
+    "B": { "item": "minecraft:blaze_powder" },
+    "A": { "item": "ultimate_apple_mod:diamond_apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:apple_bomb",
+    "count": 2
+  }
+}
