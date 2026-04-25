@@ -50,7 +50,7 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<MobEffect> CURSE_OF_ROTTEN =
         EFFECTS.register("curse_of_rotten", CurseOfRotten::new);
 
-    public static final RegistryObject<MobEffect> GRAVITY_EFFECT =
+    public static final RegistryObject<MobEffect> Moon_EFFECT =
         EFFECTS.register("gravity_inversion", GravityEffect::new);
 
     public static final RegistryObject<MobEffect> GLITCH_EFFECT =
@@ -195,7 +195,7 @@ public final class ultimate_apple_modForge {
 
     // ── New Items ────────────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> GRAVITY_APPLE = ITEMS.register("gravity_apple", () ->
+    public static final RegistryObject<Item> MOON_APPLE = ITEMS.register("moon_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationMod(0.6f).alwaysEat()
@@ -335,7 +335,7 @@ public final class ultimate_apple_modForge {
                 output.accept(BLAZE_APPLE.get());
                 output.accept(BLAZING_APPLE_STEW.get());
                 output.accept(ENDER_PEARL_APPLE.get());
-                output.accept(GRAVITY_APPLE.get());
+                output.accept(MOON_APPLE.get());
                 output.accept(ORCHARD_CALLER.get());
                 output.accept(ECHO_APPLE.get());
                 output.accept(GLITCH_APPLE.get());
