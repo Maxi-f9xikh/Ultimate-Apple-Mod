@@ -3,11 +3,14 @@ package de.maxi.ultimate_apple_mod.event;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -26,44 +29,69 @@ public class PlayerEffectEventHandler {
                 event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f));
             }
         } catch (NullPointerException ignored) {
-            // EntityEvent.Size fires during entity construction before LivingEntity.activeEffects is initialized
+            // EntityEvent.Size fires during entity construction before activeEffects is initialized
         }
     }
 
     /**
-     * When a player with Lifesteal kills a hostile mob:
-     *  - Heal 1 heart
-     *  - Play a deep soul-drain sound
-     *  - Burst crimson spore + heart particles around the player
+     * Lifesteal: heal 1 heart whenever a hostile mob dies near a player with the effect.
+     *
+     * Triggered by:
+     *  - Direct player kill (sword, bow, etc.)
+     *  - Wither/DoT kill — the mob may have gotten Wither II from the Wither Apple,
+     *    so DamageSource.getEntity() is null in that case. We scan nearby players instead.
      */
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         // Server-side only
         if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) return;
-        // Killer must be a player
-        if (!(event.getSource().getEntity() instanceof ServerPlayer killer)) return;
-        // Only when Lifesteal is active
-        if (!killer.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) return;
-        // Only on hostile mobs (not animals, not players)
+        // Only hostile mobs count (not animals, not players)
         if (!(event.getEntity() instanceof Enemy)) return;
 
-        // Heal 1 heart
-        killer.heal(2.0f);
+        LivingEntity dying = event.getEntity();
 
-        // Deep, low-pitched XP sound — "soul absorbed"
+        // 1. Prefer the direct killer if they carry Lifesteal
+        ServerPlayer recipient = null;
+        Entity attacker = event.getSource().getEntity();
+        if (attacker instanceof ServerPlayer sp
+                && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
+            recipient = sp;
+        }
+
+        // 2. Fallback: any nearby player with Lifesteal (covers Wither / DoT deaths)
+        if (recipient == null) {
+            for (ServerPlayer sp : serverLevel.players()) {
+                if (sp.distanceTo(dying) <= 16.0f
+                        && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
+                    recipient = sp;
+                    break;
+                }
+            }
+        }
+
+        if (recipient == null) return;
+
+        // Heal 1 heart
+        recipient.heal(2.0f);
+
+        // Action bar feedback
+        recipient.displayClientMessage(
+            Component.translatable("message.ultimate_apple_mod.lifesteal_heal"), true);
+
+        // Deep soul-drain sound
         serverLevel.playSound(null,
-            killer.getX(), killer.getY(), killer.getZ(),
+            recipient.getX(), recipient.getY(), recipient.getZ(),
             SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS,
             0.8f, 0.4f);
 
-        // Red crimson spore cloud around the player
+        // Red crimson spore cloud
         serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE,
-            killer.getX(), killer.getY() + 1.0, killer.getZ(),
+            recipient.getX(), recipient.getY() + 1.0, recipient.getZ(),
             14, 0.5, 0.9, 0.5, 0.04);
 
-        // A few hearts floating up
+        // Hearts floating up
         serverLevel.sendParticles(ParticleTypes.HEART,
-            killer.getX(), killer.getY() + 2.1, killer.getZ(),
+            recipient.getX(), recipient.getY() + 2.1, recipient.getZ(),
             4, 0.4, 0.15, 0.4, 0.0);
     }
 }
