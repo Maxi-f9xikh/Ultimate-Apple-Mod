@@ -1,12 +1,8 @@
 package de.maxi.ultimate_apple_mod.item;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -17,33 +13,18 @@ import java.util.List;
 
 public class DragonAppleItem extends Item {
 
-    private static final String CHARGES_KEY = "dragonBreathCharges";
+    public static final String CHARGES_KEY = "dragonBreathCharges";
 
     public DragonAppleItem(Properties properties) {
         super(properties);
     }
 
     /**
-     * Right-click: if charges > 0 shoot a Dragon Fireball immediately.
-     * Right-click with 0 charges: eat the apple to load 1 charge.
+     * Right-clicking always eats the apple (loading 1 charge).
+     * Firing is handled by the keybinding (default R) via FireDragonBreathPacket.
      */
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        int charges = player.getPersistentData().getInt(CHARGES_KEY);
-        if (charges > 0) {
-            if (!level.isClientSide()) {
-                spawnDragonFireball(level, player);
-                int remaining = charges - 1;
-                player.getPersistentData().putInt(CHARGES_KEY, remaining);
-                player.displayClientMessage(
-                    Component.translatable("message.ultimate_apple_mod.dragon_breath_remaining", remaining), true);
-            }
-            return InteractionResultHolder.success(player.getItemInHand(hand));
-        }
-        return super.use(level, player, hand);
-    }
 
-    /** Each apple eaten adds 1 charge. */
+    /** Each apple eaten loads 1 charge. */
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack result = super.finishUsingItem(stack, level, entity);
@@ -54,17 +35,6 @@ public class DragonAppleItem extends Item {
                 Component.translatable("message.ultimate_apple_mod.dragon_breath_remaining", charges), true);
         }
         return result;
-    }
-
-    private static void spawnDragonFireball(Level level, Player player) {
-        Vec3 look = player.getLookAngle();
-        DragonFireball fireball = new DragonFireball(level, player, look.x, look.y, look.z);
-        fireball.setPos(
-            player.getX() + look.x * 1.5,
-            player.getEyeY() - 0.1,
-            player.getZ() + look.z * 1.5
-        );
-        level.addFreshEntity(fireball);
     }
 
     @Override
