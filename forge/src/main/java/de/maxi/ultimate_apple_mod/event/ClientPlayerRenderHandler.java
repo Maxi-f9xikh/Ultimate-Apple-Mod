@@ -23,7 +23,6 @@ public class ClientPlayerRenderHandler {
             wasRottenActive = false;
             return;
         }
-        player.noPhysics = player.hasEffect(ultimate_apple_modForge.GLITCH_EFFECT.get());
         boolean isRottenActive = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get());
         if (isRottenActive != wasRottenActive) {
             player.refreshDimensions();
