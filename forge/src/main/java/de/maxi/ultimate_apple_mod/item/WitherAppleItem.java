@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,6 +36,8 @@ public class WitherAppleItem extends Item {
                 player.displayClientMessage(
                     Component.translatable("message.ultimate_apple_mod.wither_curse_applied"), true);
             }
+            // Always grant 1 minute of lifesteal
+            player.addEffect(new MobEffectInstance(ultimate_apple_modForge.LIFESTEAL_EFFECT.get(), 20 * 60, 0));
         }
         return result;
     }
