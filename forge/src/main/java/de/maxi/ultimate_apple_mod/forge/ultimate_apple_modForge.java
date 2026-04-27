@@ -4,6 +4,7 @@ import de.maxi.ultimate_apple_mod.effect.CurseOfRotten;
 import de.maxi.ultimate_apple_mod.effect.GlitchEffect;
 import de.maxi.ultimate_apple_mod.effect.GravityEffect;
 import de.maxi.ultimate_apple_mod.effect.LifestealEffect;
+import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
 import de.maxi.ultimate_apple_mod.item.BlazingAppleStewItem;
@@ -357,6 +358,7 @@ public final class ultimate_apple_modForge {
         ENTITY_TYPES.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModRecipes.register(modEventBus);
+        NetworkHandler.register();
         ultimate_apple_mod.init();
     }
 }
