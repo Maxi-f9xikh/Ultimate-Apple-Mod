@@ -2,6 +2,8 @@ package de.maxi.ultimate_apple_mod.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -11,7 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class OrchardCallerItem extends Item {
 
@@ -44,40 +46,59 @@ public class OrchardCallerItem extends Item {
             return stack;
         }
 
+        // Get the oak tree configured feature — places a full grown tree directly
+        var featureOpt = serverLevel.registryAccess()
+            .registry(Registries.CONFIGURED_FEATURE)
+            .flatMap(reg -> reg.getHolder(TreeFeatures.OAK));
+
+        if (featureOpt.isEmpty()) {
+            return super.finishUsingItem(stack, level, livingEntity);
+        }
+        var treeFeature = featureOpt.get().value();
+
         int treesPlanted = 0;
         int attempts = 0;
-        while (treesPlanted < 4 && attempts < 30) {
+        while (treesPlanted < 4 && attempts < 60) {
             attempts++;
-            int dx = serverLevel.getRandom().nextIntBetweenInclusive(-5, 5);
-            int dz = serverLevel.getRandom().nextIntBetweenInclusive(-5, 5);
+            int dx = serverLevel.getRandom().nextIntBetweenInclusive(-6, 6);
+            int dz = serverLevel.getRandom().nextIntBetweenInclusive(-6, 6);
             if (dx == 0 && dz == 0) continue;
 
             BlockPos base = playerPos.offset(dx, 0, dz);
             for (int dy = 2; dy >= -3; dy--) {
                 BlockPos groundPos = base.offset(0, dy - 1, 0);
-                BlockPos saplingPos = base.offset(0, dy, 0);
+                BlockPos treePos  = base.offset(0, dy, 0);
 
                 if (!serverLevel.getBlockState(groundPos).isSolid()) continue;
-                if (!serverLevel.isEmptyBlock(saplingPos)) continue;
-                if (!serverLevel.isEmptyBlock(saplingPos.above())) continue;
-                if (!serverLevel.isEmptyBlock(saplingPos.above(2))) continue;
 
-                var groundState = serverLevel.getBlockState(groundPos);
-                if (!groundState.is(BlockTags.DIRT)) {
-                    // non-dirt solid ground is converted to grass so the sapling can grow — intentional design
+                // Oak trees need at least 7 blocks of free vertical space
+                boolean enoughSpace = true;
+                for (int h = 0; h < 7; h++) {
+                    if (!serverLevel.isEmptyBlock(treePos.above(h))) {
+                        enoughSpace = false;
+                        break;
+                    }
+                }
+                if (!enoughSpace) continue;
+
+                // TreeFeature requires dirt or grass directly below the trunk
+                BlockState ground = serverLevel.getBlockState(groundPos);
+                if (!ground.is(BlockTags.DIRT)) {
                     serverLevel.setBlock(groundPos, Blocks.GRASS_BLOCK.defaultBlockState(), 3);
                 }
 
-                serverLevel.setBlock(saplingPos, Blocks.OAK_SAPLING.defaultBlockState(), 3);
-                var saplingState = serverLevel.getBlockState(saplingPos);
-                if (saplingState.getBlock() instanceof SaplingBlock saplingBlock) {
-                    for (int attempt = 0; attempt < 10; attempt++) {
-                        saplingBlock.performBonemeal(serverLevel, serverLevel.getRandom(), saplingPos, saplingState);
-                        if (!(serverLevel.getBlockState(saplingPos).getBlock() instanceof SaplingBlock)) break;
-                    }
+                // Place the tree directly via ConfiguredFeature — no sapling, guaranteed growth
+                boolean grew = treeFeature.place(
+                    serverLevel,
+                    serverLevel.getChunkSource().getGenerator(),
+                    serverLevel.getRandom(),
+                    treePos
+                );
+
+                if (grew) {
                     serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
-                        saplingPos.getX() + 0.5, saplingPos.getY() + 0.5, saplingPos.getZ() + 0.5,
-                        5, 0.5, 0.5, 0.5, 0.1);
+                        treePos.getX() + 0.5, treePos.getY() + 1.5, treePos.getZ() + 0.5,
+                        20, 1.5, 1.5, 1.5, 0.1);
                     treesPlanted++;
                     break;
                 }
