@@ -3,6 +3,7 @@ package de.maxi.ultimate_apple_mod.forge;
 import de.maxi.ultimate_apple_mod.effect.CurseOfRotten;
 import de.maxi.ultimate_apple_mod.effect.GlitchEffect;
 import de.maxi.ultimate_apple_mod.effect.GravityEffect;
+import de.maxi.ultimate_apple_mod.effect.LifestealEffect;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
 import de.maxi.ultimate_apple_mod.item.BlazingAppleStewItem;
@@ -58,6 +59,9 @@ public final class ultimate_apple_modForge {
 
     public static final RegistryObject<MobEffect> GLITCH_EFFECT =
         EFFECTS.register("glitch", GlitchEffect::new);
+
+    public static final RegistryObject<MobEffect> LIFESTEAL_EFFECT =
+        EFFECTS.register("lifesteal", LifestealEffect::new);
 
     // ── Entity Types ─────────────────────────────────────────────────────────
 
