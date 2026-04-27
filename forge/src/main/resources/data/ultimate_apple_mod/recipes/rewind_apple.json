@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CAC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "item": "minecraft:clock" },
+    "A": { "item": "minecraft:apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:rewind_apple"
+  }
+}

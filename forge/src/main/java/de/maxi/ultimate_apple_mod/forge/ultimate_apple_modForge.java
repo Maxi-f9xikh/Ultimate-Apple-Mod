@@ -8,8 +8,11 @@ import de.maxi.ultimate_apple_mod.item.AppleBombItem;
 import de.maxi.ultimate_apple_mod.item.BlazingAppleStewItem;
 import de.maxi.ultimate_apple_mod.item.EchoAppleItem;
 import de.maxi.ultimate_apple_mod.item.EnderPearlAppleItem;
+import de.maxi.ultimate_apple_mod.item.DragonAppleItem;
 import de.maxi.ultimate_apple_mod.item.HoneyAppleItem;
 import de.maxi.ultimate_apple_mod.item.OrchardCallerItem;
+import de.maxi.ultimate_apple_mod.item.RewindAppleItem;
+import de.maxi.ultimate_apple_mod.item.WitherAppleItem;
 import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.registries.Registries;
@@ -219,24 +222,13 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> GLITCH_APPLE = ITEMS.register("glitch_apple", () ->
-        new Item(new Item.Properties()
-            .food(new FoodProperties.Builder()
-                .nutrition(4).saturationMod(0.3f).alwaysEat()
-                .effect(() -> new MobEffectInstance(GLITCH_EFFECT.get(), 100, 0), 1.0f)
-                .build())
-            .stacksTo(16)) {
-            @Override
-            public void appendHoverText(ItemStack stack,
-                    @javax.annotation.Nullable net.minecraft.world.level.Level level,
-                    java.util.List<net.minecraft.network.chat.Component> components,
-                    net.minecraft.world.item.TooltipFlag flag) {
-                components.add(net.minecraft.network.chat.Component.translatable(
-                    "tooltip.ultimate_apple_mod.glitch_apple.line1"));
-                components.add(net.minecraft.network.chat.Component.translatable(
-                    "tooltip.ultimate_apple_mod.glitch_apple.line2"));
-            }
-        });
+    public static final RegistryObject<Item> REWIND_APPLE =
+        ITEMS.register("rewind_apple", () ->
+            new RewindAppleItem(new Item.Properties()
+                .food(new FoodProperties.Builder()
+                    .nutrition(4).saturationMod(0.3f).alwaysEat()
+                    .build())
+                .stacksTo(16)));
 
     public static final RegistryObject<Item> APPLE_BOMB =
         ITEMS.register("apple_bomb", () ->
@@ -244,15 +236,16 @@ public final class ultimate_apple_modForge {
 
     // ── Second-Wave Items ────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> WITHER_APPLE = ITEMS.register("wither_apple", () ->
-        new Item(new Item.Properties()
-            .food(new FoodProperties.Builder()
-                .nutrition(6).saturationMod(0.6f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 30, 2), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 10, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 1), 1.0f)
-                .build())
-            .stacksTo(64)));
+    public static final RegistryObject<Item> WITHER_APPLE =
+        ITEMS.register("wither_apple", () ->
+            new WitherAppleItem(new Item.Properties()
+                .food(new FoodProperties.Builder()
+                    .nutrition(6).saturationMod(0.6f).alwaysEat()
+                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 30, 2), 1.0f)
+                    .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 10, 1), 1.0f)
+                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 1), 1.0f)
+                    .build())
+                .stacksTo(64)));
 
     public static final RegistryObject<Item> GOLDEN_CARROT_APPLE = ITEMS.register("golden_carrot_apple", () ->
         new Item(new Item.Properties()
@@ -272,15 +265,16 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> DRAGON_APPLE = ITEMS.register("dragon_apple", () ->
-        new Item(new Item.Properties()
-            .food(new FoodProperties.Builder()
-                .nutrition(8).saturationMod(0.8f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 10, 3), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 2), 1.0f)
-                .build())
-            .stacksTo(16)));
+    public static final RegistryObject<Item> DRAGON_APPLE =
+        ITEMS.register("dragon_apple", () ->
+            new DragonAppleItem(new Item.Properties()
+                .food(new FoodProperties.Builder()
+                    .nutrition(8).saturationMod(0.8f).alwaysEat()
+                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 10, 3), 1.0f)
+                    .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 1), 1.0f)
+                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 2), 1.0f)
+                    .build())
+                .stacksTo(16)));
 
     public static final RegistryObject<Item> NETHER_STAR_APPLE = ITEMS.register("nether_star_apple", () ->
         new Item(new Item.Properties()
@@ -338,7 +332,7 @@ public final class ultimate_apple_modForge {
                 output.accept(MOON_APPLE.get());
                 output.accept(ORCHARD_CALLER.get());
                 output.accept(ECHO_APPLE.get());
-                output.accept(GLITCH_APPLE.get());
+                output.accept(REWIND_APPLE.get());
                 output.accept(APPLE_BOMB.get());
                 output.accept(WITHER_APPLE.get());
                 output.accept(GOLDEN_CARROT_APPLE.get());
