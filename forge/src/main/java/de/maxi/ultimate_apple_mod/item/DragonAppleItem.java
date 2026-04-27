@@ -24,13 +24,13 @@ public class DragonAppleItem extends Item {
     }
 
     /**
-     * Sneak + right-click: shoot a Dragon Fireball (if charges > 0).
-     * Regular right-click: eat the apple.
+     * Right-click: if charges > 0 shoot a Dragon Fireball immediately.
+     * Right-click with 0 charges: eat the apple to load 1 charge.
      */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         int charges = player.getPersistentData().getInt(CHARGES_KEY);
-        if (charges > 0 && player.isCrouching()) {
+        if (charges > 0) {
             if (!level.isClientSide()) {
                 spawnDragonFireball(level, player);
                 int remaining = charges - 1;
