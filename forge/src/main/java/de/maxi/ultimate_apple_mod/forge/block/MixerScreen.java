@@ -86,12 +86,6 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
         // ── Panel background ─────────────────────────────────────────────
         g.fill(x, y, x + imageWidth, y + imageHeight, BG);
 
-        // Outer bevel
-        g.fill(x,                   y,                   x + imageWidth, y + 1,           BORDER_DARK);
-        g.fill(x,                   y,                   x + 1,          y + imageHeight, BORDER_DARK);
-        g.fill(x + imageWidth - 1,  y,                   x + imageWidth, y + imageHeight, BORDER_LIGHT);
-        g.fill(x,                   y + imageHeight - 1, x + imageWidth, y + imageHeight, BORDER_LIGHT);
-
         // ── Mixer area slots ──────────────────────────────────────────────
         drawSlot(g, x + CUP_X,  y + CUP_Y);
         drawSlot(g, x + ING1_X, y + ING1_Y);

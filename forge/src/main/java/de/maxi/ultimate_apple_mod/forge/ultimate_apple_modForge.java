@@ -304,7 +304,7 @@ public final class ultimate_apple_modForge {
                     .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 1), 1.0f)
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 2), 1.0f)
                     .build())
-                .stacksTo(16)));
+                .stacksTo(64)));
 
     public static final RegistryObject<Item> NETHER_STAR_APPLE = ITEMS.register("nether_star_apple", () ->
         new Item(new Item.Properties()
@@ -334,6 +334,16 @@ public final class ultimate_apple_modForge {
                 .nutrition(1).saturationMod(0.0f).alwaysEat()
                 .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 2), 1.0f)
                 .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 20 * 10, 0), 1.0f)
+                .build())
+            .stacksTo(64)));
+
+    // ── Banana ───────────────────────────────────────────────────────────────
+
+    public static final RegistryObject<Item> BANANA = ITEMS.register("banana", () ->
+        new Item(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(4)
+                .saturationMod(0.5f)
                 .build())
             .stacksTo(64)));
 
@@ -378,6 +388,7 @@ public final class ultimate_apple_modForge {
                 output.accept(DRAGON_APPLE.get());
                 output.accept(NETHER_STAR_APPLE.get());
                 output.accept(DIRT_APPLE.get());
+                output.accept(BANANA.get());
                 output.accept(CUP_ITEM.get());
                 output.accept(SHAKE_ITEM.get());
                 output.accept(ModBlocks.MIXER_ITEM.get());

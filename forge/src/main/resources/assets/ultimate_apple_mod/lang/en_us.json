@@ -59,6 +59,7 @@
   "message.ultimate_apple_mod.dragon_breath_remaining": "§c%s Dragon Breath charge(s) remaining.",
   "message.ultimate_apple_mod.wither_curse_applied": "§5Wither curse applied to nearby mobs!",
   "message.ultimate_apple_mod.dragon_charges_added": "§6+%s Dragon Breath Charge(s) from Shake!",
+  "item.ultimate_apple_mod.banana": "Banana",
   "item.ultimate_apple_mod.cup": "Cup",
   "item.ultimate_apple_mod.shake": "Shake",
   "block.ultimate_apple_mod.mixer": "Mixer",

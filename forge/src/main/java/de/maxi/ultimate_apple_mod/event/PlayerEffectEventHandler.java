@@ -13,14 +13,31 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.WeakHashMap;
+
 @Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerEffectEventHandler {
 
+    /**
+     * Tracks whether Curse of Rotten was active last tick for each server-side player.
+     * Used to trigger refreshDimensions() exactly when the state changes, mirroring
+     * what ClientPlayerRenderHandler does for the client player.
+     */
+    private static final WeakHashMap<Player, Boolean> serverRottenState = new WeakHashMap<>();
+
+    // ── Hitbox resize ─────────────────────────────────────────────────────────
+
+    /**
+     * Returns shrunken dimensions (0.25 × 0.6) whenever a player has Curse of Rotten.
+     * Fires whenever getDimensions(Pose) is called, so it covers both standing-height
+     * checks (for pose selection) and actual bounding-box updates.
+     */
     @SubscribeEvent
     public static void onEntitySize(EntityEvent.Size event) {
         if (!(event.getEntity() instanceof Player player)) return;
@@ -30,6 +47,33 @@ public class PlayerEffectEventHandler {
             }
         } catch (NullPointerException ignored) {
             // EntityEvent.Size fires during entity construction before activeEffects is initialized
+        }
+    }
+
+    /**
+     * Server-side mirror of ClientPlayerRenderHandler.onClientTick.
+     * Calls refreshDimensions() on the server player entity whenever Curse of Rotten
+     * is applied or removed, so the server bounding box actually shrinks to 0.25×0.6
+     * and the player can walk (not crawl) through 1-block gaps.
+     */
+    @SubscribeEvent
+    public static void onServerPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) return;
+        Player player = event.player;
+        // Server side only
+        if (!(player.level() instanceof ServerLevel)) return;
+
+        boolean hasEffect;
+        try {
+            hasEffect = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get());
+        } catch (NullPointerException ignored) {
+            return;
+        }
+
+        Boolean prev = serverRottenState.get(player);
+        if (prev == null || prev != hasEffect) {
+            serverRottenState.put(player, hasEffect);
+            player.refreshDimensions();
         }
     }
 

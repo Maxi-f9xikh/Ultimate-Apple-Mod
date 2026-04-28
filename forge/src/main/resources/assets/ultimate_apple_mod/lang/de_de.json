@@ -58,6 +58,7 @@
   "message.ultimate_apple_mod.dragon_breath_remaining": "§c%s Drachenatem-Ladung(en) verbleibend.",
   "message.ultimate_apple_mod.wither_curse_applied": "§5Witherverwünschung auf nahegelegene Mobs angewendet!",
   "message.ultimate_apple_mod.dragon_charges_added": "§6+%s Drachenatem-Ladung(en) durch Shake!",
+  "item.ultimate_apple_mod.banana": "Banane",
   "item.ultimate_apple_mod.cup": "Becher",
   "item.ultimate_apple_mod.shake": "Shake",
   "block.ultimate_apple_mod.mixer": "Mixer",
