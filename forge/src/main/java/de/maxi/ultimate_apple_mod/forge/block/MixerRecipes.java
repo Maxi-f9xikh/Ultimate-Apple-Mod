@@ -27,7 +27,20 @@ public final class MixerRecipes {
         List<EffectData> effects,
         int dragonCharges,
         boolean lifesteal,
-        boolean witherCurse
+        boolean witherCurse,
+        /**
+         * When true this ingredient removes all active effects from the player when
+         * the shake is drunk, just like eating a Honey Apple.
+         * When ANY ingredient in the pair has this set, NO effects at all are added —
+         * the resulting shake only cleanses.
+         */
+        boolean clearsEffects,
+        /**
+         * Multiplier applied to every effect duration in the combined shake.
+         * The Longevity Apple sets this to 2.0; all others keep the default 1.0.
+         * The build step takes the MAX of the two ingredient multipliers.
+         */
+        double durationMultiplier
     ) {}
 
     // ── Registry ───────────────────────────────────────────────────────────
@@ -175,10 +188,9 @@ public final class MixerRecipes {
             new EffectData(saturation,  20 *  30, 1)   // Saturation II, 30s
         ), 0, false, false);
 
-        register("honey_apple", List.of(
-            new EffectData(regen,     20 * 10, 1),     // Regen II, 10s
-            new EffectData(slowness,  20 *  5, 0)      // Slowness, 5s
-        ), 0, false, false);
+        // honey_apple cleanses all effects — its own effects are intentionally excluded
+        // so the resulting shake clears the player's effects when drunk.
+        registerCleansing("honey_apple");
 
         register("dragon_apple", List.of(
             new EffectData(absorption, 20 * 10, 3),    // Absorption IV, 10s
@@ -197,6 +209,14 @@ public final class MixerRecipes {
             new EffectData(hunger, 20 * 30, 2),        // Hunger III, 30s
             new EffectData(nausea, 20 * 10, 0)         // Nausea, 10s
         ), 0, false, false);
+
+        // Longevity Apple: doubles the duration of ALL effects in the combined shake.
+        // Its own base effects (Absorption IV + Health Boost I + Regen I) also appear.
+        register("longevity_apple", List.of(
+            new EffectData(absorption,   20 * 120, 3), // Absorption IV, 2 min
+            new EffectData(healthBoost,  20 *  60, 0), // Health Boost I, 1 min
+            new EffectData(regen,        20 *  15, 0)  // Regen I, 15s
+        ), 0, false, false, 2.0);                      // ← 2× duration multiplier
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
@@ -219,13 +239,32 @@ public final class MixerRecipes {
     /** Register an item from this mod (ultimate_apple_mod:<name>). */
     private static void register(String itemName, List<EffectData> effects,
                                   int dragonCharges, boolean lifesteal, boolean witherCurse) {
-        REGISTRY.put(mod(itemName), new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse));
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0));
+    }
+
+    /**
+     * Register a mod item with a custom duration multiplier.
+     * The Longevity Apple uses 2.0 — all other items call the 5-arg overload above (1.0).
+     */
+    private static void register(String itemName, List<EffectData> effects,
+                                  int dragonCharges, boolean lifesteal, boolean witherCurse,
+                                  double durationMultiplier) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, durationMultiplier));
+    }
+
+    /** Register a mod item whose shake cleanses all effects (e.g. honey_apple). */
+    private static void registerCleansing(String itemName) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(List.of(), 0, false, false, true, 1.0));
     }
 
     /** Register a vanilla Minecraft item (minecraft:<name>). */
     private static void registerVanilla(String itemName, List<EffectData> effects,
                                          int dragonCharges, boolean lifesteal, boolean witherCurse) {
-        REGISTRY.put(mc(itemName), new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse));
+        REGISTRY.put(mc(itemName),
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0));
     }
 
     private static ResourceLocation mc(String path)  { return new ResourceLocation("minecraft",         path); }

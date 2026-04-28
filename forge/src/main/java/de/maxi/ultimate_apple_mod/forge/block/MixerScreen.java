@@ -38,7 +38,7 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
     private static final int SLOT_LIGHT   = 0xFFFFFFFF;
     private static final int SEP_LINE     = 0xFF888888;
     private static final int ARROW_BG     = 0xFF8B8B8B;
-    private static final int ARROW_FILL   = 0xFFFF8800;
+    private static final int ARROW_FILL   = 0xFF55C820;  // bright green matching the shake colour
     private static final int ARROW_LINE   = 0xFF373737;
     private static final int TEXT_COLOR   = 0x404040;
 
@@ -86,6 +86,19 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
         // ── Panel background ─────────────────────────────────────────────
         g.fill(x, y, x + imageWidth, y + imageHeight, BG);
 
+        // ── Outer dark frame on all four sides (1 px) ─────────────────────
+        // The vanilla container PNG has a dark outer pixel row on every edge.
+        g.fill(x,                    y,                     x + imageWidth,     y + 1,             BORDER_DARK); // top
+        g.fill(x,                    y + imageHeight - 1,   x + imageWidth,     y + imageHeight,   BORDER_DARK); // bottom
+        g.fill(x,                    y,                     x + 1,              y + imageHeight,   BORDER_DARK); // left
+        g.fill(x + imageWidth - 1,   y,                     x + imageWidth,     y + imageHeight,   BORDER_DARK); // right
+
+        // ── Inner highlight on top + left (1 px inside the dark frame) ────
+        // Matches the vanilla "raised panel" bevel that makes the GUI look
+        // like the crafting table and other standard container GUIs.
+        g.fill(x + 1, y + 1, x + imageWidth - 1, y + 2,            BORDER_LIGHT); // top inner
+        g.fill(x + 1, y + 1, x + 2,              y + imageHeight - 1, BORDER_LIGHT); // left inner
+
         // ── Mixer area slots ──────────────────────────────────────────────
         drawSlot(g, x + CUP_X,  y + CUP_Y);
         drawSlot(g, x + ING1_X, y + ING1_Y);
@@ -104,7 +117,7 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
                x + ARROW_X + ARROW_W + 1, y + ARROW_Y + ARROW_H + 1, ARROW_LINE);
         g.fill(x + ARROW_X, y + ARROW_Y,
                x + ARROW_X + ARROW_W, y + ARROW_Y + ARROW_H, ARROW_BG);
-        // Orange fill
+        // Green fill
         if (filled > 0) {
             g.fill(x + ARROW_X, y + ARROW_Y,
                    x + ARROW_X + filled, y + ARROW_Y + ARROW_H, ARROW_FILL);
@@ -118,10 +131,6 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
             g.fill(ax + i, ay + i,          ax + i + 1, ay + i + 1,          ARROW_LINE); // upper
             g.fill(ax + i, ay + ARROW_H - 1 - i, ax + i + 1, ay + ARROW_H - i, ARROW_LINE); // lower
         }
-
-        // ── Separator: mixer area ↔ player inventory ──────────────────────
-        g.fill(x + 7, y + 81, x + 169, y + 82, BORDER_DARK);
-        g.fill(x + 7, y + 82, x + 169, y + 83, BORDER_LIGHT);
 
         // ── Player inventory slot backgrounds (3 rows × 9) ───────────────
         for (int row = 0; row < 3; row++) {
@@ -137,9 +146,6 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
             drawSlot(g, x + INV_X + col * SLOT_STRIDE, y + HOTBAR_Y);
         }
 
-        // ── Divider between inventory rows and hotbar ────────────────────
-        g.fill(x + 7, y + 139, x + 169, y + 140, BORDER_DARK);
-        g.fill(x + 7, y + 140, x + 169, y + 141, BORDER_LIGHT);
     }
 
     @Override

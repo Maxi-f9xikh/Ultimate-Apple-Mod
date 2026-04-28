@@ -35,14 +35,10 @@ public class CurseOfRotten extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
-        return true;
-    }
-
-    @Override
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
         entity.refreshDimensions();
+        // Witch particles on application
         if (!entity.level().isClientSide() && entity.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(ParticleTypes.WITCH,
                 entity.getX(), entity.getY() + 1.0, entity.getZ(),

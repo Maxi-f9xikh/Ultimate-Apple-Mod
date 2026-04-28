@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GAG",
+    "GGG"
+  ],
+  "key": {
+    "G": { "item": "minecraft:ghast_tear" },
+    "A": { "item": "minecraft:golden_apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:longevity_apple"
+  }
+}

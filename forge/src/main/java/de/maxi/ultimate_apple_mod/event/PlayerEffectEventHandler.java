@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
@@ -38,12 +39,27 @@ public class PlayerEffectEventHandler {
      * Fires whenever getDimensions(Pose) is called, so it covers both standing-height
      * checks (for pose selection) and actual bounding-box updates.
      */
+    /**
+     * Visual scale used for rendering (ClientPlayerRenderHandler) and physics (here).
+     * Keep in sync with the scale(0.35f) call in ClientPlayerRenderHandler.onRenderPlayerPre.
+     */
+    private static final float ROTTEN_SCALE = 0.35f;
+
     @SubscribeEvent
     public static void onEntitySize(EntityEvent.Size event) {
         if (!(event.getEntity() instanceof Player player)) return;
         try {
             if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
+                // Shrink the physics bounding box to 0.25 × 0.6
                 event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f));
+                // Lower the first-person camera to match the visual render scale.
+                // Entity.getEyeHeight() (no-arg, final) returns the cached eyeHeight
+                // field that refreshDimensions() writes from event.getNewEyeHeight(),
+                // so this correctly lowers the camera for the local player.
+                // Use a fixed standing-height-based value (1.62 * scale = 0.567)
+                // so the eye height never depends on the current pose (SWIMMING eye height
+                // is only 0.4, which would put the camera in the floor when scaled).
+                event.setNewEyeHeight(1.62f * ROTTEN_SCALE);
             }
         } catch (NullPointerException ignored) {
             // EntityEvent.Size fires during entity construction before activeEffects is initialized
@@ -75,6 +91,28 @@ public class PlayerEffectEventHandler {
             serverRottenState.put(player, hasEffect);
             player.refreshDimensions();
         }
+    }
+
+    /**
+     * After updatePlayerPose() runs (END phase), force the cursed player back to STANDING
+     * when they are on land so they walk through 1-block gaps normally instead of crawling.
+     * The entity dimensions are already 0.25×0.6, so the physics allow it — the only
+     * issue is that updatePlayerPose() checks static 1.8-tall standing dimensions for
+     * pose selection and forces SWIMMING (crawl) for any gap < 1.8 blocks.
+     */
+    @SubscribeEvent
+    public static void onServerPlayerTickEnd(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        Player player = event.player;
+        if (!(player.level() instanceof ServerLevel)) return;
+
+        try {
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())
+                    && player.getPose() == Pose.SWIMMING
+                    && !player.isInWater()) {
+                player.setPose(Pose.STANDING);
+            }
+        } catch (NullPointerException ignored) {}
     }
 
     /**
