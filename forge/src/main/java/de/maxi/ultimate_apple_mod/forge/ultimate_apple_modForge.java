@@ -159,8 +159,10 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationMod(0.1f).alwaysEat()
+                // CurseOfRotten handles speed boost + hitbox shrink.
+                // Nausea is applied separately so it shows up as its own effect icon.
                 .effect(() -> new MobEffectInstance(CURSE_OF_ROTTEN.get(), 400, 0, false, true), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 50 * 5, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
@@ -337,6 +339,19 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
+    // ── Longevity Apple ───────────────────────────────────────────────────────
+
+    public static final RegistryObject<Item> LONGEVITY_APPLE = ITEMS.register("longevity_apple", () ->
+        new Item(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(6).saturationMod(0.6f).alwaysEat()
+                // When eaten on its own: generous survival buffs
+                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION,    20 * 120, 3), 1.0f) // Absorption IV, 2 min
+                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,  20 *  60, 0), 1.0f) // Health Boost I, 1 min
+                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,  20 *  15, 0), 1.0f) // Regen I, 15 s
+                .build())
+            .stacksTo(64)));
+
     // ── Banana ───────────────────────────────────────────────────────────────
 
     public static final RegistryObject<Item> BANANA = ITEMS.register("banana", () ->
@@ -388,6 +403,7 @@ public final class ultimate_apple_modForge {
                 output.accept(DRAGON_APPLE.get());
                 output.accept(NETHER_STAR_APPLE.get());
                 output.accept(DIRT_APPLE.get());
+                output.accept(LONGEVITY_APPLE.get());
                 output.accept(BANANA.get());
                 output.accept(CUP_ITEM.get());
                 output.accept(SHAKE_ITEM.get());

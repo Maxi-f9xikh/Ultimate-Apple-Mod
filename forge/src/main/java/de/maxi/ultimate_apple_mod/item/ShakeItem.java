@@ -76,6 +76,11 @@ public class ShakeItem extends Item {
     private void applyShakeEffects(@Nullable CompoundTag tag, ServerPlayer player, Level level) {
         if (tag == null) return;
 
+        // Cleanse: remove all active effects first (Honey Apple behaviour)
+        if (tag.getBoolean("clearsEffects")) {
+            player.removeAllEffects();
+        }
+
         // Regular mob effects
         ListTag effectsList = tag.getList("effects", Tag.TAG_COMPOUND);
         for (int i = 0; i < effectsList.size(); i++) {
@@ -167,6 +172,9 @@ public class ShakeItem extends Item {
         }
         if (tag.getBoolean("witherCurse")) {
             components.add(Component.literal("§5Wither Curse on nearby mobs"));
+        }
+        if (tag.getBoolean("clearsEffects")) {
+            components.add(Component.literal("§bClears all active effects"));
         }
     }
 
