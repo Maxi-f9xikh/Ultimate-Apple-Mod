@@ -18,7 +18,10 @@
       "Bash(where python3 *)",
       "Bash(where py *)",
       "Bash(C:Python314python.exe -c ' *)",
-      "Bash(/c/Python314/python.exe -c ' *)"
+      "Bash(/c/Python314/python.exe -c ' *)",
+      "Read(//e/Programieren/Projekte/Ultimate Apple Mod/**)",
+      "Bash(JAVA_HOME=\"C:/Users/Maxi/.jdks/temurin-17.0.15\" ./gradlew :forge:build)",
+      "Bash(JAVA_HOME=\"C:/Users/Maxi/.jdks/temurin-17.0.15\" ./gradlew :forge:compileJava)"
     ]
   }
 }
