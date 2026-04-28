@@ -1,6 +1,5 @@
 package de.maxi.ultimate_apple_mod.forge.network;
 
-import de.maxi.ultimate_apple_mod.item.DragonAppleItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,9 +31,6 @@ public class FireDragonBreathPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
             if (player == null) return;
-
-            // Safety: must actually be holding a Dragon Apple
-            if (!(player.getMainHandItem().getItem() instanceof DragonAppleItem)) return;
 
             int charges = player.getPersistentData().getInt(CHARGES_KEY);
             if (charges <= 0) return;
