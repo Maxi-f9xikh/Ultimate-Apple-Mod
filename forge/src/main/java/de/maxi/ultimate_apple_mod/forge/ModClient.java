@@ -8,6 +8,7 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
 
 import static de.maxi.ultimate_apple_mod.ultimate_apple_mod.MOD_ID;
@@ -20,9 +21,15 @@ public class ModClient {
      * Configurable keybinding — default R.
      * Shows up in Options → Controls → "Ultimate Apple Mod".
      */
+    /**
+     * Default: Left Mouse Button. Fires a dragon fireball if charges > 0.
+     * Suppressed client-side when aiming at an entity with a melee weapon (normal attack takes priority).
+     * Rebindable in Options → Controls → "Ultimate Apple Mod".
+     */
     public static final KeyMapping FIRE_DRAGON_BREATH_KEY = new KeyMapping(
         "key.ultimate_apple_mod.fire_dragon_breath",
-        GLFW.GLFW_KEY_R,
+        InputConstants.Type.MOUSE,
+        GLFW.GLFW_MOUSE_BUTTON_LEFT,   // = 0  (left click)
         "key.categories.ultimate_apple_mod"
     );
 
