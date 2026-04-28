@@ -4,18 +4,22 @@ import de.maxi.ultimate_apple_mod.effect.CurseOfRotten;
 import de.maxi.ultimate_apple_mod.effect.GlitchEffect;
 import de.maxi.ultimate_apple_mod.effect.GravityEffect;
 import de.maxi.ultimate_apple_mod.effect.LifestealEffect;
+import de.maxi.ultimate_apple_mod.forge.block.MixerBlockEntity;
+import de.maxi.ultimate_apple_mod.forge.block.MixerMenu;
+import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
 import de.maxi.ultimate_apple_mod.item.BlazingAppleStewItem;
+import de.maxi.ultimate_apple_mod.item.CupItem;
 import de.maxi.ultimate_apple_mod.item.EchoAppleItem;
 import de.maxi.ultimate_apple_mod.item.EnderPearlAppleItem;
 import de.maxi.ultimate_apple_mod.item.DragonAppleItem;
 import de.maxi.ultimate_apple_mod.item.HoneyAppleItem;
 import de.maxi.ultimate_apple_mod.item.OrchardCallerItem;
 import de.maxi.ultimate_apple_mod.item.RewindAppleItem;
+import de.maxi.ultimate_apple_mod.item.ShakeItem;
 import de.maxi.ultimate_apple_mod.item.WitherAppleItem;
-import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -25,9 +29,12 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -50,6 +57,12 @@ public final class ultimate_apple_modForge {
     public static final DeferredRegister<CreativeModeTab> TABS =
         DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ultimate_apple_mod.MOD_ID);
 
+    public static final DeferredRegister<MenuType<?>> MENUS =
+        DeferredRegister.create(ForgeRegistries.MENU_TYPES, ultimate_apple_mod.MOD_ID);
+
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
+        DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ultimate_apple_mod.MOD_ID);
+
     // ── Effects ──────────────────────────────────────────────────────────────
 
     public static final RegistryObject<MobEffect> CURSE_OF_ROTTEN =
@@ -63,6 +76,18 @@ public final class ultimate_apple_modForge {
 
     public static final RegistryObject<MobEffect> LIFESTEAL_EFFECT =
         EFFECTS.register("lifesteal", LifestealEffect::new);
+
+    // ── Menu Types ────────────────────────────────────────────────────────────
+
+    public static final RegistryObject<MenuType<MixerMenu>> MIXER_MENU_TYPE =
+        MENUS.register("mixer", () -> IForgeMenuType.create(MixerMenu::new));
+
+    // ── Block Entity Types ────────────────────────────────────────────────────
+
+    public static final RegistryObject<BlockEntityType<MixerBlockEntity>> MIXER_BLOCK_ENTITY =
+        BLOCK_ENTITIES.register("mixer", () -> BlockEntityType.Builder
+            .of(MixerBlockEntity::new, ModBlocks.MIXER.get())
+            .build(null));
 
     // ── Entity Types ─────────────────────────────────────────────────────────
 
@@ -233,7 +258,7 @@ public final class ultimate_apple_modForge {
                 .food(new FoodProperties.Builder()
                     .nutrition(4).saturationMod(0.3f).alwaysEat()
                     .build())
-                .stacksTo(16)));
+                .stacksTo(64)));
 
     public static final RegistryObject<Item> APPLE_BOMB =
         ITEMS.register("apple_bomb", () ->
@@ -312,6 +337,14 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
+    // ── Mixer Items ───────────────────────────────────────────────────────────
+
+    public static final RegistryObject<Item> CUP_ITEM =
+        ITEMS.register("cup", CupItem::new);
+
+    public static final RegistryObject<Item> SHAKE_ITEM =
+        ITEMS.register("shake", ShakeItem::new);
+
     // ── Creative Tab ─────────────────────────────────────────────────────────
 
     public static final RegistryObject<CreativeModeTab> ULTIMATE_TAB = TABS.register("ultimate_tab", () ->
@@ -345,6 +378,9 @@ public final class ultimate_apple_modForge {
                 output.accept(DRAGON_APPLE.get());
                 output.accept(NETHER_STAR_APPLE.get());
                 output.accept(DIRT_APPLE.get());
+                output.accept(CUP_ITEM.get());
+                output.accept(SHAKE_ITEM.get());
+                output.accept(ModBlocks.MIXER_ITEM.get());
             })
             .build());
 
@@ -356,6 +392,8 @@ public final class ultimate_apple_modForge {
         TABS.register(modEventBus);
         EFFECTS.register(modEventBus);
         ENTITY_TYPES.register(modEventBus);
+        MENUS.register(modEventBus);
+        BLOCK_ENTITIES.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModRecipes.register(modEventBus);
         NetworkHandler.register();

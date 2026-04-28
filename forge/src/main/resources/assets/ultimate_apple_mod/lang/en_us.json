@@ -57,5 +57,14 @@
   "message.ultimate_apple_mod.rewind": "§bRewound! You've been sent back 5 seconds.",
   "message.ultimate_apple_mod.rewind_no_history": "§7No history yet... try again in a few seconds.",
   "message.ultimate_apple_mod.dragon_breath_remaining": "§c%s Dragon Breath charge(s) remaining.",
-  "message.ultimate_apple_mod.wither_curse_applied": "§5Wither curse applied to nearby mobs!"
+  "message.ultimate_apple_mod.wither_curse_applied": "§5Wither curse applied to nearby mobs!",
+  "message.ultimate_apple_mod.dragon_charges_added": "§6+%s Dragon Breath Charge(s) from Shake!",
+  "item.ultimate_apple_mod.cup": "Cup",
+  "item.ultimate_apple_mod.shake": "Shake",
+  "block.ultimate_apple_mod.mixer": "Mixer",
+  "container.ultimate_apple_mod.mixer": "Mixer",
+  "gui.ultimate_apple_mod.mixer.cup": "Cup",
+  "gui.ultimate_apple_mod.mixer.ingredients": "Ingredients",
+  "tooltip.ultimate_apple_mod.shake.effects": "§6Effects:",
+  "tooltip.ultimate_apple_mod.shake.no_effects": "§7No effects stored."
 }

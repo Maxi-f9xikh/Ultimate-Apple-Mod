@@ -1,13 +1,16 @@
 package de.maxi.ultimate_apple_mod.forge;
 
+import de.maxi.ultimate_apple_mod.forge.block.MixerScreen;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
 
@@ -54,5 +57,12 @@ public class ModClient {
     public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ultimate_apple_modForge.APPLE_BOMB_ENTITY.get(),
             ThrownItemRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() ->
+            MenuScreens.register(ultimate_apple_modForge.MIXER_MENU_TYPE.get(), MixerScreen::new)
+        );
     }
 }

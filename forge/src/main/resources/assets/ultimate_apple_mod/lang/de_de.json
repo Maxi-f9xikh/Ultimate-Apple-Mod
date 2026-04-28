@@ -56,5 +56,14 @@
   "message.ultimate_apple_mod.rewind": "§bZurückgespult! Du wurdest 5 Sekunden zurückversetzt.",
   "message.ultimate_apple_mod.rewind_no_history": "§7Noch keine Aufzeichnung... versuche es in ein paar Sekunden.",
   "message.ultimate_apple_mod.dragon_breath_remaining": "§c%s Drachenatem-Ladung(en) verbleibend.",
-  "message.ultimate_apple_mod.wither_curse_applied": "§5Witherverwünschung auf nahegelegene Mobs angewendet!"
+  "message.ultimate_apple_mod.wither_curse_applied": "§5Witherverwünschung auf nahegelegene Mobs angewendet!",
+  "message.ultimate_apple_mod.dragon_charges_added": "§6+%s Drachenatem-Ladung(en) durch Shake!",
+  "item.ultimate_apple_mod.cup": "Becher",
+  "item.ultimate_apple_mod.shake": "Shake",
+  "block.ultimate_apple_mod.mixer": "Mixer",
+  "container.ultimate_apple_mod.mixer": "Mixer",
+  "gui.ultimate_apple_mod.mixer.cup": "Becher",
+  "gui.ultimate_apple_mod.mixer.ingredients": "Zutaten",
+  "tooltip.ultimate_apple_mod.shake.effects": "§6Effekte:",
+  "tooltip.ultimate_apple_mod.shake.no_effects": "§7Keine Effekte gespeichert."
 }
