@@ -1,6 +1,8 @@
 {
   "variants": {
-    "has_jar=false": { "model": "ultimate_apple_mod:block/mixer_block_unten" },
-    "has_jar=true": { "model": "ultimate_apple_mod:block/mixer_block_mit_glas" }
+    "has_jar=false,has_shake=false": { "model": "ultimate_apple_mod:block/mixer_block_unten" },
+    "has_jar=true,has_shake=false":  { "model": "ultimate_apple_mod:block/mixer_block_mit_glas" },
+    "has_jar=false,has_shake=true":  { "model": "ultimate_apple_mod:block/mixer_block_mit_shake" },
+    "has_jar=true,has_shake=true":   { "model": "ultimate_apple_mod:block/mixer_block_mit_glas" }
   }
 }
