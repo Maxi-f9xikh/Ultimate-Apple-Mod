@@ -154,29 +154,41 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
      */
     private static CompoundTag buildShakeNbt(MixerRecipes.ShakeContribution c1,
                                               MixerRecipes.ShakeContribution c2) {
-        // Deduplicate effects: same ID → take max amplifier, max duration
-        Map<ResourceLocation, MixerRecipes.EffectData> merged = new LinkedHashMap<>();
-        for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
-        for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
+        boolean clearsEffects = c1.clearsEffects() || c2.clearsEffects();
 
-        // Sum / OR the special values
-        int dragonCharges = c1.dragonCharges() + c2.dragonCharges();
-        boolean lifesteal  = c1.lifesteal()   || c2.lifesteal();
-        boolean witherCurse = c1.witherCurse() || c2.witherCurse();
+        // When ANY ingredient cleanses, the whole shake is cleanse-only —
+        // no effects from either ingredient are carried over.
+        Map<ResourceLocation, MixerRecipes.EffectData> merged = new LinkedHashMap<>();
+        if (!clearsEffects) {
+            for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
+            for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
+        }
+
+        // Sum / OR the special values — also zeroed out when cleansing.
+        int dragonCharges = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
+        boolean lifesteal   = !clearsEffects && (c1.lifesteal()   || c2.lifesteal());
+        boolean witherCurse = !clearsEffects && (c1.witherCurse() || c2.witherCurse());
+
+        // Duration multiplier: take the higher of the two ingredients' multipliers
+        // (Longevity Apple contributes 2.0; everything else is 1.0).
+        // On top of this, all shakes get a flat +20 % bonus duration.
+        double multiplier = Math.max(c1.durationMultiplier(), c2.durationMultiplier());
 
         CompoundTag tag = new CompoundTag();
         ListTag effectsList = new ListTag();
         for (MixerRecipes.EffectData e : merged.values()) {
             CompoundTag et = new CompoundTag();
-            et.putString("id",        e.id().toString());
-            et.putInt("duration",  e.duration());
+            et.putString("id",       e.id().toString());
+            // +20 % base bonus, then longevity multiplier on top
+            et.putInt("duration",  (int)(e.duration() * 1.20 * multiplier));
             et.putInt("amplifier", e.amplifier());
             effectsList.add(et);
         }
         tag.put("effects", effectsList);
-        tag.putInt("dragonCharges",   dragonCharges);
-        tag.putBoolean("lifesteal",   lifesteal);
-        tag.putBoolean("witherCurse", witherCurse);
+        tag.putInt("dragonCharges",     dragonCharges);
+        tag.putBoolean("lifesteal",     lifesteal);
+        tag.putBoolean("witherCurse",   witherCurse);
+        tag.putBoolean("clearsEffects", clearsEffects);
         return tag;
     }
 
