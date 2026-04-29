@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "item": "ultimate_apple_mod:shake" },
+    "title": { "translate": "advancements.ultimate_apple_mod.drink_first_shake.title" },
+    "description": { "translate": "advancements.ultimate_apple_mod.drink_first_shake.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "ultimate_apple_mod:mix_first_shake",
+  "criteria": {
+    "drank_shake": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["ultimate_apple_mod:shake"] } }
+    }
+  }
+}
