@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BCB",
+    "CAC",
+    "BCB"
+  ],
+  "key": {
+    "B": { "item": "minecraft:blue_ice" },
+    "C": { "item": "minecraft:clock" },
+    "A": { "item": "minecraft:golden_apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:time_freeze_apple"
+  }
+}
