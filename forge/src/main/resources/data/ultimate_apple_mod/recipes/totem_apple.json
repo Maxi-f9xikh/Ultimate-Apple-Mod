@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "GTG",
+    "GGG"
+  ],
+  "key": {
+    "G": { "item": "minecraft:golden_apple" },
+    "T": { "item": "minecraft:totem_of_undying" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:totem_apple"
+  }
+}
