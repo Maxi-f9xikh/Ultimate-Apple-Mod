@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -11,9 +12,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class OrchardCallerItem extends Item {
 
@@ -106,5 +111,14 @@ public class OrchardCallerItem extends Item {
         }
 
         return super.finishUsingItem(stack, level, livingEntity);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level,
+                                 List<Component> components, TooltipFlag flag) {
+        components.add(Component.literal("§aEating this apple calls an orchard!")
+            .withStyle(ChatFormatting.GREEN));
+        components.add(Component.literal("§7Spawns up to 4 oak trees around you.")
+            .withStyle(ChatFormatting.GRAY));
     }
 }

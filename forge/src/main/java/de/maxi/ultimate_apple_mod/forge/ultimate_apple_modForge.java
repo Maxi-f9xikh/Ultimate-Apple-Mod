@@ -4,8 +4,11 @@ import de.maxi.ultimate_apple_mod.effect.CurseOfRotten;
 import de.maxi.ultimate_apple_mod.effect.GlitchEffect;
 import de.maxi.ultimate_apple_mod.effect.GravityEffect;
 import de.maxi.ultimate_apple_mod.effect.LifestealEffect;
+import de.maxi.ultimate_apple_mod.effect.MoonGravityEffect;
 import de.maxi.ultimate_apple_mod.effect.TimeFreezeEffect;
 import de.maxi.ultimate_apple_mod.effect.TotemProtectionEffect;
+import de.maxi.ultimate_apple_mod.item.LapislazuliAppleItem;
+import de.maxi.ultimate_apple_mod.item.PrismAppleItem;
 import de.maxi.ultimate_apple_mod.item.QuantumAppleItem;
 import de.maxi.ultimate_apple_mod.item.TotemAppleItem;
 import de.maxi.ultimate_apple_mod.item.VoidAppleItem;
@@ -76,6 +79,9 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<MobEffect> Moon_EFFECT =
         EFFECTS.register("gravity_inversion", GravityEffect::new);
 
+    public static final RegistryObject<MobEffect> MOON_GRAVITY_EFFECT =
+        EFFECTS.register("moon_gravity", MoonGravityEffect::new);
+
     public static final RegistryObject<MobEffect> GLITCH_EFFECT =
         EFFECTS.register("glitch", GlitchEffect::new);
 
@@ -122,13 +128,8 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> LAPISLAZULI_APPLE = ITEMS.register("lapislazuli_apple", () ->
-        new Item(new Item.Properties()
-            .food(new FoodProperties.Builder()
-                .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.LUCK, 20 * 30, 1), 1.0f)
-                .build())
-            .stacksTo(64)));
+    public static final RegistryObject<Item> LAPISLAZULI_APPLE =
+        ITEMS.register("lapislazuli_apple", LapislazuliAppleItem::new);
 
     public static final RegistryObject<Item> EMERALD_APPLE = ITEMS.register("emerald_apple", () ->
         new Item(new Item.Properties()
@@ -143,8 +144,10 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 20, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 20, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 20, 2), 1.0f) // Speed III, 20s
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,      20 * 20, 2), 1.0f) // Haste III, 20s
+                .effect(() -> new MobEffectInstance(MobEffects.GLOWING,        20 * 20, 0), 1.0f) // Glowing, 20s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,   20 * 15, 0), 1.0f) // Strength I, 15s
                 .build())
             .stacksTo(64)));
 
@@ -237,8 +240,9 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(5).saturationMod(0.6f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 20, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 20 * 30, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f) // Haste II, 25s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f) // Strength I, 25s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f) // Resistance I, 25s
                 .build())
             .stacksTo(64)));
 
@@ -251,12 +255,13 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationMod(0.6f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.JUMP, 200, 2), 1.0f)
+                .effect(() -> new MobEffectInstance(MOON_GRAVITY_EFFECT.get(), 20 * 30, 0), 1.0f) // Moon Gravity, 30s
+                .effect(() -> new MobEffectInstance(MobEffects.JUMP, 20 * 30, 1), 1.0f) // Jump Boost II, 30s
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> ORCHARD_CALLER =
-        ITEMS.register("orchard_caller", () ->
+    public static final RegistryObject<Item> ORCHARD_APPLE =
+        ITEMS.register("orchard_apple", () ->
             new OrchardCallerItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
                     .nutrition(4).saturationMod(0.4f).alwaysEat()
@@ -295,15 +300,6 @@ public final class ultimate_apple_modForge {
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 1), 1.0f)
                     .build())
                 .stacksTo(64)));
-
-    public static final RegistryObject<Item> GOLDEN_CARROT_APPLE = ITEMS.register("golden_carrot_apple", () ->
-        new Item(new Item.Properties()
-            .food(new FoodProperties.Builder()
-                .nutrition(6).saturationMod(1.2f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 600, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.SATURATION, 20 * 30, 1), 1.0f)
-                .build())
-            .stacksTo(64)));
 
     public static final RegistryObject<Item> HONEY_APPLE =
         ITEMS.register("honey_apple", () ->
@@ -373,7 +369,7 @@ public final class ultimate_apple_modForge {
                 .nutrition(4).saturationMod(0.4f).alwaysEat()
                 .effect(() -> new MobEffectInstance(TIME_FREEZE_EFFECT.get(), 20 * 30, 0), 1.0f)
                 .build())
-            .stacksTo(16)));
+            .stacksTo(64)));
 
     // ── Longevity Apple ───────────────────────────────────────────────────────
 
@@ -387,6 +383,11 @@ public final class ultimate_apple_modForge {
                 .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,  20 *  15, 0), 1.0f) // Regen I, 15 s
                 .build())
             .stacksTo(64)));
+
+    // ── Prism Apple ──────────────────────────────────────────────────────────
+
+    public static final RegistryObject<Item> PRISM_APPLE =
+        ITEMS.register("prism_apple", PrismAppleItem::new);
 
     // ── Banana ───────────────────────────────────────────────────────────────
 
@@ -429,12 +430,11 @@ public final class ultimate_apple_modForge {
                 output.accept(BLAZING_APPLE_STEW.get());
                 output.accept(ENDER_PEARL_APPLE.get());
                 output.accept(MOON_APPLE.get());
-                output.accept(ORCHARD_CALLER.get());
+                output.accept(ORCHARD_APPLE.get());
                 output.accept(ECHO_APPLE.get());
                 output.accept(REWIND_APPLE.get());
                 output.accept(APPLE_BOMB.get());
                 output.accept(WITHER_APPLE.get());
-                output.accept(GOLDEN_CARROT_APPLE.get());
                 output.accept(HONEY_APPLE.get());
                 output.accept(DRAGON_APPLE.get());
                 output.accept(NETHER_STAR_APPLE.get());
@@ -444,6 +444,7 @@ public final class ultimate_apple_modForge {
                 output.accept(VOID_APPLE.get());
                 output.accept(TIME_FREEZE_APPLE.get());
                 output.accept(LONGEVITY_APPLE.get());
+                output.accept(PRISM_APPLE.get());
                 output.accept(BANANA.get());
                 output.accept(CUP_ITEM.get());
                 output.accept(SHAKE_ITEM.get());
