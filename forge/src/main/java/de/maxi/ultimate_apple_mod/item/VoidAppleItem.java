@@ -18,13 +18,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Void Apple — emergency aerial recovery.
+ * Void Apple — emergency aerial rescue.
  *
- * While falling: strong upward velocity kick + 8 s Slow Fall + Speed II →
- * simulates catching yourself mid-air and gliding to safety.
+ * While falling: massive upward velocity burst (~55+ blocks) + 15 s Slow Falling.
+ * While on ground: moderate kick + 8 s Slow Falling for intentional cliff-diving.
  *
- * While on ground: smaller kick + 5 s Slow Fall (lets you leap off cliffs
- * intentionally and glide down).
+ * No per-tick glide handler — Slow Falling handles the descent naturally.
  */
 public class VoidAppleItem extends Item {
 
@@ -35,7 +34,7 @@ public class VoidAppleItem extends Item {
                 .saturationMod(0.2f)
                 .alwaysEat()
                 .build())
-            .stacksTo(16));
+            .stacksTo(64));
     }
 
     @Override
@@ -44,20 +43,20 @@ public class VoidAppleItem extends Item {
 
         if (!level.isClientSide && entity instanceof ServerPlayer player) {
             Vec3 motion = player.getDeltaMovement();
-            boolean falling = motion.y < -0.1;
+            boolean falling = motion.y < -0.05;
 
             if (falling) {
-                // Emergency rescue: strong upward burst + 8 s glide
-                player.setDeltaMovement(motion.x * 0.4, 1.7, motion.z * 0.4);
-                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 8, 0));
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 8, 1));
+                // Emergency rescue: ~55+ blocks upward, horizontal dampened
+                player.setDeltaMovement(motion.x * 0.2, 6.5, motion.z * 0.2);
+                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 15, 0));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 10, 1));
             } else {
-                // Intentional launch from ground: moderate kick + 5 s glide
-                player.setDeltaMovement(motion.x, 0.9, motion.z);
-                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 5, 0));
+                // Intentional ground launch
+                player.setDeltaMovement(motion.x, 2.5, motion.z);
+                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 8, 0));
             }
 
-            // Force-sync the new velocity to the client immediately
+            // Force-sync velocity to client immediately
             player.connection.send(
                 new ClientboundSetEntityMotionPacket(player.getId(), player.getDeltaMovement()));
         }
@@ -67,9 +66,9 @@ public class VoidAppleItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level,
                                  List<Component> components, TooltipFlag flag) {
-        components.add(Component.literal("§6Eat while falling to launch upward and glide.")
+        components.add(Component.literal("§6Eat while falling for a massive upward launch!")
             .withStyle(ChatFormatting.GOLD));
-        components.add(Component.literal("§7Also works on the ground for a boost.")
+        components.add(Component.literal("§7Slow Falling carries you safely to the ground.")
             .withStyle(ChatFormatting.GRAY));
     }
 }

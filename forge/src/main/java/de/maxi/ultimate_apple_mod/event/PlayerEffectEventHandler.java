@@ -109,6 +109,7 @@ public class PlayerEffectEventHandler {
         Player player = event.player;
         if (!(player.level() instanceof ServerLevel)) return;
 
+        // ── Rotten Apple: fix swimming pose ──────────────────────────────────
         try {
             if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())
                     && player.getPose() == Pose.SWIMMING
@@ -116,6 +117,7 @@ public class PlayerEffectEventHandler {
                 player.setPose(Pose.STANDING);
             }
         } catch (NullPointerException ignored) {}
+
     }
 
     // ── Totem Apple — cancel death ────────────────────────────────────────────
