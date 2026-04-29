@@ -168,6 +168,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         int dragonCharges = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
         boolean lifesteal   = !clearsEffects && (c1.lifesteal()   || c2.lifesteal());
         boolean witherCurse = !clearsEffects && (c1.witherCurse() || c2.witherCurse());
+        boolean voidLaunch  = !clearsEffects && (c1.voidLaunch()  || c2.voidLaunch());
 
         // Duration multiplier: take the higher of the two ingredients' multipliers
         // (Longevity Apple contributes 2.0; everything else is 1.0).
@@ -189,6 +190,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         tag.putBoolean("lifesteal",     lifesteal);
         tag.putBoolean("witherCurse",   witherCurse);
         tag.putBoolean("clearsEffects", clearsEffects);
+        tag.putBoolean("voidLaunch",    voidLaunch);
         return tag;
     }
 

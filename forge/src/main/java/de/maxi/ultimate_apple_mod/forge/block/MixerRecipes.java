@@ -40,7 +40,12 @@ public final class MixerRecipes {
          * The Longevity Apple sets this to 2.0; all others keep the default 1.0.
          * The build step takes the MAX of the two ingredient multipliers.
          */
-        double durationMultiplier
+        double durationMultiplier,
+        /**
+         * When true, drinking the shake applies a massive upward velocity burst
+         * (same mechanic as eating the Void Apple directly).
+         */
+        boolean voidLaunch
     ) {}
 
     // ── Registry ───────────────────────────────────────────────────────────
@@ -96,7 +101,8 @@ public final class MixerRecipes {
         ), 0, false, false);
 
         register("lapislazuli_apple", List.of(
-            new EffectData(luck, 20 * 30, 1)           // Luck II, 30s
+            new EffectData(nightVision, 20 * 300, 0),  // Night Vision, 5 min
+            new EffectData(luck, 20 * 120, 0)           // Luck I, 2 min
         ), 0, false, false);
 
         register("emerald_apple", List.of(
@@ -104,9 +110,12 @@ public final class MixerRecipes {
             new EffectData(nightVision, 20 * 30, 0)    // Night Vision, 30s
         ), 0, false, false);
 
+        ResourceLocation glowing  = mc("glowing");
         register("redstone_apple", List.of(
-            new EffectData(speed, 20 * 20, 1),         // Speed II, 20s
-            new EffectData(haste, 20 * 20, 0)          // Haste, 20s
+            new EffectData(speed,    20 * 20, 2),      // Speed III, 20s
+            new EffectData(haste,    20 * 20, 2),      // Haste III, 20s
+            new EffectData(glowing,  20 * 20, 0),      // Glowing, 20s
+            new EffectData(strength, 20 * 15, 0)       // Strength I, 15s
         ), 0, false, false);
 
         register("netherite_apple", List.of(
@@ -163,8 +172,9 @@ public final class MixerRecipes {
         ), 0, false, false);
 
         register("copper_apple", List.of(
-            new EffectData(haste,       20 * 20, 1),   // Haste II, 20s
-            new EffectData(waterBreath, 20 * 30, 0)    // Water Breathing, 30s
+            new EffectData(haste,      20 * 25, 1),    // Haste II, 25s
+            new EffectData(strength,   20 * 25, 0),    // Strength I, 25s
+            new EffectData(resistance, 20 * 25, 0)     // Resistance I, 25s
         ), 0, false, false);
 
         register("ender_pearl_apple", List.of(
@@ -172,7 +182,8 @@ public final class MixerRecipes {
         ), 0, false, false);
 
         register("moon_apple", List.of(
-            new EffectData(jump, 200, 2)               // Jump Boost III, 10s
+            new EffectData(mod("moon_gravity"), 20 * 30, 0), // Moon Gravity, 30s
+            new EffectData(jump,                20 * 30, 1)  // Jump Boost II, 30s
         ), 0, false, false);
 
         // echo_apple and rewind_apple intentionally excluded —
@@ -187,11 +198,6 @@ public final class MixerRecipes {
             new EffectData(resistance,  20 * 10, 1),   // Resistance II, 10s
             new EffectData(regen,       20 *  5, 1)    // Regen II, 5s
         ), 0, true, true);                             // + lifesteal + witherCurse
-
-        register("golden_carrot_apple", List.of(
-            new EffectData(nightVision, 20 * 600, 0),  // Night Vision, 600s
-            new EffectData(saturation,  20 *  30, 1)   // Saturation II, 30s
-        ), 0, false, false);
 
         // honey_apple cleanses all effects — its own effects are intentionally excluded
         // so the resulting shake clears the player's effects when drunk.
@@ -217,19 +223,15 @@ public final class MixerRecipes {
 
         // ── New apples ─────────────────────────────────────────────────────────
 
-        // Totem Apple shake: defensive buffs (not the protection effect itself — that
-        // would be too powerful in a drink).
-        register("totem_apple", List.of(
-            new EffectData(absorption,  20 * 60, 3), // Absorption IV, 60s
-            new EffectData(regen,       20 * 30, 1), // Regen II, 30s
-            new EffectData(fireRes,     20 * 60, 0)  // Fire Resistance, 60s
-        ), 0, false, false);
+        // Totem Apple is intentionally NOT registered — its one-time death-cancellation
+        // ability is too powerful to combine in a shake, and any effect approximation
+        // would be confusing or overpowered.
 
-        // Void Apple shake: slow fall + jump.
-        register("void_apple", List.of(
-            new EffectData(new ResourceLocation("minecraft", "slow_falling"), 20 * 15, 0),
-            new EffectData(jump, 20 * 10, 2)         // Jump Boost III, 10s
-        ), 0, false, false);
+        // Void Apple shake: triggers the massive upward launch + Slow Falling,
+        // exactly as eating the apple directly when falling.
+        registerVoidLaunch("void_apple", List.of(
+            new EffectData(new ResourceLocation("minecraft", "slow_falling"), 20 * 15, 0)
+        ));
 
         // Time Freeze Apple shake: shorter Time Freeze (10 s instead of 30 s).
         register("time_freeze_apple", List.of(
@@ -246,6 +248,23 @@ public final class MixerRecipes {
             new EffectData(healthBoost,  20 *  60, 0), // Health Boost I, 1 min
             new EffectData(regen,        20 *  15, 0)  // Regen I, 15s
         ), 0, false, false, 2.0);                      // ← 2× duration multiplier
+
+        // Prism Apple shake: full ocean-speed package.
+        ResourceLocation dolphinsGrace = mc("dolphins_grace");
+        register("prism_apple", List.of(
+            new EffectData(waterBreath,  20 * 300, 0), // Water Breathing, 5 min
+            new EffectData(dolphinsGrace, 20 * 300, 0), // Dolphin's Grace, 5 min
+            new EffectData(speed,        20 * 300, 1)  // Speed II, 5 min
+        ), 0, false, false);
+
+        // Quantum Apple shake: "average apple" — a randomized middle ground.
+        // We deliberately pick a fixed set of common buffs so the shake is still
+        // useful and predictable when put in the Mixer alongside another apple.
+        register("quantum_apple", List.of(
+            new EffectData(regen,      20 * 15, 1), // Regen II, 15s
+            new EffectData(absorption, 20 * 60, 1), // Absorption II, 60s
+            new EffectData(strength,   20 * 15, 0)  // Strength, 15s
+        ), 0, false, false);
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
@@ -277,7 +296,7 @@ public final class MixerRecipes {
     private static void register(String itemName, List<EffectData> effects,
                                   int dragonCharges, boolean lifesteal, boolean witherCurse) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0));
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0, false));
     }
 
     /**
@@ -288,20 +307,26 @@ public final class MixerRecipes {
                                   int dragonCharges, boolean lifesteal, boolean witherCurse,
                                   double durationMultiplier) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, durationMultiplier));
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, durationMultiplier, false));
     }
 
     /** Register a mod item whose shake cleanses all effects (e.g. honey_apple). */
     private static void registerCleansing(String itemName) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(List.of(), 0, false, false, true, 1.0));
+            new ShakeContribution(List.of(), 0, false, false, true, 1.0, false));
+    }
+
+    /** Register a mod item that triggers the Void Apple launch mechanic. */
+    private static void registerVoidLaunch(String itemName, List<EffectData> effects) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(effects, 0, false, false, false, 1.0, true));
     }
 
     /** Register a vanilla Minecraft item (minecraft:<name>). */
     private static void registerVanilla(String itemName, List<EffectData> effects,
                                          int dragonCharges, boolean lifesteal, boolean witherCurse) {
         REGISTRY.put(mc(itemName),
-            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0));
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0, false));
     }
 
     private static ResourceLocation mc(String path)  { return new ResourceLocation("minecraft",         path); }
