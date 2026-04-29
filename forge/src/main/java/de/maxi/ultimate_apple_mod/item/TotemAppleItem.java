@@ -35,7 +35,7 @@ public class TotemAppleItem extends Item {
                 .saturationMod(0.5f)
                 .alwaysEat()
                 .build())
-            .stacksTo(16));
+            .stacksTo(64));
     }
 
     @Override

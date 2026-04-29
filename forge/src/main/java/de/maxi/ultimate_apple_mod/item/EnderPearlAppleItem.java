@@ -28,7 +28,7 @@ import java.util.List;
 public class EnderPearlAppleItem extends Item {
     public EnderPearlAppleItem() {
         super(new Properties()
-                .stacksTo(64)
+                .stacksTo(16)
                 .food(new FoodProperties.Builder()
                         .nutrition(6)
                         .saturationMod(0.8f)
