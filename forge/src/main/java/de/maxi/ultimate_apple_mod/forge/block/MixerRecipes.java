@@ -89,9 +89,10 @@ public final class MixerRecipes {
         // ── Mod apples ─────────────────────────────────────────────────────
 
         register("diamond_apple", List.of(
-            new EffectData(healthBoost, 20 * 30, 2),   // Health Boost III, 30s
-            new EffectData(regen,       20 * 10, 1),   // Regen II, 10s
-            new EffectData(resistance,  20 * 10, 1)    // Resistance II, 10s
+            new EffectData(healthBoost, 20 * 60, 2),   // Health Boost III, 60s
+            new EffectData(regen,       20 * 20, 1),   // Regen II, 20s
+            new EffectData(resistance,  20 * 30, 1),   // Resistance II, 30s
+            new EffectData(absorption,  20 * 60, 0)    // Absorption I, 60s
         ), 0, false, false);
 
         register("lapislazuli_apple", List.of(
@@ -109,14 +110,18 @@ public final class MixerRecipes {
         ), 0, false, false);
 
         register("netherite_apple", List.of(
-            new EffectData(fireRes,    20 * 60, 0),    // Fire Resistance, 60s
-            new EffectData(resistance, 20 * 30, 1),    // Resistance II, 30s
-            new EffectData(strength,   20 * 15, 0)     // Strength, 15s
+            new EffectData(resistance,  20 * 120, 2),  // Resistance III, 2 min
+            new EffectData(fireRes,     20 * 120, 0),  // Fire Resistance, 2 min
+            new EffectData(healthBoost, 20 * 120, 3),  // Health Boost IV, 2 min
+            new EffectData(regen,       20 *  30, 2),  // Regen III, 30s
+            new EffectData(strength,    20 *  30, 1),  // Strength II, 30s
+            new EffectData(absorption,  20 * 120, 2)   // Absorption III, 2 min
         ), 0, false, false);
 
         register("iron_apple", List.of(
-            new EffectData(healthBoost, 20 * 10, 0),   // Health Boost, 10s
-            new EffectData(regen,       20 *  3, 0)    // Regen, 3s
+            new EffectData(healthBoost, 20 * 30, 0),   // Health Boost I, 30s
+            new EffectData(regen,       20 * 10, 0),   // Regen I, 10s
+            new EffectData(resistance,  20 * 15, 0)    // Resistance I, 15s
         ), 0, false, false);
 
         register("rotten_apple", List.of(
@@ -210,6 +215,30 @@ public final class MixerRecipes {
             new EffectData(nausea, 20 * 10, 0)         // Nausea, 10s
         ), 0, false, false);
 
+        // ── New apples ─────────────────────────────────────────────────────────
+
+        // Totem Apple shake: defensive buffs (not the protection effect itself — that
+        // would be too powerful in a drink).
+        register("totem_apple", List.of(
+            new EffectData(absorption,  20 * 60, 3), // Absorption IV, 60s
+            new EffectData(regen,       20 * 30, 1), // Regen II, 30s
+            new EffectData(fireRes,     20 * 60, 0)  // Fire Resistance, 60s
+        ), 0, false, false);
+
+        // Void Apple shake: slow fall + jump.
+        register("void_apple", List.of(
+            new EffectData(new ResourceLocation("minecraft", "slow_falling"), 20 * 15, 0),
+            new EffectData(jump, 20 * 10, 2)         // Jump Boost III, 10s
+        ), 0, false, false);
+
+        // Time Freeze Apple shake: shorter Time Freeze (10 s instead of 30 s).
+        register("time_freeze_apple", List.of(
+            new EffectData(mod("time_freeze"), 20 * 10, 0) // Time Freeze, 10s
+        ), 0, false, false);
+
+        // Quantum Apple is intentionally not added to the Mixer — its whole point
+        // is unpredictability, which doesn't map to a deterministic shake contribution.
+
         // Longevity Apple: doubles the duration of ALL effects in the combined shake.
         // Its own base effects (Absorption IV + Health Boost I + Regen I) also appear.
         register("longevity_apple", List.of(
@@ -220,6 +249,14 @@ public final class MixerRecipes {
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
+
+    /**
+     * Returns every registered ShakeContribution — used by QuantumAppleItem to pick
+     * a random apple's effects when eaten.
+     */
+    public static java.util.List<ShakeContribution> getAllContributions() {
+        return new java.util.ArrayList<>(REGISTRY.values());
+    }
 
     public static Optional<ShakeContribution> getContribution(ItemStack stack) {
         if (stack.isEmpty()) return Optional.empty();
