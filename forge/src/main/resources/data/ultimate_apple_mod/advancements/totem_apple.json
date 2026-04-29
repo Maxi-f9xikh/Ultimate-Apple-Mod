@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "item": "ultimate_apple_mod:totem_apple" },
+    "title": { "translate": "advancements.ultimate_apple_mod.totem_apple.title" },
+    "description": { "translate": "advancements.ultimate_apple_mod.totem_apple.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "ultimate_apple_mod:enchanted_golden_apple",
+  "criteria": {
+    "ate_item": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["ultimate_apple_mod:totem_apple"] } }
+    }
+  }
+}

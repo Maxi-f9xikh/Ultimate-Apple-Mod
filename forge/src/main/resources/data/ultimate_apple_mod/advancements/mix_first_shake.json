@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": { "item": "ultimate_apple_mod:shake" },
+    "title": { "translate": "advancements.ultimate_apple_mod.mix_first_shake.title" },
+    "description": { "translate": "advancements.ultimate_apple_mod.mix_first_shake.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "ultimate_apple_mod:root",
+  "criteria": {
+    "has_shake": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "items": ["ultimate_apple_mod:shake"] }]
+      }
+    }
+  }
+}

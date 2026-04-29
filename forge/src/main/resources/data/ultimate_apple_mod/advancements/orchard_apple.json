@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "item": "ultimate_apple_mod:orchard_apple" },
+    "title": { "translate": "advancements.ultimate_apple_mod.orchard_apple.title" },
+    "description": { "translate": "advancements.ultimate_apple_mod.orchard_apple.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "ultimate_apple_mod:root",
+  "criteria": {
+    "ate_item": {
+      "trigger": "minecraft:consume_item",
+      "conditions": { "item": { "items": ["ultimate_apple_mod:orchard_apple"] } }
+    }
+  }
+}
