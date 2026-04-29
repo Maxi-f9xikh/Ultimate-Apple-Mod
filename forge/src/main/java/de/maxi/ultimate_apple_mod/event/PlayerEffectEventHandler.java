@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -113,6 +116,44 @@ public class PlayerEffectEventHandler {
                 player.setPose(Pose.STANDING);
             }
         } catch (NullPointerException ignored) {}
+    }
+
+    // ── Totem Apple — cancel death ────────────────────────────────────────────
+
+    /**
+     * If the dying player has the Totem Protection effect (from eating a Totem Apple),
+     * cancel the death, consume the effect, restore health, and play the vanilla totem
+     * animation + sound (entity event 35) so the player gets clear visual feedback.
+     *
+     * Priority HIGHEST ensures this runs before other death listeners.
+     */
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onPlayerTotemDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!(player.level() instanceof ServerLevel)) return;
+
+        try {
+            if (!player.hasEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get())) return;
+        } catch (NullPointerException ignored) { return; }
+
+        // Cancel the death
+        event.setCanceled(true);
+
+        // Remove the one-time protection
+        player.removeEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get());
+
+        // Restore health and apply the same buffs vanilla totem gives
+        player.setHealth(1.0f);
+        player.removeAllEffects();
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,     20 * 45, 1));
+        player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE,  20 * 40, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION,       20 * 15, 3));
+
+        // Entity event 35 → client plays totem-of-undying animation + sound
+        player.level().broadcastEntityEvent(player, (byte) 35);
+
+        player.displayClientMessage(
+            Component.translatable("message.ultimate_apple_mod.totem_apple_triggered"), true);
     }
 
     /**
