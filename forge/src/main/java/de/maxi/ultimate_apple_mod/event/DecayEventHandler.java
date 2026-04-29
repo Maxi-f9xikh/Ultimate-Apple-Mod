@@ -40,9 +40,8 @@ public class DecayEventHandler {
 
     /** Returns the decay threshold in ticks for the given item, or 0 if it does not decay. */
     public static long getDecayThreshold(Item item) {
-        if (item == Items.APPLE)                  return APPLE_DECAY_TICKS;
-        if (item == Items.GOLDEN_APPLE)           return GOLDEN_APPLE_DECAY_TICKS;
-        if (item == Items.ENCHANTED_GOLDEN_APPLE) return ENCHANTED_APPLE_DECAY_TICKS;
+        // Only the plain apple rots — golden & enchanted golden are preserved by magic.
+        if (item == Items.APPLE) return APPLE_DECAY_TICKS;
         return 0;
     }
 
@@ -89,12 +88,6 @@ public class DecayEventHandler {
         int count = original.getCount();
         if (original.getItem() == Items.APPLE) {
             return new ItemStack(ultimate_apple_modForge.ROTTEN_APPLE.get(), count);
-        }
-        if (original.getItem() == Items.GOLDEN_APPLE) {
-            return new ItemStack(Items.APPLE, count);
-        }
-        if (original.getItem() == Items.ENCHANTED_GOLDEN_APPLE) {
-            return new ItemStack(Items.GOLDEN_APPLE, count);
         }
         return ItemStack.EMPTY;
     }
