@@ -4,6 +4,11 @@ import de.maxi.ultimate_apple_mod.effect.CurseOfRotten;
 import de.maxi.ultimate_apple_mod.effect.GlitchEffect;
 import de.maxi.ultimate_apple_mod.effect.GravityEffect;
 import de.maxi.ultimate_apple_mod.effect.LifestealEffect;
+import de.maxi.ultimate_apple_mod.effect.TimeFreezeEffect;
+import de.maxi.ultimate_apple_mod.effect.TotemProtectionEffect;
+import de.maxi.ultimate_apple_mod.item.QuantumAppleItem;
+import de.maxi.ultimate_apple_mod.item.TotemAppleItem;
+import de.maxi.ultimate_apple_mod.item.VoidAppleItem;
 import de.maxi.ultimate_apple_mod.forge.block.MixerBlockEntity;
 import de.maxi.ultimate_apple_mod.forge.block.MixerMenu;
 import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
@@ -77,6 +82,12 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<MobEffect> LIFESTEAL_EFFECT =
         EFFECTS.register("lifesteal", LifestealEffect::new);
 
+    public static final RegistryObject<MobEffect> TOTEM_PROTECTION_EFFECT =
+        EFFECTS.register("totem_protection", TotemProtectionEffect::new);
+
+    public static final RegistryObject<MobEffect> TIME_FREEZE_EFFECT =
+        EFFECTS.register("time_freeze", TimeFreezeEffect::new);
+
     // ── Menu Types ────────────────────────────────────────────────────────────
 
     public static final RegistryObject<MenuType<MixerMenu>> MIXER_MENU_TYPE =
@@ -104,9 +115,10 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 30, 2), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 10, 1), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 60, 2), 1.0f) // Health Boost III, 60s
+                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,      20 * 20, 1), 1.0f) // Regen II, 20s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 30, 1), 1.0f) // Resistance II, 30s
+                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION,        20 * 60, 0), 1.0f) // Absorption I, 60s
                 .build())
             .stacksTo(64)));
 
@@ -139,10 +151,14 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> NETHERITE_APPLE = ITEMS.register("netherite_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20 * 60, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 30, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f)
+                .nutrition(10).saturationMod(1.0f).alwaysEat()
+                // Near-godlike defensive stats befitting the cost of 1 Netherite Ingot
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 120, 2), 1.0f) // Resistance III, 2 min
+                .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE,   20 * 120, 0), 1.0f) // Fire Resistance, 2 min
+                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 120, 3), 1.0f) // Health Boost IV, 2 min
+                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,      20 *  30, 2), 1.0f) // Regen III, 30s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,      20 *  30, 1), 1.0f) // Strength II, 30s
+                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION,        20 * 120, 2), 1.0f) // Absorption III, 2 min
                 .build())
             .stacksTo(64)));
 
@@ -150,8 +166,9 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationMod(0.7f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 10, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 3, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 30, 0), 1.0f) // Health Boost I, 30s
+                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,      20 * 10, 0), 1.0f) // Regen I, 10s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 15, 0), 1.0f) // Resistance I, 15s
                 .build())
             .stacksTo(64)));
 
@@ -339,6 +356,25 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
+    // ── Special Apples ────────────────────────────────────────────────────────
+
+    public static final RegistryObject<Item> TOTEM_APPLE =
+        ITEMS.register("totem_apple", TotemAppleItem::new);
+
+    public static final RegistryObject<Item> QUANTUM_APPLE =
+        ITEMS.register("quantum_apple", QuantumAppleItem::new);
+
+    public static final RegistryObject<Item> VOID_APPLE =
+        ITEMS.register("void_apple", VoidAppleItem::new);
+
+    public static final RegistryObject<Item> TIME_FREEZE_APPLE = ITEMS.register("time_freeze_apple", () ->
+        new Item(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(4).saturationMod(0.4f).alwaysEat()
+                .effect(() -> new MobEffectInstance(TIME_FREEZE_EFFECT.get(), 20 * 30, 0), 1.0f)
+                .build())
+            .stacksTo(16)));
+
     // ── Longevity Apple ───────────────────────────────────────────────────────
 
     public static final RegistryObject<Item> LONGEVITY_APPLE = ITEMS.register("longevity_apple", () ->
@@ -403,6 +439,10 @@ public final class ultimate_apple_modForge {
                 output.accept(DRAGON_APPLE.get());
                 output.accept(NETHER_STAR_APPLE.get());
                 output.accept(DIRT_APPLE.get());
+                output.accept(TOTEM_APPLE.get());
+                output.accept(QUANTUM_APPLE.get());
+                output.accept(VOID_APPLE.get());
+                output.accept(TIME_FREEZE_APPLE.get());
                 output.accept(LONGEVITY_APPLE.get());
                 output.accept(BANANA.get());
                 output.accept(CUP_ITEM.get());
