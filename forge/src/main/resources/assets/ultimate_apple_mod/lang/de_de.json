@@ -21,7 +21,8 @@
   "tooltip.ultimate_apple_mod.ender_pearl_apple.line2": "§7Bis zu 256 Blöcke – mit der Kraft der Endermen.",
   "item.ultimate_apple_mod.copper_apple": "Kupferapfel",
   "item.ultimate_apple_mod.moon_apple": "Mond-Apfel",
-  "item.ultimate_apple_mod.orchard_caller": "Obstgarten-Rufer",
+  "item.ultimate_apple_mod.orchard_apple": "Obstgarten Apfel",
+  "effect.ultimate_apple_mod.moon_gravity": "Mondgravitation",
   "item.ultimate_apple_mod.echo_apple": "Echo-Apfel",
   "item.ultimate_apple_mod.rewind_apple": "Rückspul-Apfel",
   "item.ultimate_apple_mod.apple_bomb": "Apfel-Bombe",
@@ -44,11 +45,10 @@
   "message.ultimate_apple_mod.echo_return": "Echo!",
   "message.ultimate_apple_mod.echo_wrong_dim": "Dimensionswechsel nicht möglich.",
   "item.ultimate_apple_mod.wither_apple": "Witherapfel",
-  "item.ultimate_apple_mod.golden_carrot_apple": "Goldener Möhrenapfel",
   "item.ultimate_apple_mod.honey_apple": "Honigapfel",
   "item.ultimate_apple_mod.dragon_apple": "Drachenapfel",
   "item.ultimate_apple_mod.nether_star_apple": "Netherstern-Apfel",
-  "item.ultimate_apple_mod.dirt_apple": "Dreckiger Apfel",
+  "item.ultimate_apple_mod.dirt_apple": "Erd Apfel",
   "tooltip.ultimate_apple_mod.honey_apple.line1": "§6Heilt sofort alle aktiven Effekte.",
   "tooltip.ultimate_apple_mod.honey_apple.line2": "§7Macht dich danach kurz langsamer.",
   "tooltip.ultimate_apple_mod.nether_star_apple.line1": "§62 Sekunden absolute Unverwundbarkeit.",
@@ -60,7 +60,7 @@
   "message.ultimate_apple_mod.dragon_charges_added": "§6+%s Drachenatem-Ladung(en) durch Shake!",
   "item.ultimate_apple_mod.totem_apple": "Totenapfel",
   "item.ultimate_apple_mod.quantum_apple": "Quantenapfel",
-  "item.ultimate_apple_mod.void_apple": "Leerapfel",
+  "item.ultimate_apple_mod.void_apple": "Leere Apfel",
   "item.ultimate_apple_mod.time_freeze_apple": "Zeitstillstandsapfel",
   "effect.ultimate_apple_mod.totem_protection": "Totemschutz",
   "effect.ultimate_apple_mod.time_freeze": "Zeitstillstand",
@@ -74,5 +74,120 @@
   "gui.ultimate_apple_mod.mixer.cup": "Becher",
   "gui.ultimate_apple_mod.mixer.ingredients": "Zutaten",
   "tooltip.ultimate_apple_mod.shake.effects": "§6Effekte:",
-  "tooltip.ultimate_apple_mod.shake.no_effects": "§7Keine Effekte gespeichert."
+  "tooltip.ultimate_apple_mod.shake.no_effects": "§7Keine Effekte gespeichert.",
+
+  "advancements.ultimate_apple_mod.root.title": "Ultimate Apple Mod",
+  "advancements.ultimate_apple_mod.root.description": "Entdecke die Welt der magischen Äpfel.",
+
+  "advancements.ultimate_apple_mod.apple.title": "Ein Apfel am Tag...",
+  "advancements.ultimate_apple_mod.apple.description": "Iss einen normalen Apfel.",
+
+  "advancements.ultimate_apple_mod.baked_apple.title": "Frisch Gebacken",
+  "advancements.ultimate_apple_mod.baked_apple.description": "Iss einen gebackenen Apfel.",
+
+  "advancements.ultimate_apple_mod.roasted_apple.title": "Gerösteter Genuss",
+  "advancements.ultimate_apple_mod.roasted_apple.description": "Iss einen gerösteten Apfel.",
+
+  "advancements.ultimate_apple_mod.pear_apple.title": "Eigentlich keine Apfel",
+  "advancements.ultimate_apple_mod.pear_apple.description": "Iss eine Birne.",
+
+  "advancements.ultimate_apple_mod.banana.title": "Völlig Banane",
+  "advancements.ultimate_apple_mod.banana.description": "Iss eine Banane.",
+
+  "advancements.ultimate_apple_mod.rotten_apple.title": "Besser als nichts?",
+  "advancements.ultimate_apple_mod.rotten_apple.description": "Iss einen vergammelten Apfel. Viel Glück.",
+
+  "advancements.ultimate_apple_mod.burnt_apple.title": "Gut Durchgebraten",
+  "advancements.ultimate_apple_mod.burnt_apple.description": "Iss einen verbrannten Apfel – schmeckt nach Reue.",
+
+  "advancements.ultimate_apple_mod.dirt_apple.title": "Geh Mal Raus",
+  "advancements.ultimate_apple_mod.dirt_apple.description": "Iss einen Dreckigen Apfel. Warum auch immer.",
+
+  "advancements.ultimate_apple_mod.blaze_apple.title": "Feuerfester Snack",
+  "advancements.ultimate_apple_mod.blaze_apple.description": "Iss einen Lohenapfel.",
+
+  "advancements.ultimate_apple_mod.golden_apple.title": "Alles, was glänzt...",
+  "advancements.ultimate_apple_mod.golden_apple.description": "Iss einen goldenen Apfel.",
+
+  "advancements.ultimate_apple_mod.iron_apple.title": "Eiserne Konstitution",
+  "advancements.ultimate_apple_mod.iron_apple.description": "Iss einen Eisenapfel.",
+
+  "advancements.ultimate_apple_mod.copper_apple.title": "Schmied des Lebens",
+  "advancements.ultimate_apple_mod.copper_apple.description": "Iss einen Kupferapfel – Schnelligkeit, Stärke und Widerstand warten.",
+
+  "advancements.ultimate_apple_mod.redstone_apple.title": "Vollgeladen",
+  "advancements.ultimate_apple_mod.redstone_apple.description": "Iss einen Redstoneapfel.",
+
+  "advancements.ultimate_apple_mod.lapislazuli_apple.title": "Der Verzauberer",
+  "advancements.ultimate_apple_mod.lapislazuli_apple.description": "Iss einen Lapislazuliapfel und erhalte 5 Erfahrungslevel.",
+
+  "advancements.ultimate_apple_mod.emerald_apple.title": "Glück begünstigt den Mutigen",
+  "advancements.ultimate_apple_mod.emerald_apple.description": "Iss einen Smaragdapfel.",
+
+  "advancements.ultimate_apple_mod.moon_apple.title": "Schwerkraft? Kenn ich nicht.",
+  "advancements.ultimate_apple_mod.moon_apple.description": "Iss einen Mondapfel und spring in den Himmel.",
+
+  "advancements.ultimate_apple_mod.ender_pearl_apple.title": "Dimensionaler Snack",
+  "advancements.ultimate_apple_mod.ender_pearl_apple.description": "Iss einen Enderperlenapfel.",
+
+  "advancements.ultimate_apple_mod.honey_apple.title": "Süßer Entzug",
+  "advancements.ultimate_apple_mod.honey_apple.description": "Iss einen Honigapfel und befreie dich von Effekten.",
+
+  "advancements.ultimate_apple_mod.wither_apple.title": "Lebenskraft",
+  "advancements.ultimate_apple_mod.wither_apple.description": "Iss einen Witherapfel und erhalte Lebensraub.",
+
+  "advancements.ultimate_apple_mod.blazing_apple_stew.title": "Lodernde Kombination",
+  "advancements.ultimate_apple_mod.blazing_apple_stew.description": "Iss eine Lodernde Apfelsuppe.",
+
+  "advancements.ultimate_apple_mod.echo_apple.title": "Echo der Leere",
+  "advancements.ultimate_apple_mod.echo_apple.description": "Iss einen Echo-Apfel und markiere deinen Rückkehrpunkt.",
+
+  "advancements.ultimate_apple_mod.rewind_apple.title": "Zeit zurückdrehen",
+  "advancements.ultimate_apple_mod.rewind_apple.description": "Iss einen Rückspul-Apfel.",
+
+  "advancements.ultimate_apple_mod.orchard_apple.title": "Der Obstgarten ruft",
+  "advancements.ultimate_apple_mod.orchard_apple.description": "Iss einen Obstgarten Apfel und beschwöre einen Wald.",
+
+  "advancements.ultimate_apple_mod.void_apple.title": "Himmelssurfer",
+  "advancements.ultimate_apple_mod.void_apple.description": "Iss einen Leerapfel und schieß in den Himmel.",
+
+  "advancements.ultimate_apple_mod.time_freeze_apple.title": "Der Blitz",
+  "advancements.ultimate_apple_mod.time_freeze_apple.description": "Iss einen Zeitstillstandsapfel. Die Welt hält an, du nicht.",
+
+  "advancements.ultimate_apple_mod.longevity_apple.title": "Für immer Leben",
+  "advancements.ultimate_apple_mod.longevity_apple.description": "Iss einen Langlebigkeitsapfel.",
+
+  "advancements.ultimate_apple_mod.enchanted_golden_apple.title": "Verbotene Frucht",
+  "advancements.ultimate_apple_mod.enchanted_golden_apple.description": "Iss einen verzauberten goldenen Apfel.",
+
+  "advancements.ultimate_apple_mod.diamond_apple.title": "Diamantener Appetit",
+  "advancements.ultimate_apple_mod.diamond_apple.description": "Iss einen Diamantapfel.",
+
+  "advancements.ultimate_apple_mod.netherite_apple.title": "Unbesiegbar",
+  "advancements.ultimate_apple_mod.netherite_apple.description": "Iss einen Netheritapfel. Du bist unaufhaltbar.",
+
+  "advancements.ultimate_apple_mod.dragon_apple.title": "Drachentöter-Mahl",
+  "advancements.ultimate_apple_mod.dragon_apple.description": "Iss einen Drachenapfel und beherrsche den Enderdrachen.",
+
+  "advancements.ultimate_apple_mod.nether_star_apple.title": "Sternenkraft",
+  "advancements.ultimate_apple_mod.nether_star_apple.description": "Iss einen Netherstern-Apfel. 2 Sekunden absolute Unverwundbarkeit.",
+
+  "advancements.ultimate_apple_mod.totem_apple.title": "Du kannst mich nicht töten",
+  "advancements.ultimate_apple_mod.totem_apple.description": "Iss einen Totenapfel und überlist den Tod.",
+
+  "advancements.ultimate_apple_mod.quantum_apple.title": "Schrödingers Snack",
+  "advancements.ultimate_apple_mod.quantum_apple.description": "Iss einen Quantenapfel. Du hattest keine Ahnung was passieren würde.",
+
+  "item.ultimate_apple_mod.prism_apple": "Prismaapfel",
+  "advancements.ultimate_apple_mod.prism_apple.title": "Tiefseetaucher",
+  "advancements.ultimate_apple_mod.prism_apple.description": "Iss einen Prismaapfel und beherrsche den Ozean.",
+
+  "advancements.ultimate_apple_mod.mix_first_shake.title": "Der Mixologe",
+  "advancements.ultimate_apple_mod.mix_first_shake.description": "Mixe zwei Äpfel im Mixer zu deinem ersten Shake.",
+
+  "advancements.ultimate_apple_mod.drink_first_shake.title": "Prost!",
+  "advancements.ultimate_apple_mod.drink_first_shake.description": "Trink einen Shake und erlebe die kombinierte Kraft zweier Äpfel.",
+
+  "advancements.ultimate_apple_mod.eat_all_apples.title": "Apfel-Kenner",
+  "advancements.ultimate_apple_mod.eat_all_apples.description": "Iss jeden Apfel im Mod. Ein wahrer Apfelliebhaber."
 }
