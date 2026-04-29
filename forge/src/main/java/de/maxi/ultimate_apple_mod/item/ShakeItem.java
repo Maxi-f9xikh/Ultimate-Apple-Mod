@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -124,6 +126,20 @@ public class ShakeItem extends Item {
                     true);
             }
         }
+
+        // Void launch — same upward burst as eating the Void Apple directly
+        if (tag.getBoolean("voidLaunch")) {
+            Vec3 motion = player.getDeltaMovement();
+            boolean falling = motion.y < -0.05;
+            if (falling) {
+                player.setDeltaMovement(motion.x * 0.2, 6.5, motion.z * 0.2);
+            } else {
+                player.setDeltaMovement(motion.x, 2.5, motion.z);
+            }
+            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 15, 0));
+            player.connection.send(new ClientboundSetEntityMotionPacket(
+                player.getId(), player.getDeltaMovement()));
+        }
     }
 
     // ── Tooltip ─────────────────────────────────────────────────────────────
@@ -176,6 +192,10 @@ public class ShakeItem extends Item {
         if (tag.getBoolean("clearsEffects")) {
             components.add(Component.literal("§bClears all active effects"));
         }
+        if (tag.getBoolean("voidLaunch")) {
+            components.add(Component.literal("§9⬆ Void Launch on drink!"));
+        }
+        components.add(Component.literal("§8(+20% duration from mixing)").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────────
