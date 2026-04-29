@@ -21,7 +21,7 @@
   "tooltip.ultimate_apple_mod.ender_pearl_apple.line2": "§7up to 256 blocks with the power of Endermen.",
   "item.ultimate_apple_mod.copper_apple": "Copper Apple",
   "item.ultimate_apple_mod.moon_apple": "Moon Apple",
-  "item.ultimate_apple_mod.orchard_caller": "Orchard Caller",
+  "item.ultimate_apple_mod.orchard_apple": "Orchard Apple",
   "item.ultimate_apple_mod.echo_apple": "Echo Apple",
   "item.ultimate_apple_mod.rewind_apple": "Rewind Apple",
   "item.ultimate_apple_mod.apple_bomb": "Apple Bomb",
@@ -45,7 +45,7 @@
   "message.ultimate_apple_mod.echo_return": "Echo!",
   "message.ultimate_apple_mod.echo_wrong_dim": "Cannot teleport across dimensions.",
   "item.ultimate_apple_mod.wither_apple": "Wither Apple",
-  "item.ultimate_apple_mod.golden_carrot_apple": "Golden Carrot Apple",
+  "effect.ultimate_apple_mod.moon_gravity": "Moon Gravity",
   "item.ultimate_apple_mod.honey_apple": "Honey Apple",
   "item.ultimate_apple_mod.dragon_apple": "Dragon Apple",
   "item.ultimate_apple_mod.nether_star_apple": "Nether Star Apple",
@@ -75,5 +75,120 @@
   "gui.ultimate_apple_mod.mixer.cup": "Cup",
   "gui.ultimate_apple_mod.mixer.ingredients": "Ingredients",
   "tooltip.ultimate_apple_mod.shake.effects": "§6Effects:",
-  "tooltip.ultimate_apple_mod.shake.no_effects": "§7No effects stored."
+  "tooltip.ultimate_apple_mod.shake.no_effects": "§7No effects stored.",
+
+  "advancements.ultimate_apple_mod.root.title": "Ultimate Apple Mod",
+  "advancements.ultimate_apple_mod.root.description": "Discover the world of magical apples.",
+
+  "advancements.ultimate_apple_mod.apple.title": "An Apple a Day...",
+  "advancements.ultimate_apple_mod.apple.description": "Eat a regular apple.",
+
+  "advancements.ultimate_apple_mod.baked_apple.title": "Freshly Baked",
+  "advancements.ultimate_apple_mod.baked_apple.description": "Eat a Baked Apple.",
+
+  "advancements.ultimate_apple_mod.roasted_apple.title": "Roasted Treat",
+  "advancements.ultimate_apple_mod.roasted_apple.description": "Eat a Roasted Apple.",
+
+  "advancements.ultimate_apple_mod.pear_apple.title": "Not an Apple, Actually",
+  "advancements.ultimate_apple_mod.pear_apple.description": "Eat a Pear.",
+
+  "advancements.ultimate_apple_mod.banana.title": "Going Bananas",
+  "advancements.ultimate_apple_mod.banana.description": "Eat a Banana.",
+
+  "advancements.ultimate_apple_mod.rotten_apple.title": "Better Than Nothing?",
+  "advancements.ultimate_apple_mod.rotten_apple.description": "Eat a Rotten Apple. Good luck.",
+
+  "advancements.ultimate_apple_mod.burnt_apple.title": "Well Done",
+  "advancements.ultimate_apple_mod.burnt_apple.description": "Eat a Burnt Apple — tastes like regret.",
+
+  "advancements.ultimate_apple_mod.dirt_apple.title": "Touch Grass",
+  "advancements.ultimate_apple_mod.dirt_apple.description": "Eat a Dirt Apple. Why would you do this.",
+
+  "advancements.ultimate_apple_mod.blaze_apple.title": "Fireproof Snack",
+  "advancements.ultimate_apple_mod.blaze_apple.description": "Eat a Blaze Apple.",
+
+  "advancements.ultimate_apple_mod.golden_apple.title": "All That Glitters",
+  "advancements.ultimate_apple_mod.golden_apple.description": "Eat a Golden Apple.",
+
+  "advancements.ultimate_apple_mod.iron_apple.title": "Iron Constitution",
+  "advancements.ultimate_apple_mod.iron_apple.description": "Eat an Iron Apple.",
+
+  "advancements.ultimate_apple_mod.copper_apple.title": "Forged Strong",
+  "advancements.ultimate_apple_mod.copper_apple.description": "Eat a Copper Apple — Haste, Strength, and Resistance await.",
+
+  "advancements.ultimate_apple_mod.redstone_apple.title": "Charged Up",
+  "advancements.ultimate_apple_mod.redstone_apple.description": "Eat a Redstone Apple.",
+
+  "advancements.ultimate_apple_mod.lapislazuli_apple.title": "The Enchanter",
+  "advancements.ultimate_apple_mod.lapislazuli_apple.description": "Eat a Lapis Lazuli Apple and gain 5 levels of experience.",
+
+  "advancements.ultimate_apple_mod.emerald_apple.title": "Fortune Favors the Bold",
+  "advancements.ultimate_apple_mod.emerald_apple.description": "Eat an Emerald Apple.",
+
+  "advancements.ultimate_apple_mod.moon_apple.title": "Gravity? Never Heard of It.",
+  "advancements.ultimate_apple_mod.moon_apple.description": "Eat a Moon Apple and leap to the skies.",
+
+  "advancements.ultimate_apple_mod.ender_pearl_apple.title": "Dimensional Snack",
+  "advancements.ultimate_apple_mod.ender_pearl_apple.description": "Eat an Ender Pearl Apple.",
+
+  "advancements.ultimate_apple_mod.honey_apple.title": "Sweet Detox",
+  "advancements.ultimate_apple_mod.honey_apple.description": "Eat a Honey Apple and cleanse your effects.",
+
+  "advancements.ultimate_apple_mod.wither_apple.title": "Life Force",
+  "advancements.ultimate_apple_mod.wither_apple.description": "Eat a Wither Apple and gain Lifesteal.",
+
+  "advancements.ultimate_apple_mod.blazing_apple_stew.title": "Blazing Combo",
+  "advancements.ultimate_apple_mod.blazing_apple_stew.description": "Eat a Blazing Apple Stew.",
+
+  "advancements.ultimate_apple_mod.echo_apple.title": "Echo of the Void",
+  "advancements.ultimate_apple_mod.echo_apple.description": "Eat an Echo Apple and mark your return.",
+
+  "advancements.ultimate_apple_mod.rewind_apple.title": "Turn Back Time",
+  "advancements.ultimate_apple_mod.rewind_apple.description": "Eat a Rewind Apple.",
+
+  "advancements.ultimate_apple_mod.orchard_apple.title": "The Orchard Calls",
+  "advancements.ultimate_apple_mod.orchard_apple.description": "Eat an Orchard Apple and summon a forest.",
+
+  "advancements.ultimate_apple_mod.void_apple.title": "Sky Surfer",
+  "advancements.ultimate_apple_mod.void_apple.description": "Eat a Void Apple and launch into the sky.",
+
+  "advancements.ultimate_apple_mod.time_freeze_apple.title": "The Flash",
+  "advancements.ultimate_apple_mod.time_freeze_apple.description": "Eat a Time Freeze Apple. The world stops, you don't.",
+
+  "advancements.ultimate_apple_mod.longevity_apple.title": "Live Forever",
+  "advancements.ultimate_apple_mod.longevity_apple.description": "Eat a Longevity Apple.",
+
+  "advancements.ultimate_apple_mod.enchanted_golden_apple.title": "Forbidden Fruit",
+  "advancements.ultimate_apple_mod.enchanted_golden_apple.description": "Eat an Enchanted Golden Apple.",
+
+  "advancements.ultimate_apple_mod.diamond_apple.title": "Adamantine Appetite",
+  "advancements.ultimate_apple_mod.diamond_apple.description": "Eat a Diamond Apple.",
+
+  "advancements.ultimate_apple_mod.netherite_apple.title": "Invincible",
+  "advancements.ultimate_apple_mod.netherite_apple.description": "Eat a Netherite Apple. You are unstoppable.",
+
+  "advancements.ultimate_apple_mod.dragon_apple.title": "Dragon Slayer's Feast",
+  "advancements.ultimate_apple_mod.dragon_apple.description": "Eat a Dragon Apple and channel the Ender Dragon.",
+
+  "advancements.ultimate_apple_mod.nether_star_apple.title": "Star Power",
+  "advancements.ultimate_apple_mod.nether_star_apple.description": "Eat a Nether Star Apple. 2 seconds of true invincibility.",
+
+  "advancements.ultimate_apple_mod.totem_apple.title": "You Can't Kill Me",
+  "advancements.ultimate_apple_mod.totem_apple.description": "Eat a Totem Apple and cheat death itself.",
+
+  "advancements.ultimate_apple_mod.quantum_apple.title": "Schrödinger's Snack",
+  "advancements.ultimate_apple_mod.quantum_apple.description": "Eat a Quantum Apple. You had no idea what would happen.",
+
+  "item.ultimate_apple_mod.prism_apple": "Prism Apple",
+  "advancements.ultimate_apple_mod.prism_apple.title": "Deep Sea Diver",
+  "advancements.ultimate_apple_mod.prism_apple.description": "Eat a Prism Apple and conquer the ocean.",
+
+  "advancements.ultimate_apple_mod.mix_first_shake.title": "The Mixologist",
+  "advancements.ultimate_apple_mod.mix_first_shake.description": "Mix two apples in the Mixer to brew your first Shake.",
+
+  "advancements.ultimate_apple_mod.drink_first_shake.title": "Bottoms Up!",
+  "advancements.ultimate_apple_mod.drink_first_shake.description": "Drink a Shake and taste the combined power of two apples.",
+
+  "advancements.ultimate_apple_mod.eat_all_apples.title": "Apple Connoisseur",
+  "advancements.ultimate_apple_mod.eat_all_apples.description": "Eat every apple in the mod. A true apple lover."
 }
