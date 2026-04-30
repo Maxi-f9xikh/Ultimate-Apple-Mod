@@ -18,7 +18,7 @@ import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
-import de.maxi.ultimate_apple_mod.item.BlazingAppleStewItem;
+import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
 import de.maxi.ultimate_apple_mod.item.CupItem;
 import de.maxi.ultimate_apple_mod.item.EchoAppleItem;
 import de.maxi.ultimate_apple_mod.item.EnderPearlAppleItem;
@@ -114,6 +114,13 @@ public final class ultimate_apple_modForge {
                 .sized(0.25f, 0.25f)
                 .clientTrackingRange(4)
                 .build("apple_bomb"));
+
+    public static final RegistryObject<EntityType<ShakeBombEntity>> SHAKE_BOMB_ENTITY =
+        ENTITY_TYPES.register("shake_bomb",
+            () -> EntityType.Builder.<ShakeBombEntity>of(ShakeBombEntity::new, MobCategory.MISC)
+                .sized(0.25f, 0.25f)
+                .clientTrackingRange(4)
+                .build("shake_bomb"));
 
     // ── Existing Items (with effects added) ──────────────────────────────────
 
@@ -224,9 +231,6 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> BLAZING_APPLE_STEW =
-        ITEMS.register("blazing_apple_stew", () -> new BlazingAppleStewItem());
-
     public static final RegistryObject<Item> BIRNE = ITEMS.register("pear_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
@@ -256,7 +260,7 @@ public final class ultimate_apple_modForge {
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationMod(0.6f).alwaysEat()
                 .effect(() -> new MobEffectInstance(MOON_GRAVITY_EFFECT.get(), 20 * 30, 0), 1.0f) // Moon Gravity, 30s
-                .effect(() -> new MobEffectInstance(MobEffects.JUMP, 20 * 30, 1), 1.0f) // Jump Boost II, 30s
+                .effect(() -> new MobEffectInstance(MobEffects.JUMP, 20 * 30, 0), 1.0f) // Jump Boost I, 30s
                 .build())
             .stacksTo(64)));
 
@@ -427,7 +431,6 @@ public final class ultimate_apple_modForge {
                 output.accept(BURNT_APPLE.get());
                 output.accept(BIRNE.get());
                 output.accept(BLAZE_APPLE.get());
-                output.accept(BLAZING_APPLE_STEW.get());
                 output.accept(ENDER_PEARL_APPLE.get());
                 output.accept(MOON_APPLE.get());
                 output.accept(ORCHARD_APPLE.get());
