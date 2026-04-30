@@ -2,10 +2,12 @@ package de.maxi.ultimate_apple_mod.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -15,8 +17,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -61,11 +65,44 @@ public class OrchardCallerItem extends Item {
      * Returns the number of trees actually planted.
      * Called both from eating the Orchard Apple directly and from shakes/bombs.
      */
+    /**
+     * Picks the appropriate tree type for the biome at {@code pos}.
+     * Falls back to Oak for any biome without a natural single-trunk tree type.
+     *
+     * <ul>
+     *   <li>birch / old_growth_birch → Birch</li>
+     *   <li>jungle / bamboo_jungle / sparse_jungle → Jungle tree (small)</li>
+     *   <li>taiga / snowy_taiga / old_growth_*_taiga → Spruce</li>
+     *   <li>savanna / savanna_plateau / windswept_savanna → Acacia</li>
+     *   <li>everything else (oak, dark forest, swamp, mangrove …) → Oak</li>
+     * </ul>
+     */
+    private static ResourceKey<ConfiguredFeature<?, ?>> treeTypeForBiome(
+            ServerLevel level, BlockPos pos) {
+        Holder<Biome> biomeHolder = level.getBiome(pos);
+        String biome = biomeHolder.unwrapKey()
+            .map(k -> k.location().getPath())
+            .orElse("");
+
+        if (biome.contains("birch"))   return TreeFeatures.BIRCH;
+        if (biome.contains("jungle"))  return TreeFeatures.JUNGLE_TREE;
+        if (biome.contains("taiga"))   return TreeFeatures.SPRUCE;
+        if (biome.contains("savanna")) return TreeFeatures.ACACIA;
+        return TreeFeatures.OAK;
+    }
+
     public static int plantTrees(ServerLevel serverLevel, BlockPos center,
                                   RandomSource rng, int maxTrees) {
+        ResourceKey<ConfiguredFeature<?, ?>> treeType = treeTypeForBiome(serverLevel, center);
         var featureOpt = serverLevel.registryAccess()
             .registry(Registries.CONFIGURED_FEATURE)
-            .flatMap(reg -> reg.getHolder(TreeFeatures.OAK));
+            .flatMap(reg -> reg.getHolder(treeType));
+        // Fall back to oak if the biome-specific feature isn't available
+        if (featureOpt.isEmpty()) {
+            featureOpt = serverLevel.registryAccess()
+                .registry(Registries.CONFIGURED_FEATURE)
+                .flatMap(reg -> reg.getHolder(TreeFeatures.OAK));
+        }
         if (featureOpt.isEmpty()) return 0;
         var treeFeature = featureOpt.get().value();
 
