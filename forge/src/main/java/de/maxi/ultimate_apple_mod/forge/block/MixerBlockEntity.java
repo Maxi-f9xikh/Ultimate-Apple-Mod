@@ -161,6 +161,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         if (!(cup.getItem() instanceof CupItem)) return false;
         if (ing1.isEmpty() || ing2.isEmpty()) return false;
         if (ing1.getItem() == ing2.getItem()) return false;  // same type not allowed
+        if (MixerRecipes.areIncompatible(ing1, ing2)) return false;
 
         return MixerRecipes.getContribution(ing1).isPresent()
             && MixerRecipes.getContribution(ing2).isPresent();
@@ -316,14 +317,17 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
             case SLOT_CUP  -> stack.getItem() instanceof CupItem;
             case SLOT_ING1 -> {
                 if (MixerRecipes.getContribution(stack).isEmpty()) yield false;
-                // Prevent placing the same item type as whatever is in ING2
                 ItemStack ing2 = items.get(SLOT_ING2);
-                yield ing2.isEmpty() || ing2.getItem() != stack.getItem();
+                yield ing2.isEmpty()
+                    || (ing2.getItem() != stack.getItem()
+                        && !MixerRecipes.areIncompatible(stack, ing2));
             }
             case SLOT_ING2 -> {
                 if (MixerRecipes.getContribution(stack).isEmpty()) yield false;
                 ItemStack ing1 = items.get(SLOT_ING1);
-                yield ing1.isEmpty() || ing1.getItem() != stack.getItem();
+                yield ing1.isEmpty()
+                    || (ing1.getItem() != stack.getItem()
+                        && !MixerRecipes.areIncompatible(stack, ing1));
             }
             case SLOT_OUTPUT -> false;  // output-only
             default -> false;

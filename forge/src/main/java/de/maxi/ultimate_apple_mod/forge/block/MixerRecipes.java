@@ -192,9 +192,7 @@ public final class MixerRecipes {
             new EffectData(resistance, 20 * 25, 0)     // Resistance I, 25s
         ), 0, false, false);
 
-        register("ender_pearl_apple", List.of(
-            new EffectData(speed, 20 * 15, 1)          // Speed II, 15s
-        ), 0, false, false);
+        // ender_pearl_apple registered below via registerEnderTeleport (line ~295)
 
         register("moon_apple", List.of(
             new EffectData(mod("moon_gravity"), 20 * 30, 0), // Moon Gravity, 30s
@@ -204,9 +202,7 @@ public final class MixerRecipes {
         // echo_apple and rewind_apple intentionally excluded —
         // their core abilities (teleportation) cannot be meaningfully stored in a shake.
 
-        register("apple_bomb", List.of(
-            new EffectData(strength, 20 * 10, 1)       // Strength II, 10s
-        ), 0, false, false);
+        // apple_bomb registered below via registerBomb (line ~300)
 
         register("wither_apple", List.of(
             new EffectData(absorption,  20 * 30, 2),   // Absorption IV, 30s
@@ -298,6 +294,37 @@ public final class MixerRecipes {
         // Apple Bomb shake: makes the shake THROWABLE instead of drinkable.
         // The combined effects of the OTHER ingredient are applied to hit entities.
         registerBomb("apple_bomb");
+    }
+
+    // ── Incompatibility rules ──────────────────────────────────────────────
+
+    private static final ResourceLocation ID_APPLE_BOMB        = mod("apple_bomb");
+    private static final ResourceLocation ID_ENDER_PEARL_APPLE = mod("ender_pearl_apple");
+    private static final ResourceLocation ID_REWIND_APPLE      = mod("rewind_apple");
+
+    /**
+     * Returns true when the two items form a forbidden combination and cannot be
+     * mixed together. The check is symmetric (order does not matter).
+     * <ul>
+     *   <li>Apple Bomb + Ender Pearl Apple — a bomb that also teleports would be
+     *       an exploit (instant escape + ranged teleport).</li>
+     *   <li>Ender Pearl Apple + Rewind Apple — two opposing teleport effects that
+     *       conflict with each other.</li>
+     * </ul>
+     */
+    public static boolean areIncompatible(ItemStack a, ItemStack b) {
+        if (a.isEmpty() || b.isEmpty()) return false;
+        ResourceLocation idA = ForgeRegistries.ITEMS.getKey(a.getItem());
+        ResourceLocation idB = ForgeRegistries.ITEMS.getKey(b.getItem());
+        if (idA == null || idB == null) return false;
+        return pair(idA, idB, ID_APPLE_BOMB,        ID_ENDER_PEARL_APPLE)
+            || pair(idA, idB, ID_ENDER_PEARL_APPLE, ID_REWIND_APPLE);
+    }
+
+    /** Returns true if {a,b} is the symmetric pair {x,y}. */
+    private static boolean pair(ResourceLocation a, ResourceLocation b,
+                                 ResourceLocation x, ResourceLocation y) {
+        return (a.equals(x) && b.equals(y)) || (a.equals(y) && b.equals(x));
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
