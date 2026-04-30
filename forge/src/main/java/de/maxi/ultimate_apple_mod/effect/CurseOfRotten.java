@@ -4,10 +4,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 
 public class CurseOfRotten extends MobEffect {
 
@@ -20,13 +22,18 @@ public class CurseOfRotten extends MobEffect {
     /**
      * While the curse is active and the sun is shining directly on the entity,
      * ignite them for 8 seconds — exactly like a zombie in daylight.
-     * The check uses the vanilla {@link LivingEntity#isSunBurnTick()} which already
-     * accounts for: daytime, no helmet, not submerged, clear sky above.
+     * Checks: daytime, clear sky above, not in water, no helmet equipped.
      */
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (!entity.level().isClientSide() && entity.isSunBurnTick()) {
-            entity.igniteForSeconds(8);
+        Level level = entity.level();
+        if (level.isClientSide()) return;
+        // Replicate isSunBurnTick(): daytime, sky visible, not in water, no helmet
+        if (level.isDay()
+                && level.canSeeSky(entity.blockPosition())
+                && !entity.isInWater()
+                && entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+            entity.setSecondsOnFire(8);
         }
     }
 
