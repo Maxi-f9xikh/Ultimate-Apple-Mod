@@ -21,7 +21,14 @@
       "Bash(/c/Python314/python.exe -c ' *)",
       "Read(//e/Programieren/Projekte/Ultimate Apple Mod/**)",
       "Bash(JAVA_HOME=\"C:/Users/Maxi/.jdks/temurin-17.0.15\" ./gradlew :forge:build)",
-      "Bash(JAVA_HOME=\"C:/Users/Maxi/.jdks/temurin-17.0.15\" ./gradlew :forge:compileJava)"
+      "Bash(JAVA_HOME=\"C:/Users/Maxi/.jdks/temurin-17.0.15\" ./gradlew :forge:compileJava)",
+      "Bash(dir \"E:\\\\Programieren\\\\Projekte\\\\Ultimate Apple Mod\\\\forge\\\\src\\\\main\\\\resources\\\\data\\\\ultimate_apple_mod\\\\advancements\" /b)",
+      "Bash(Remove-Item \"E:\\\\Programieren\\\\Projekte\\\\Ultimate Apple Mod\\\\forge\\\\src\\\\main\\\\resources\\\\data\\\\ultimate_apple_mod\\\\advancements\\\\orchard_caller.json\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item \"E:\\\\Programieren\\\\Projekte\\\\Ultimate Apple Mod\\\\forge\\\\src\\\\main\\\\resources\\\\data\\\\ultimate_apple_mod\\\\advancements\\\\golden_carrot_apple.json\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"Done\")",
+      "Bash(del \"E:\\\\Programieren\\\\Projekte\\\\Ultimate Apple Mod\\\\forge\\\\src\\\\main\\\\java\\\\de\\\\maxi\\\\ultimate_apple_mod\\\\item\\\\BlazingAppleStewItem.java\")",
+      "Bash(del \"E:\\\\Programieren\\\\Projekte\\\\Ultimate Apple Mod\\\\forge\\\\src\\\\main\\\\resources\\\\assets\\\\ultimate_apple_mod\\\\models\\\\item\\\\blazing_apple_stew.json\")",
+      "Bash(del \"E:\\\\Programieren\\\\Projekte\\\\Ultimate Apple Mod\\\\forge\\\\src\\\\main\\\\resources\\\\data\\\\ultimate_apple_mod\\\\advancements\\\\blazing_apple_stew.json\")"
     ]
   }
 }
