@@ -30,9 +30,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
 
     // ── Colours (ARGB) ─────────────────────────────────────────────────────
-    private static final int BG           = 0xFFC6C6C6;
-    private static final int BORDER_DARK  = 0xFF555555;
-    private static final int BORDER_LIGHT = 0xFFFFFFFF;
+    private static final int BG            = 0xFFC6C6C6;
+    private static final int BORDER_OUTER  = 0xFF373737; // very dark outer ring (matches vanilla PNG edge)
+    private static final int BORDER_LIGHT  = 0xFFFFFFFF; // inner bevel highlight — top + left
+    private static final int BORDER_SHADOW = 0xFF555555; // inner bevel shadow — bottom + right
     private static final int SLOT_DARK    = 0xFF373737;
     private static final int SLOT_INNER   = 0xFF8B8B8B;
     private static final int SLOT_LIGHT   = 0xFFFFFFFF;
@@ -86,18 +87,19 @@ public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
         // ── Panel background ─────────────────────────────────────────────
         g.fill(x, y, x + imageWidth, y + imageHeight, BG);
 
-        // ── Outer dark frame on all four sides (1 px) ─────────────────────
-        // The vanilla container PNG has a dark outer pixel row on every edge.
-        g.fill(x,                    y,                     x + imageWidth,     y + 1,             BORDER_DARK); // top
-        g.fill(x,                    y + imageHeight - 1,   x + imageWidth,     y + imageHeight,   BORDER_DARK); // bottom
-        g.fill(x,                    y,                     x + 1,              y + imageHeight,   BORDER_DARK); // left
-        g.fill(x + imageWidth - 1,   y,                     x + imageWidth,     y + imageHeight,   BORDER_DARK); // right
+        // ── Outer frame (1 px, very dark) — matches vanilla PNG outer edge ──
+        g.fill(x,                  y,                   x + imageWidth,   y + 1,             BORDER_OUTER); // top
+        g.fill(x,                  y + imageHeight - 1, x + imageWidth,   y + imageHeight,   BORDER_OUTER); // bottom
+        g.fill(x,                  y,                   x + 1,            y + imageHeight,   BORDER_OUTER); // left
+        g.fill(x + imageWidth - 1, y,                   x + imageWidth,   y + imageHeight,   BORDER_OUTER); // right
 
-        // ── Inner highlight on top + left (1 px inside the dark frame) ────
-        // Matches the vanilla "raised panel" bevel that makes the GUI look
-        // like the crafting table and other standard container GUIs.
-        g.fill(x + 1, y + 1, x + imageWidth - 1, y + 2,            BORDER_LIGHT); // top inner
-        g.fill(x + 1, y + 1, x + 2,              y + imageHeight - 1, BORDER_LIGHT); // left inner
+        // ── Inner bevel (1 px): light on top+left, shadow on bottom+right ─
+        // Together with the outer ring this reproduces the raised-panel look
+        // of the Crafting Table and all standard vanilla container GUIs.
+        g.fill(x + 1, y + 1, x + imageWidth - 1, y + 2,                BORDER_LIGHT);  // top-inner highlight
+        g.fill(x + 1, y + 1, x + 2,              y + imageHeight - 1,   BORDER_LIGHT);  // left-inner highlight
+        g.fill(x + 1, y + imageHeight - 2, x + imageWidth - 1, y + imageHeight - 1, BORDER_SHADOW); // bottom-inner shadow
+        g.fill(x + imageWidth - 2, y + 1,  x + imageWidth - 1, y + imageHeight - 1, BORDER_SHADOW); // right-inner shadow
 
         // ── Mixer area slots ──────────────────────────────────────────────
         drawSlot(g, x + CUP_X,  y + CUP_Y);
