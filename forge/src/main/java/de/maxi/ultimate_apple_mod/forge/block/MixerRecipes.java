@@ -42,10 +42,31 @@ public final class MixerRecipes {
          */
         double durationMultiplier,
         /**
-         * When true, drinking the shake applies a massive upward velocity burst
+         * When true, drinking/throwing the shake applies a massive upward velocity burst
          * (same mechanic as eating the Void Apple directly).
          */
-        boolean voidLaunch
+        boolean voidLaunch,
+        /**
+         * When true, drinking the shake teleports the player back 5 seconds in time
+         * using the RewindTracker position history (same as Rewind Apple).
+         */
+        boolean rewindEffect,
+        /**
+         * When true, drinking the shake plants up to 6 oak trees around the player
+         * (same as Orchard Apple, but 2 more trees because of the mixing bonus).
+         */
+        boolean orchardSpawn,
+        /**
+         * When true, drinking/applying the shake teleports the entity up to 256 blocks
+         * in their current look direction (same as Ender Pearl Apple).
+         */
+        boolean enderTeleport,
+        /**
+         * When true, the shake is a throwable item instead of a drinkable one.
+         * Right-clicking throws a ShakeBombEntity that applies all stored effects to
+         * any entity it hits (direct hit) or nearby entities (AOE on block hit).
+         */
+        boolean isBomb
     ) {}
 
     // ── Registry ───────────────────────────────────────────────────────────
@@ -160,12 +181,6 @@ public final class MixerRecipes {
             new EffectData(fireRes,  20 * 15, 0)       // Fire Resistance, 15s
         ), 0, false, false);
 
-        register("blazing_apple_stew", List.of(
-            new EffectData(regen,    20 * 10, 1),      // Regen II, 10s
-            new EffectData(strength, 20 * 10, 1),      // Strength II, 10s
-            new EffectData(fireRes,  20 * 30, 0)       // Fire Resistance, 30s
-        ), 0, false, false);
-
         register("pear_apple", List.of(
             new EffectData(regen,      20 * 15, 0),    // Regen, 15s
             new EffectData(saturation, 20 *  5, 0)     // Saturation, 5s
@@ -197,7 +212,7 @@ public final class MixerRecipes {
             new EffectData(absorption,  20 * 30, 2),   // Absorption IV, 30s
             new EffectData(resistance,  20 * 10, 1),   // Resistance II, 10s
             new EffectData(regen,       20 *  5, 1)    // Regen II, 5s
-        ), 0, true, true);                             // + lifesteal + witherCurse
+        ), 0, true, true);  // + lifesteal + witherCurse
 
         // honey_apple cleanses all effects — its own effects are intentionally excluded
         // so the resulting shake clears the player's effects when drunk.
@@ -257,14 +272,32 @@ public final class MixerRecipes {
             new EffectData(speed,        20 * 300, 1)  // Speed II, 5 min
         ), 0, false, false);
 
-        // Quantum Apple shake: "average apple" — a randomized middle ground.
-        // We deliberately pick a fixed set of common buffs so the shake is still
-        // useful and predictable when put in the Mixer alongside another apple.
+        // Quantum Apple: this registration exists only so the item can be placed in
+        // the Mixer. The actual effects are RANDOMISED at mix-time by MixerBlockEntity —
+        // the fixed effects here are never used in buildShakeNbt.
         register("quantum_apple", List.of(
-            new EffectData(regen,      20 * 15, 1), // Regen II, 15s
-            new EffectData(absorption, 20 * 60, 1), // Absorption II, 60s
-            new EffectData(strength,   20 * 15, 0)  // Strength, 15s
+            new EffectData(regen,      20 * 15, 1), // placeholder (overridden at build-time)
+            new EffectData(absorption, 20 * 60, 1),
+            new EffectData(strength,   20 * 15, 0)
         ), 0, false, false);
+
+        // ── Special behaviour contributors ─────────────────────────────────────
+
+        // Rewind Apple shake: teleports the drinker back 5 seconds using position history.
+        registerRewind("rewind_apple");
+
+        // Orchard Apple shake: plants up to 6 oak trees at the drink/impact location.
+        registerOrchard("orchard_apple");
+
+        // Ender Pearl Apple shake: also teleports the drinker/target in their look direction.
+        // Speed II is kept as a secondary effect to make the shake useful on its own.
+        registerEnderTeleport("ender_pearl_apple", List.of(
+            new EffectData(speed, 20 * 15, 1)  // Speed II, 15s
+        ));
+
+        // Apple Bomb shake: makes the shake THROWABLE instead of drinkable.
+        // The combined effects of the OTHER ingredient are applied to hit entities.
+        registerBomb("apple_bomb");
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
@@ -296,7 +329,8 @@ public final class MixerRecipes {
     private static void register(String itemName, List<EffectData> effects,
                                   int dragonCharges, boolean lifesteal, boolean witherCurse) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0, false));
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse,
+                false, 1.0, false, false, false, false, false));
     }
 
     /**
@@ -307,26 +341,62 @@ public final class MixerRecipes {
                                   int dragonCharges, boolean lifesteal, boolean witherCurse,
                                   double durationMultiplier) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, durationMultiplier, false));
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse,
+                false, durationMultiplier, false, false, false, false, false));
     }
 
     /** Register a mod item whose shake cleanses all effects (e.g. honey_apple). */
     private static void registerCleansing(String itemName) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(List.of(), 0, false, false, true, 1.0, false));
+            new ShakeContribution(List.of(), 0, false, false, true, 1.0, false, false, false, false, false));
     }
 
     /** Register a mod item that triggers the Void Apple launch mechanic. */
     private static void registerVoidLaunch(String itemName, List<EffectData> effects) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, 0, false, false, false, 1.0, true));
+            new ShakeContribution(effects, 0, false, false, false, 1.0, true, false, false, false, false));
+    }
+
+    /** Register a mod item whose shake rewinds the drinker 5 seconds back in time. */
+    private static void registerRewind(String itemName) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, true, false, false, false));
+    }
+
+    /** Register a mod item whose shake plants up to 6 trees at the drink/impact location. */
+    private static void registerOrchard(String itemName) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, true, false, false));
+    }
+
+    /** Register a mod item whose shake also teleports the entity in their look direction. */
+    private static void registerEnderTeleport(String itemName, List<EffectData> effects) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(effects, 0, false, false, false, 1.0, false, false, false, true, false));
+    }
+
+    /** Register a mod item that turns the shake into a throwable bomb. */
+    private static void registerBomb(String itemName) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, false, false, true));
     }
 
     /** Register a vanilla Minecraft item (minecraft:<name>). */
     private static void registerVanilla(String itemName, List<EffectData> effects,
                                          int dragonCharges, boolean lifesteal, boolean witherCurse) {
         REGISTRY.put(mc(itemName),
-            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse, false, 1.0, false));
+            new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse,
+                false, 1.0, false, false, false, false, false));
+    }
+
+    /**
+     * Returns all contributions that have regular mob effects (no isBomb).
+     * Used by Quantum Apple to pick a random contribution at mix-time.
+     */
+    public static java.util.List<ShakeContribution> getRandomizableContributions() {
+        return REGISTRY.values().stream()
+            .filter(c -> !c.isBomb())
+            .collect(java.util.stream.Collectors.toList());
     }
 
     private static ResourceLocation mc(String path)  { return new ResourceLocation("minecraft",         path); }

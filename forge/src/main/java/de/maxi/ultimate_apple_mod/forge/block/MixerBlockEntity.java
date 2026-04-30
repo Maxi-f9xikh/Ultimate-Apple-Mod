@@ -3,6 +3,8 @@ package de.maxi.ultimate_apple_mod.forge.block;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.item.CupItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -19,13 +21,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MixerBlockEntity extends BlockEntity implements Container, MenuProvider {
 
@@ -101,6 +103,24 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
                 MixerRecipes.ShakeContribution c2 =
                     MixerRecipes.getContribution(be.items.get(SLOT_ING2)).get();
 
+                // Quantum Apple: replace its fixed contribution with a random one
+                // from the registry so every shake with Quantum is a surprise.
+                ResourceLocation quantumId =
+                    new ResourceLocation("ultimate_apple_mod", "quantum_apple");
+                var rng = level.getRandom();
+                List<MixerRecipes.ShakeContribution> pool =
+                    MixerRecipes.getRandomizableContributions();
+                if (!pool.isEmpty()) {
+                    if (quantumId.equals(
+                            ForgeRegistries.ITEMS.getKey(be.items.get(SLOT_ING1).getItem()))) {
+                        c1 = pool.get(rng.nextInt(pool.size()));
+                    }
+                    if (quantumId.equals(
+                            ForgeRegistries.ITEMS.getKey(be.items.get(SLOT_ING2).getItem()))) {
+                        c2 = pool.get(rng.nextInt(pool.size()));
+                    }
+                }
+
                 // Consume 1 of each item immediately (furnace-style)
                 be.consumeSlot(SLOT_CUP);
                 be.consumeSlot(SLOT_ING1);
@@ -165,10 +185,15 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         }
 
         // Sum / OR the special values — also zeroed out when cleansing.
-        int dragonCharges = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
-        boolean lifesteal   = !clearsEffects && (c1.lifesteal()   || c2.lifesteal());
-        boolean witherCurse = !clearsEffects && (c1.witherCurse() || c2.witherCurse());
-        boolean voidLaunch  = !clearsEffects && (c1.voidLaunch()  || c2.voidLaunch());
+        int dragonCharges  = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
+        boolean lifesteal    = !clearsEffects && (c1.lifesteal()    || c2.lifesteal());
+        boolean witherCurse  = !clearsEffects && (c1.witherCurse()  || c2.witherCurse());
+        boolean voidLaunch   = !clearsEffects && (c1.voidLaunch()   || c2.voidLaunch());
+        boolean rewindEffect = !clearsEffects && (c1.rewindEffect() || c2.rewindEffect());
+        boolean orchardSpawn = !clearsEffects && (c1.orchardSpawn() || c2.orchardSpawn());
+        boolean enderTeleport = !clearsEffects && (c1.enderTeleport() || c2.enderTeleport());
+        // isBomb: always throwable when either ingredient is the Apple Bomb
+        boolean isBomb = c1.isBomb() || c2.isBomb();
 
         // Duration multiplier: take the higher of the two ingredients' multipliers
         // (Longevity Apple contributes 2.0; everything else is 1.0).
@@ -186,11 +211,15 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
             effectsList.add(et);
         }
         tag.put("effects", effectsList);
-        tag.putInt("dragonCharges",     dragonCharges);
-        tag.putBoolean("lifesteal",     lifesteal);
-        tag.putBoolean("witherCurse",   witherCurse);
-        tag.putBoolean("clearsEffects", clearsEffects);
-        tag.putBoolean("voidLaunch",    voidLaunch);
+        tag.putInt("dragonCharges",      dragonCharges);
+        tag.putBoolean("lifesteal",      lifesteal);
+        tag.putBoolean("witherCurse",    witherCurse);
+        tag.putBoolean("clearsEffects",  clearsEffects);
+        tag.putBoolean("voidLaunch",     voidLaunch);
+        tag.putBoolean("rewindEffect",   rewindEffect);
+        tag.putBoolean("orchardSpawn",   orchardSpawn);
+        tag.putBoolean("enderTeleport",  enderTeleport);
+        tag.putBoolean("isBomb",         isBomb);
         return tag;
     }
 
