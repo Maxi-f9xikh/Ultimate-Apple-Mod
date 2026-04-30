@@ -1,7 +1,9 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.event.RewindTracker;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -10,7 +12,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffect;
@@ -54,6 +59,40 @@ public class ShakeItem extends Item {
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.DRINK;
+    }
+
+    // ── Throw (bomb shake) ───────────────────────────────────────────────────
+
+    /**
+     * If the shake has {@code isBomb=true}, throw it as a ShakeBombEntity
+     * instead of drinking it. Returns the empty cup as the replacement item.
+     */
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        CompoundTag tag = stack.getTag();
+
+        if (tag != null && tag.getBoolean("isBomb")) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL,
+                0.5f, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
+
+            if (!level.isClientSide()) {
+                ShakeBombEntity bomb = new ShakeBombEntity(player, level, stack.copy());
+                bomb.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, 1.5f, 1.0f);
+                level.addFreshEntity(bomb);
+            }
+
+            // Consuming the shake always leaves a cup in hand (like drinking does)
+            if (player.getAbilities().instabuild) {
+                return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+            }
+            return InteractionResultHolder.sidedSuccess(
+                new ItemStack(ultimate_apple_modForge.CUP_ITEM.get()), level.isClientSide());
+        }
+
+        // Not a bomb — drink normally
+        return super.use(level, player, hand);
     }
 
     // ── Consumption ─────────────────────────────────────────────────────────
@@ -140,6 +179,32 @@ public class ShakeItem extends Item {
             player.connection.send(new ClientboundSetEntityMotionPacket(
                 player.getId(), player.getDeltaMovement()));
         }
+
+        // Rewind: teleport back 5 seconds in position history
+        if (tag.getBoolean("rewindEffect")) {
+            Vec3 oldPos = RewindTracker.getPositionFiveSecondsAgo(player);
+            if (oldPos != null) {
+                player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
+                player.displayClientMessage(
+                    Component.translatable("message.ultimate_apple_mod.rewind"), true);
+            } else {
+                player.displayClientMessage(
+                    Component.translatable("message.ultimate_apple_mod.rewind_no_history"), true);
+            }
+        }
+
+        // Orchard spawn: plant trees at the player's current location
+        if (tag.getBoolean("orchardSpawn")) {
+            if (level instanceof ServerLevel serverLevel) {
+                OrchardCallerItem.plantTrees(
+                    serverLevel, player.blockPosition(), serverLevel.getRandom(), 6);
+            }
+        }
+
+        // Ender teleport: look-direction teleport up to 256 blocks
+        if (tag.getBoolean("enderTeleport")) {
+            ShakeBombEntity.performEnderTeleport(player);
+        }
     }
 
     // ── Tooltip ─────────────────────────────────────────────────────────────
@@ -195,7 +260,21 @@ public class ShakeItem extends Item {
         if (tag.getBoolean("voidLaunch")) {
             components.add(Component.literal("§9⬆ Void Launch on drink!"));
         }
-        components.add(Component.literal("§8(+20% duration from mixing)").withStyle(ChatFormatting.DARK_GRAY));
+        if (tag.getBoolean("rewindEffect")) {
+            components.add(Component.literal("§b⏪ Rewinds you 5 seconds on drink"));
+        }
+        if (tag.getBoolean("orchardSpawn")) {
+            components.add(Component.literal("§2🌳 Spawns up to 6 trees on drink"));
+        }
+        if (tag.getBoolean("enderTeleport")) {
+            components.add(Component.literal("§5⚡ Ender-teleports you on drink"));
+        }
+        if (tag.getBoolean("isBomb")) {
+            components.add(Component.literal("§c⚠ Right-click to throw!").withStyle(ChatFormatting.RED));
+            components.add(Component.literal("§7Applies effects on impact.").withStyle(ChatFormatting.GRAY));
+        } else {
+            components.add(Component.literal("§8(+20% duration from mixing)").withStyle(ChatFormatting.DARK_GRAY));
+        }
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────────

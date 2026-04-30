@@ -8,6 +8,7 @@ import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -51,28 +52,36 @@ public class OrchardCallerItem extends Item {
             return stack;
         }
 
-        // Get the oak tree configured feature — places a full grown tree directly
+        plantTrees(serverLevel, playerPos, serverLevel.getRandom(), 4);
+        return super.finishUsingItem(stack, level, livingEntity);
+    }
+
+    /**
+     * Plants up to {@code maxTrees} oak trees around {@code center}.
+     * Returns the number of trees actually planted.
+     * Called both from eating the Orchard Apple directly and from shakes/bombs.
+     */
+    public static int plantTrees(ServerLevel serverLevel, BlockPos center,
+                                  RandomSource rng, int maxTrees) {
         var featureOpt = serverLevel.registryAccess()
             .registry(Registries.CONFIGURED_FEATURE)
             .flatMap(reg -> reg.getHolder(TreeFeatures.OAK));
-
-        if (featureOpt.isEmpty()) {
-            return super.finishUsingItem(stack, level, livingEntity);
-        }
+        if (featureOpt.isEmpty()) return 0;
         var treeFeature = featureOpt.get().value();
 
         int treesPlanted = 0;
-        int attempts = 0;
-        while (treesPlanted < 4 && attempts < 60) {
+        int attempts     = 0;
+        int maxAttempts  = maxTrees * 15;
+        while (treesPlanted < maxTrees && attempts < maxAttempts) {
             attempts++;
-            int dx = serverLevel.getRandom().nextIntBetweenInclusive(-6, 6);
-            int dz = serverLevel.getRandom().nextIntBetweenInclusive(-6, 6);
+            int dx = rng.nextIntBetweenInclusive(-6, 6);
+            int dz = rng.nextIntBetweenInclusive(-6, 6);
             if (dx == 0 && dz == 0) continue;
 
-            BlockPos base = playerPos.offset(dx, 0, dz);
+            BlockPos base = center.offset(dx, 0, dz);
             for (int dy = 2; dy >= -3; dy--) {
                 BlockPos groundPos = base.offset(0, dy - 1, 0);
-                BlockPos treePos  = base.offset(0, dy, 0);
+                BlockPos treePos   = base.offset(0, dy,     0);
 
                 if (!serverLevel.getBlockState(groundPos).isSolid()) continue;
 
@@ -96,10 +105,9 @@ public class OrchardCallerItem extends Item {
                 boolean grew = treeFeature.place(
                     serverLevel,
                     serverLevel.getChunkSource().getGenerator(),
-                    serverLevel.getRandom(),
+                    rng,
                     treePos
                 );
-
                 if (grew) {
                     serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
                         treePos.getX() + 0.5, treePos.getY() + 1.5, treePos.getZ() + 0.5,
@@ -109,8 +117,7 @@ public class OrchardCallerItem extends Item {
                 }
             }
         }
-
-        return super.finishUsingItem(stack, level, livingEntity);
+        return treesPlanted;
     }
 
     @Override

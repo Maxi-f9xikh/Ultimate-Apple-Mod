@@ -2,6 +2,7 @@ package de.maxi.ultimate_apple_mod.forge;
 
 import de.maxi.ultimate_apple_mod.forge.block.MixerScreen;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
+import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -55,6 +56,8 @@ public class ModClient {
     @SubscribeEvent
     public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ultimate_apple_modForge.APPLE_BOMB_ENTITY.get(),
+            ThrownItemRenderer::new);
+        event.registerEntityRenderer(ultimate_apple_modForge.SHAKE_BOMB_ENTITY.get(),
             ThrownItemRenderer::new);
     }
 
