@@ -234,9 +234,12 @@ public final class MixerRecipes {
 
         // ── New apples ─────────────────────────────────────────────────────────
 
-        // Totem Apple is intentionally NOT registered — its one-time death-cancellation
-        // ability is too powerful to combine in a shake, and any effect approximation
-        // would be confusing or overpowered.
+        // Totem Apple: contributes Totem Protection. The death-cancellation
+        // itself is passive (handled by TotemProtectionEffect), so combining it
+        // in a shake is safe — the shake just grants the buff.
+        register("totem_apple", List.of(
+            new EffectData(mod("totem_protection"), 20 * 30, 0)  // Totem Protection, 30s
+        ), 0, false, false);
 
         // Void Apple shake: triggers the massive upward launch + Slow Falling,
         // exactly as eating the apple directly when falling.
@@ -244,9 +247,10 @@ public final class MixerRecipes {
             new EffectData(new ResourceLocation("minecraft", "slow_falling"), 20 * 15, 0)
         ));
 
-        // Time Freeze Apple shake: shorter Time Freeze (10 s instead of 30 s).
+        // Time Freeze Apple shake: 25 s base → after the mixer's +20 % bonus = 30 s,
+        // matching what eating the apple directly gives. With Longevity Apple: 60 s.
         register("time_freeze_apple", List.of(
-            new EffectData(mod("time_freeze"), 20 * 10, 0) // Time Freeze, 10s
+            new EffectData(mod("time_freeze"), 20 * 25, 0) // Time Freeze, 25s base
         ), 0, false, false);
 
         // Quantum Apple is intentionally not added to the Mixer — its whole point
