@@ -259,8 +259,9 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationMod(0.6f).alwaysEat()
+                // Moon Gravity alone produces a ~4–5 block symmetric arc (≈ 3× normal height).
+                // No Jump Boost — the gravity reduction IS the height bonus.
                 .effect(() -> new MobEffectInstance(MOON_GRAVITY_EFFECT.get(), 20 * 30, 0), 1.0f) // Moon Gravity, 30s
-                .effect(() -> new MobEffectInstance(MobEffects.JUMP, 20 * 30, 0), 1.0f) // Jump Boost I, 30s
                 .build())
             .stacksTo(64)));
 

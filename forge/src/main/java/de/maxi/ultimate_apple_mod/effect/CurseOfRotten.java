@@ -11,6 +11,25 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class CurseOfRotten extends MobEffect {
 
+    /** Check sun-burn once per second — same cadence Minecraft uses for zombie sunburn. */
+    @Override
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        return duration % 20 == 0;
+    }
+
+    /**
+     * While the curse is active and the sun is shining directly on the entity,
+     * ignite them for 8 seconds — exactly like a zombie in daylight.
+     * The check uses the vanilla {@link LivingEntity#isSunBurnTick()} which already
+     * accounts for: daytime, no helmet, not submerged, clear sky above.
+     */
+    @Override
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        if (!entity.level().isClientSide() && entity.isSunBurnTick()) {
+            entity.igniteForSeconds(8);
+        }
+    }
+
     public CurseOfRotten() {
         super(MobEffectCategory.HARMFUL, 0x7e5c3d);
 

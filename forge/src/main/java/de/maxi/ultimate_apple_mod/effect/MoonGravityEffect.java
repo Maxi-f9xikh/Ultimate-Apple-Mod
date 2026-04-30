@@ -8,29 +8,40 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Moon Gravity — reduces gravitational acceleration to ~20 % while the entity is airborne.
+ * Moon Gravity — symmetric low-gravity physics while the entity is airborne.
  *
- * Normal gravity: −0.08 blocks/tick per tick.
- * Moon Gravity:   counteracts +0.064/tick → effective gravity ≈ −0.016/tick (20 % normal).
+ * Vertical axis
+ * ─────────────
+ * Normal Minecraft gravity: −0.08 blocks/tick, drag 0.98 → net −0.0784/tick.
+ * Moon counteraction: +0.064/tick applied BEFORE physics each tick.
+ * Effective net gravity per tick ≈ (v − 0.016) × 0.98, terminal velocity ≈ −0.8 m/tick.
+ * Applied symmetrically on both the rising and falling phase → perfectly mirrored arc.
+ * With normal jump (v₀ = 0.42, no Jump Boost): peak ≈ 4–5 blocks, air time ≈ 35 ticks.
  *
- * Critically, the counteraction is applied on BOTH the rising AND falling phase.
- * This creates symmetric lunar physics: the jump arc is perfectly mirrored —
- * the entity rises just as slowly as it falls. Combined with Jump Boost I, this
- * produces a noticeably higher jump with a smooth, floaty feel on both sides.
+ * Horizontal axis
+ * ───────────────
+ * Vanilla air drag removes 9 % of horizontal speed per tick (×0.91).
+ * Over a 35-tick moon jump this decays sprint speed to near zero — the player
+ * can barely move forward. We compensate by mostly cancelling the horizontal drag
+ * so that the player retains ~96 % of horizontal speed per tick while airborne.
+ * The net factor applied here is (0.96 / 0.91) ≈ 1.055; physics then multiplies
+ * by 0.91 again → effective net horizontal drag 0.96 per tick (vs 0.91 vanilla).
  *
- * Physics:  vanilla jump v₀ ≈ 0.42 + JB-I bonus → effective gravity 0.016/tick
- *           → peak height ≈ 8 blocks, total hang time ≈ 50+ ticks.
- *
- * Motion is synced every tick to prevent the client's own gravity simulation
- * from fighting the server correction, which would cause a snapping/stuttering feel.
+ * Motion is synced every tick so the client never diverges and causes snapping.
  */
 public class MoonGravityEffect extends MobEffect {
+
+    // 0.064 counteracts 80 % of vanilla gravity → net gravity ~20 % of normal
+    private static final double GRAVITY_COUNTERACTION = 0.064;
+
+    // Mostly cancels the 0.91 vanilla air drag → net horizontal retention = 0.96/tick
+    private static final double H_FACTOR = 0.96 / 0.91; // ≈ 1.055
 
     public MoonGravityEffect() {
         super(MobEffectCategory.BENEFICIAL, 0xC8C8FF); // pale blue-white
     }
 
-    /** Fire every tick so the gravity counteraction is smooth. */
+    /** Fire every tick for a smooth, continuous counteraction. */
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
@@ -39,15 +50,16 @@ public class MoonGravityEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.level().isClientSide()) return;
-        if (entity.onGround()) return;  // no effect while standing
+        if (entity.onGround()) return;
 
         Vec3 v = entity.getDeltaMovement();
-        // Counteract 80 % of vanilla gravity every tick.
-        // Applied to both rising (v.y > 0) AND falling (v.y < 0) for a symmetric arc —
-        // the entity decelerates going up at the same rate it accelerates going down.
-        entity.setDeltaMovement(v.x, v.y + 0.064, v.z);
+        entity.setDeltaMovement(
+            v.x * H_FACTOR,                  // preserve horizontal momentum
+            v.y + GRAVITY_COUNTERACTION,      // symmetric arc — same for rise & fall
+            v.z * H_FACTOR
+        );
 
-        // Sync every tick so the client never diverges and causes snapping.
+        // Sync every tick so the client's own gravity simulation stays in lockstep.
         if (entity instanceof ServerPlayer sp) {
             sp.connection.send(new ClientboundSetEntityMotionPacket(
                 sp.getId(), entity.getDeltaMovement()));
