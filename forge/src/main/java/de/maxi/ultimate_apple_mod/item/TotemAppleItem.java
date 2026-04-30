@@ -35,7 +35,7 @@ public class TotemAppleItem extends Item {
                 .saturationMod(0.5f)
                 .alwaysEat()
                 .build())
-            .stacksTo(64));
+            .stacksTo(1));   // like Totem of Undying — one at a time
     }
 
     @Override
