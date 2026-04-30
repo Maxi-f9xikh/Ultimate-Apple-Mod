@@ -12,10 +12,7 @@
   "item.ultimate_apple_mod.redstone_apple": "Redstoneapfel",
   "effect.ultimate_apple_mod.curse_of_rotten": "Verdorbenheit",
   "item.ultimate_apple_mod.pear_apple": "Birne",
-  "item.ultimate_apple_mod.blazing_apple_stew": "Lodernde Apfelsuppe",
   "item.ultimate_apple_mod.blaze_apple": "Lohenapfel",
-  "tooltip.ultimate_apple_mod.blazing_apple_stew.line1": "§6Feuerfest und kraftvoll – hält dich am Leben!",
-  "tooltip.ultimate_apple_mod.blazing_apple_stew.line2": "§7Gibt Regeneration, Stärke und Feuerresistenz.",
   "item.ultimate_apple_mod.ender_pearl_apple": "Enderperlenapfel",
   "tooltip.ultimate_apple_mod.ender_pearl_apple.line1": "§6Teleportation entlang der Blickrichtung.",
   "tooltip.ultimate_apple_mod.ender_pearl_apple.line2": "§7Bis zu 256 Blöcke – mit der Kraft der Endermen.",
@@ -135,9 +132,6 @@
 
   "advancements.ultimate_apple_mod.wither_apple.title": "Lebenskraft",
   "advancements.ultimate_apple_mod.wither_apple.description": "Iss einen Witherapfel und erhalte Lebensraub.",
-
-  "advancements.ultimate_apple_mod.blazing_apple_stew.title": "Lodernde Kombination",
-  "advancements.ultimate_apple_mod.blazing_apple_stew.description": "Iss eine Lodernde Apfelsuppe.",
 
   "advancements.ultimate_apple_mod.echo_apple.title": "Echo der Leere",
   "advancements.ultimate_apple_mod.echo_apple.description": "Iss einen Echo-Apfel und markiere deinen Rückkehrpunkt.",

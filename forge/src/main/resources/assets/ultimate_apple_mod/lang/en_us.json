@@ -12,10 +12,7 @@
   "item.ultimate_apple_mod.redstone_apple": "Redstone Apple",
   "effect.ultimate_apple_mod.curse_of_rotten": "Curse of Rotten",
   "item.ultimate_apple_mod.pear_apple": "Pear",
-  "item.ultimate_apple_mod.blazing_apple_stew": "Blazing Apple Stew",
   "item.ultimate_apple_mod.blaze_apple": "Blaze Apple",
-  "tooltip.ultimate_apple_mod.blazing_apple_stew.line1": "§6Fireproof and powerful – keeps you alive!",
-  "tooltip.ultimate_apple_mod.blazing_apple_stew.line2": "§7Gives regeneration, strength, and fire resistance.",
   "item.ultimate_apple_mod.ender_pearl_apple": "Ender Pearl Apple",
   "tooltip.ultimate_apple_mod.ender_pearl_apple.line1": "§6Teleport in line of sight.",
   "tooltip.ultimate_apple_mod.ender_pearl_apple.line2": "§7up to 256 blocks with the power of Endermen.",
@@ -136,9 +133,6 @@
 
   "advancements.ultimate_apple_mod.wither_apple.title": "Life Force",
   "advancements.ultimate_apple_mod.wither_apple.description": "Eat a Wither Apple and gain Lifesteal.",
-
-  "advancements.ultimate_apple_mod.blazing_apple_stew.title": "Blazing Combo",
-  "advancements.ultimate_apple_mod.blazing_apple_stew.description": "Eat a Blazing Apple Stew.",
 
   "advancements.ultimate_apple_mod.echo_apple.title": "Echo of the Void",
   "advancements.ultimate_apple_mod.echo_apple.description": "Eat an Echo Apple and mark your return.",
