@@ -177,13 +177,12 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
                                               MixerRecipes.ShakeContribution c2) {
         boolean clearsEffects = c1.clearsEffects() || c2.clearsEffects();
 
-        // When ANY ingredient cleanses, the whole shake is cleanse-only —
-        // no effects from either ingredient are carried over.
+        // Effects from BOTH ingredients are always added to the shake.
+        // clearsEffects only means "clear the player's pre-existing effects when
+        // drunk" — it does NOT suppress the shake's own effects.
         Map<ResourceLocation, MixerRecipes.EffectData> merged = new LinkedHashMap<>();
-        if (!clearsEffects) {
-            for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
-            for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
-        }
+        for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
+        for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
 
         // Sum / OR the special values — also zeroed out when cleansing.
         int dragonCharges  = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
