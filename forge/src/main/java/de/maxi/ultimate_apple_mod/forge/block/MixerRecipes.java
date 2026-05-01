@@ -156,7 +156,7 @@ public final class MixerRecipes {
 
         register("rotten_apple", List.of(
             new EffectData(curseOfRotten, 20 * 20, 0), // Curse of Rotten, 20s
-            new EffectData(nausea,        20 *  5, 0)  // Nausea, 5s
+            new EffectData(nausea,        20 * 20, 0)  // Nausea, 20s (matches CurseOfRotten)
         ), 0, false, false);
 
         register("roasted_apple", List.of(
@@ -195,8 +195,8 @@ public final class MixerRecipes {
         // ender_pearl_apple registered below via registerEnderTeleport (line ~295)
 
         register("moon_apple", List.of(
-            new EffectData(mod("moon_gravity"), 20 * 30, 0), // Moon Gravity, 30s
-            new EffectData(jump,                20 * 30, 1)  // Jump Boost II, 30s
+            new EffectData(mod("moon_gravity"), 20 * 30, 0) // Moon Gravity, 30s
+            // No Jump Boost — matches direct-eat (gravity reduction IS the height bonus)
         ), 0, false, false);
 
         // echo_apple and rewind_apple intentionally excluded —
@@ -210,9 +210,13 @@ public final class MixerRecipes {
             new EffectData(regen,       20 *  5, 1)    // Regen II, 5s
         ), 0, true, true);  // + lifesteal + witherCurse
 
-        // honey_apple cleanses all effects — its own effects are intentionally excluded
-        // so the resulting shake clears the player's effects when drunk.
-        registerCleansing("honey_apple");
+        // Honey Apple shake: clears the player's active effects when drunk,
+        // AND contributes Slowness I (matching direct-eat).
+        // Other ingredient's effects are NOT suppressed — cleansing only clears
+        // the player's pre-existing effects, not the shake's own effects.
+        registerCleansing("honey_apple", List.of(
+            new EffectData(slowness, 20 * 5, 0)  // Slowness I, 5s
+        ));
 
         register("dragon_apple", List.of(
             new EffectData(absorption, 20 * 10, 3),    // Absorption IV, 10s
@@ -234,11 +238,11 @@ public final class MixerRecipes {
 
         // ── New apples ─────────────────────────────────────────────────────────
 
-        // Totem Apple: contributes Totem Protection. The death-cancellation
-        // itself is passive (handled by TotemProtectionEffect), so combining it
-        // in a shake is safe — the shake just grants the buff.
+        // Totem Apple: contributes Totem Protection at the same base duration as
+        // eating the apple directly (10 in-game days = 240 000 ticks ≈ 3.3 h).
+        // After mixer +20 %: ~288 000 ticks (~4 h). With Longevity: ~576 000 (~8 h).
         register("totem_apple", List.of(
-            new EffectData(mod("totem_protection"), 20 * 30, 0)  // Totem Protection, 30s
+            new EffectData(mod("totem_protection"), 24_000 * 10, 0) // ≈3.3 h
         ), 0, false, false);
 
         // Void Apple shake: triggers the massive upward launch + Slow Falling,
@@ -247,10 +251,10 @@ public final class MixerRecipes {
             new EffectData(new ResourceLocation("minecraft", "slow_falling"), 20 * 15, 0)
         ));
 
-        // Time Freeze Apple shake: 25 s base → after the mixer's +20 % bonus = 30 s,
-        // matching what eating the apple directly gives. With Longevity Apple: 60 s.
+        // Time Freeze Apple shake: 30 s base (= direct-eat) → after +20 % = 36 s.
+        // With Longevity Apple: 36 s × 2 = 72 s.
         register("time_freeze_apple", List.of(
-            new EffectData(mod("time_freeze"), 20 * 25, 0) // Time Freeze, 25s base
+            new EffectData(mod("time_freeze"), 20 * 30, 0) // Time Freeze, 30s base
         ), 0, false, false);
 
         // Quantum Apple is intentionally not added to the Mixer — its whole point
@@ -376,10 +380,13 @@ public final class MixerRecipes {
                 false, durationMultiplier, false, false, false, false, false));
     }
 
-    /** Register a mod item whose shake cleanses all effects (e.g. honey_apple). */
-    private static void registerCleansing(String itemName) {
+    /**
+     * Register a mod item whose shake cleanses active effects AND contributes
+     * its own effects. The cleanse happens before the shake's effects are applied.
+     */
+    private static void registerCleansing(String itemName, List<EffectData> effects) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(List.of(), 0, false, false, true, 1.0, false, false, false, false, false));
+            new ShakeContribution(effects, 0, false, false, true, 1.0, false, false, false, false, false));
     }
 
     /** Register a mod item that triggers the Void Apple launch mechanic. */
