@@ -177,12 +177,19 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
                                               MixerRecipes.ShakeContribution c2) {
         boolean clearsEffects = c1.clearsEffects() || c2.clearsEffects();
 
-        // Effects from BOTH ingredients are always added to the shake.
-        // clearsEffects only means "clear the player's pre-existing effects when
-        // drunk" — it does NOT suppress the shake's own effects.
+        // When the Honey Apple (or any cleansing ingredient) is involved, ONLY its
+        // own effects are kept — the other ingredient's effects are discarded.
+        // This means the shake clears pre-existing effects AND only applies the
+        // Honey Apple's Slowness, nothing from the second ingredient.
+        // For normal (non-cleansing) pairs, both ingredients contribute as usual.
         Map<ResourceLocation, MixerRecipes.EffectData> merged = new LinkedHashMap<>();
-        for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
-        for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
+        if (clearsEffects) {
+            if (c1.clearsEffects()) for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
+            if (c2.clearsEffects()) for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
+        } else {
+            for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
+            for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
+        }
 
         // Sum / OR the special values — also zeroed out when cleansing.
         int dragonCharges  = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
