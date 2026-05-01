@@ -52,8 +52,16 @@ public class ClientEventHandler {
                         tips.add(Component.literal("§cRots any moment now!"));
                     } else {
                         long totalSecs = remaining / 20;
+                        // Color based on time remaining:
+                        //   > 15 min → green  |  ≤ 15 min → yellow
+                        //   ≤  5 min → orange |  ≤  1 min → red
+                        String color;
+                        if      (remaining > 20L * 60 * 15) color = "§a"; // green
+                        else if (remaining > 20L * 60 *  5) color = "§e"; // yellow
+                        else if (remaining > 20L * 60 *  1) color = "§6"; // orange
+                        else                                 color = "§c"; // red
                         tips.add(Component.literal(
-                            String.format("§7Rots in: §e%d:%02d", totalSecs / 60, totalSecs % 60)));
+                            String.format("%sRots in: %d:%02d", color, totalSecs / 60, totalSecs % 60)));
                     }
                 }
             }
