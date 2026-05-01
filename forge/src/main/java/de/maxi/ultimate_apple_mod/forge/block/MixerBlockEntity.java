@@ -202,22 +202,30 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         // isBomb: always throwable when either ingredient is the Apple Bomb
         boolean isBomb = c1.isBomb() || c2.isBomb();
 
-        // Duration multiplier: take the higher of the two ingredients' multipliers
-        // (Longevity Apple contributes 2.0; everything else is 1.0).
-        // Exception: when a cleansing ingredient (Honey Apple) is involved, the
-        // Longevity multiplier is ignored — the cleanse cancels the duration boost.
-        // The flat +20 % mixer bonus still applies either way.
-        double multiplier = clearsEffects ? 1.0
-            : Math.max(c1.durationMultiplier(), c2.durationMultiplier());
+        // Raw Longevity multiplier (2.0 if Longevity Apple present, 1.0 otherwise).
+        double rawMultiplier = Math.max(c1.durationMultiplier(), c2.durationMultiplier());
+
+        // Duration factor applied to every effect duration:
+        //   Normal pair:          +20 % × Longevity multiplier  (e.g. 1.2 or 2.4)
+        //   Honey + normal apple: −20 %  (factor = 0.80)
+        //   Honey + Longevity:    effects removed entirely (merged cleared below)
+        final double durationFactor;
+        if (clearsEffects && rawMultiplier >= 2.0) {
+            merged.clear();           // Honey + Longevity → no effects at all
+            durationFactor = 1.0;     // irrelevant — loop will not run
+        } else if (clearsEffects) {
+            durationFactor = 0.80;    // Honey + anything else → −20 %
+        } else {
+            durationFactor = 1.20 * rawMultiplier;  // normal → +20 % (× Longevity)
+        }
 
         CompoundTag tag = new CompoundTag();
         ListTag effectsList = new ListTag();
         for (MixerRecipes.EffectData e : merged.values()) {
             CompoundTag et = new CompoundTag();
             et.putString("id",       e.id().toString());
-            // +20 % base bonus, then longevity multiplier on top
-            et.putInt("duration",  (int)(e.duration() * 1.20 * multiplier));
-            et.putInt("amplifier", e.amplifier());
+            et.putInt("duration",    (int)(e.duration() * durationFactor));
+            et.putInt("amplifier",   e.amplifier());
             effectsList.add(et);
         }
         tag.put("effects", effectsList);
