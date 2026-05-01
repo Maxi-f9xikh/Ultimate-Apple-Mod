@@ -67,14 +67,18 @@ public class OrchardCallerItem extends Item {
      */
     /**
      * Picks the appropriate tree type for the biome at {@code pos}.
-     * Falls back to Oak for any biome without a natural single-trunk tree type.
+     * The goal is to match the trees that naturally grow in that biome.
+     * Falls back to Oak for biomes without natural trees (beach, ocean, desert …).
      *
      * <ul>
-     *   <li>birch / old_growth_birch → Birch</li>
+     *   <li>cherry / cherry_grove → Cherry</li>
+     *   <li>birch / old_growth_birch_forest → Birch</li>
      *   <li>jungle / bamboo_jungle / sparse_jungle → Jungle tree (small)</li>
      *   <li>taiga / snowy_taiga / old_growth_*_taiga → Spruce</li>
+     *   <li>grove / snowy_slopes → Spruce (spruce grows here naturally)</li>
      *   <li>savanna / savanna_plateau / windswept_savanna → Acacia</li>
-     *   <li>everything else (oak, dark forest, swamp, mangrove …) → Oak</li>
+     *   <li>everything else (forest, dark_forest, swamp, plains,
+     *       beach, ocean, desert …) → Oak</li>
      * </ul>
      */
     private static ResourceKey<ConfiguredFeature<?, ?>> treeTypeForBiome(
@@ -84,9 +88,13 @@ public class OrchardCallerItem extends Item {
             .map(k -> k.location().getPath())
             .orElse("");
 
+        // cherry must be checked before grove — "cherry_grove" contains both substrings
+        if (biome.contains("cherry"))  return TreeFeatures.CHERRY;
         if (biome.contains("birch"))   return TreeFeatures.BIRCH;
         if (biome.contains("jungle"))  return TreeFeatures.JUNGLE_TREE;
-        if (biome.contains("taiga"))   return TreeFeatures.SPRUCE;
+        // all taiga variants, plus grove and snowy_slopes, have natural spruce trees
+        if (biome.contains("taiga") || biome.contains("grove")
+                || biome.contains("snowy_slopes")) return TreeFeatures.SPRUCE;
         if (biome.contains("savanna")) return TreeFeatures.ACACIA;
         return TreeFeatures.OAK;
     }
