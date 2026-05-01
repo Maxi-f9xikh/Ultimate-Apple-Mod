@@ -204,8 +204,11 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
 
         // Duration multiplier: take the higher of the two ingredients' multipliers
         // (Longevity Apple contributes 2.0; everything else is 1.0).
-        // On top of this, all shakes get a flat +20 % bonus duration.
-        double multiplier = Math.max(c1.durationMultiplier(), c2.durationMultiplier());
+        // Exception: when a cleansing ingredient (Honey Apple) is involved, the
+        // Longevity multiplier is ignored — the cleanse cancels the duration boost.
+        // The flat +20 % mixer bonus still applies either way.
+        double multiplier = clearsEffects ? 1.0
+            : Math.max(c1.durationMultiplier(), c2.durationMultiplier());
 
         CompoundTag tag = new CompoundTag();
         ListTag effectsList = new ListTag();
