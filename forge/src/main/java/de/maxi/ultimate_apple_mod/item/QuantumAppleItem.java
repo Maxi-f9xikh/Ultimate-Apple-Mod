@@ -125,7 +125,18 @@ public class QuantumAppleItem extends Item {
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§6Random apple effect on eat.")
             .withStyle(ChatFormatting.GOLD));
-        components.add(Component.literal("§7Could be anything. Good luck.")
-            .withStyle(ChatFormatting.GRAY));
+        if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+            components.add(Component.literal("§7Every effect from every registered apple")
+                .withStyle(ChatFormatting.GRAY));
+            components.add(Component.literal("§7is equally possible — including special")
+                .withStyle(ChatFormatting.GRAY));
+            components.add(Component.literal("§7abilities like void launch, rewind,")
+                .withStyle(ChatFormatting.GRAY));
+            components.add(Component.literal("§7wither curse and orchard spawning.")
+                .withStyle(ChatFormatting.GRAY));
+        } else {
+            components.add(Component.literal("§7Could be anything. §8[SHIFT for details]")
+                .withStyle(ChatFormatting.GRAY));
+        }
     }
 }
