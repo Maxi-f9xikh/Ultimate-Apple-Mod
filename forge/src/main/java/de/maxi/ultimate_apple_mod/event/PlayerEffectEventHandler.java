@@ -170,8 +170,8 @@ public class PlayerEffectEventHandler {
     public static void onLivingDeath(LivingDeathEvent event) {
         // Server-side only
         if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) return;
-        // Only hostile mobs count (not animals, not players)
-        if (!(event.getEntity() instanceof Enemy)) return;
+        // Skip other players — lifesteal works on any mob or animal, just not players
+        if (event.getEntity() instanceof Player) return;
 
         LivingEntity dying = event.getEntity();
 
@@ -183,14 +183,18 @@ public class PlayerEffectEventHandler {
             recipient = sp;
         }
 
-        // 2. Fallback: any nearby player with Lifesteal (covers Wither / DoT deaths).
+        // 2. Fallback: any nearby player with Lifesteal.
         //    32-block radius — Wither-cursed mobs can wander before dying.
+        //    Also covers DoT / indirect damage sources where getEntity() is null.
         if (recipient == null) {
+            double best = Double.MAX_VALUE;
             for (ServerPlayer sp : serverLevel.players()) {
-                if (sp.distanceTo(dying) <= 32.0f
+                double dist = sp.distanceToSqr(dying);
+                if (dist <= 32.0 * 32.0
+                        && dist < best
                         && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
                     recipient = sp;
-                    break;
+                    best = dist;
                 }
             }
         }

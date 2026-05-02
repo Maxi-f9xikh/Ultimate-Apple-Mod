@@ -1,14 +1,12 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "EEE",
-    "EAE",
-    "EEE"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:apple" },
+    { "item": "minecraft:rabbit_foot" },
+    { "item": "minecraft:ender_pearl" },
+    { "item": "minecraft:blaze_powder" },
+    { "item": "minecraft:fermented_spider_eye" }
   ],
-  "key": {
-    "E": { "item": "minecraft:ender_pearl" },
-    "A": { "item": "minecraft:enchanted_golden_apple" }
-  },
   "result": {
     "item": "ultimate_apple_mod:quantum_apple"
   }
