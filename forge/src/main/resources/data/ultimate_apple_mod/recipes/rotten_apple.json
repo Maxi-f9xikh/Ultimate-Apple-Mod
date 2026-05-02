@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RRR",
+    "RAR",
+    "RRR"
+  ],
+  "key": {
+    "R": { "item": "minecraft:rotten_flesh" },
+    "A": { "item": "minecraft:apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:rotten_apple"
+  }
+}
