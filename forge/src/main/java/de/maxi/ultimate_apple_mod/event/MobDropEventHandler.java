@@ -8,6 +8,7 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,17 +25,16 @@ import java.util.Random;
  *   Elder Guardian / Drowned → Prism Apple (this file, see below)
  *
  * New drops added here:
- *   Adult Zombie   →  Rotten Apple       5 %
  *   Skeleton       →  Iron Apple         8 %
  *   Creeper        →  Dirt Apple        15 %
  *   Witch          →  Honey Apple       12 %
  *   Phantom        →  Moon Apple        10 %
  *   Iron Golem     →  Iron Apple        20 %
  *   Pillager       →  Apple Bomb         5 %
- *   Evoker         →  Totem Apple       15 %
+ *   Evoker         →  Totem of Undying OR Totem Apple  50/50 (replaces vanilla drop)
  *   Shulker        →  Void Apple         8 %
  *   Wither (boss)  →  Wither Apple     100 %
- *   Elder Guardian →  Prism Apple       15 %  (kept from original)
+ *   Elder Guardian →  Prism Apple       50 %  (kept from original)
  *   Drowned        →  Prism Apple        5 %  (kept from original)
  */
 @Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -47,12 +47,9 @@ public class MobDropEventHandler {
         var entity = event.getEntity();
 
         // ── Overworld mobs ────────────────────────────────────────────────────
+        // Rotten Apple is ONLY dropped by Baby Zombies (babyzombiedroppt.java).
 
-        if (entity instanceof Zombie zombie && !zombie.isBaby()) {
-            // Baby zombies are handled in babyzombiedroppt.java (10 %)
-            roll(event, ultimate_apple_modForge.ROTTEN_APPLE.get(), 0.05);
-        }
-        else if (entity instanceof Skeleton) {
+        if (entity instanceof Skeleton) {
             roll(event, ultimate_apple_modForge.IRON_APPLE.get(), 0.08);
         }
         else if (entity instanceof Creeper) {
@@ -74,7 +71,14 @@ public class MobDropEventHandler {
             roll(event, ultimate_apple_modForge.APPLE_BOMB.get(), 0.05);
         }
         else if (entity instanceof Evoker) {
-            roll(event, ultimate_apple_modForge.TOTEM_APPLE.get(), 0.15);
+            // Remove the vanilla guaranteed Totem of Undying, then flip a coin:
+            // 50 % → keep Totem of Undying, 50 % → Totem Apple instead.
+            event.getDrops().removeIf(drop -> drop.getItem().getItem() == Items.TOTEM_OF_UNDYING);
+            if (RNG.nextDouble() < 0.5) {
+                addDrop(event, new ItemStack(Items.TOTEM_OF_UNDYING));
+            } else {
+                addDrop(event, new ItemStack(ultimate_apple_modForge.TOTEM_APPLE.get()));
+            }
         }
 
         // ── End mobs ──────────────────────────────────────────────────────────
@@ -93,7 +97,7 @@ public class MobDropEventHandler {
         // ── Ocean mobs (kept from original) ───────────────────────────────────
 
         else if (entity instanceof ElderGuardian) {
-            roll(event, ultimate_apple_modForge.PRISM_APPLE.get(), 0.15);
+            roll(event, ultimate_apple_modForge.PRISM_APPLE.get(), 0.50);
         }
         else if (entity instanceof Drowned) {
             roll(event, ultimate_apple_modForge.PRISM_APPLE.get(), 0.05);
