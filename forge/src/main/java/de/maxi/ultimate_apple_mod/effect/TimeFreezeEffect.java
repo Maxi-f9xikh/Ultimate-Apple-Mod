@@ -54,10 +54,15 @@ public class TimeFreezeEffect extends MobEffect {
         );
     }
 
-    /** Freeze loop runs every 5 ticks (0.25 s). */
+    /**
+     * Run every tick — not every 5.
+     * Squids re-apply their own swimming velocity each tick in aiStep(), so freezing
+     * only every 5 ticks lets them visibly jitter. Running every tick keeps everything
+     * (including water mobs) properly locked in place.
+     */
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % 5 == 0;
+        return true;
     }
 
     @Override
