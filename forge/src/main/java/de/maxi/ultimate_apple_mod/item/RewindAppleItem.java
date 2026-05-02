@@ -25,6 +25,10 @@ public class RewindAppleItem extends Item {
             Vec3 oldPos = RewindTracker.getPositionFiveSecondsAgo(player);
             if (oldPos != null) {
                 player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
+                // Reset fall state so the player doesn't take damage from the fall
+                // that happened before the rewind (e.g. falling into the void).
+                player.fallDistance = 0;
+                player.setDeltaMovement(player.getDeltaMovement().x, 0, player.getDeltaMovement().z);
                 player.displayClientMessage(
                     Component.translatable("message.ultimate_apple_mod.rewind"), true);
             } else {

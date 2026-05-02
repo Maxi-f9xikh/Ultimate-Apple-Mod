@@ -45,7 +45,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -471,5 +473,53 @@ public final class ultimate_apple_modForge {
         ModRecipes.register(modEventBus);
         NetworkHandler.register();
         ultimate_apple_mod.init();
+        modEventBus.addListener(ultimate_apple_modForge::commonSetup);
+    }
+
+    // ── Common Setup ─────────────────────────────────────────────────────────
+
+    private static void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+
+            // ── Composter values ───────────────────────────────────────────────
+            // Rotten / burnt / negative apples: low chance (0.30)
+            ComposterBlock.COMPOSTABLES.put(ROTTEN_APPLE.get(),       0.30f);
+            ComposterBlock.COMPOSTABLES.put(BURNT_APPLE.get(),        0.30f);
+            ComposterBlock.COMPOSTABLES.put(DIRT_APPLE.get(),         0.30f);
+
+            // Normal food apples: same as vanilla apple (0.65)
+            ComposterBlock.COMPOSTABLES.put(BAKED_APPLE.get(),        0.65f);
+            ComposterBlock.COMPOSTABLES.put(ROASTED_APPLE.get(),      0.65f);
+            ComposterBlock.COMPOSTABLES.put(BIRNE.get(),              0.65f); // pear_apple
+            ComposterBlock.COMPOSTABLES.put(BANANA.get(),             0.65f);
+            ComposterBlock.COMPOSTABLES.put(BLAZE_APPLE.get(),        0.65f);
+            ComposterBlock.COMPOSTABLES.put(HONEY_APPLE.get(),        0.65f);
+            ComposterBlock.COMPOSTABLES.put(MOON_APPLE.get(),         0.65f);
+
+            // Crafted / ore-tier apples: 0.65
+            ComposterBlock.COMPOSTABLES.put(IRON_APPLE.get(),         0.65f);
+            ComposterBlock.COMPOSTABLES.put(COPPER_APPLE.get(),       0.65f);
+            ComposterBlock.COMPOSTABLES.put(LAPISLAZULI_APPLE.get(),  0.65f);
+            ComposterBlock.COMPOSTABLES.put(REDSTONE_APPLE.get(),     0.65f);
+            ComposterBlock.COMPOSTABLES.put(EMERALD_APPLE.get(),      0.65f);
+            ComposterBlock.COMPOSTABLES.put(DIAMOND_APPLE.get(),      0.65f);
+            ComposterBlock.COMPOSTABLES.put(NETHERITE_APPLE.get(),    0.65f);
+            ComposterBlock.COMPOSTABLES.put(PRISM_APPLE.get(),        0.65f);
+            ComposterBlock.COMPOSTABLES.put(TIME_FREEZE_APPLE.get(),  0.65f);
+            ComposterBlock.COMPOSTABLES.put(VOID_APPLE.get(),         0.65f);
+            ComposterBlock.COMPOSTABLES.put(ENDER_PEARL_APPLE.get(),  0.65f);
+            ComposterBlock.COMPOSTABLES.put(ECHO_APPLE.get(),         0.65f);
+            ComposterBlock.COMPOSTABLES.put(REWIND_APPLE.get(),       0.65f);
+            ComposterBlock.COMPOSTABLES.put(LONGEVITY_APPLE.get(),    0.65f);
+            ComposterBlock.COMPOSTABLES.put(QUANTUM_APPLE.get(),      0.65f);
+            ComposterBlock.COMPOSTABLES.put(WITHER_APPLE.get(),       0.65f);
+            ComposterBlock.COMPOSTABLES.put(DRAGON_APPLE.get(),       0.65f);
+            ComposterBlock.COMPOSTABLES.put(TOTEM_APPLE.get(),        0.65f);
+
+            // Nature-themed / ultra-organic: highest chance (0.85)
+            ComposterBlock.COMPOSTABLES.put(ORCHARD_APPLE.get(),      0.85f);
+            // Nether Star Apple intentionally excluded — it's crafted from a Nether Star,
+            // composting that away would be a waste and doesn't fit thematically.
+        });
     }
 }
