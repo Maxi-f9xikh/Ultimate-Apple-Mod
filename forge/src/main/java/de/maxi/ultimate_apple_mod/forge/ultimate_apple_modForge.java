@@ -160,6 +160,7 @@ public final class ultimate_apple_modForge {
 
     public static final RegistryObject<Item> NETHERITE_APPLE = ITEMS.register("netherite_apple", () ->
         new Item(new Item.Properties()
+            .fireResistant()   // does not burn in lava, like netherite tools
             .food(new FoodProperties.Builder()
                 .nutrition(10).saturationMod(1.0f).alwaysEat()
                 // Near-godlike defensive stats befitting the cost of 1 Netherite Ingot
