@@ -183,10 +183,11 @@ public class PlayerEffectEventHandler {
             recipient = sp;
         }
 
-        // 2. Fallback: any nearby player with Lifesteal (covers Wither / DoT deaths)
+        // 2. Fallback: any nearby player with Lifesteal (covers Wither / DoT deaths).
+        //    32-block radius — Wither-cursed mobs can wander before dying.
         if (recipient == null) {
             for (ServerPlayer sp : serverLevel.players()) {
-                if (sp.distanceTo(dying) <= 16.0f
+                if (sp.distanceTo(dying) <= 32.0f
                         && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
                     recipient = sp;
                     break;
