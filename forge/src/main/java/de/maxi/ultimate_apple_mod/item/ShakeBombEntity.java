@@ -235,16 +235,27 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
             && !level.isEmptyBlock(pos.below());
     }
 
-    // ── Impact VFX ───────────────────────────────────────────────────────────
+    // ── Impact VFX / Detonation ──────────────────────────────────────────────
 
     private void explode() {
         if (!(level() instanceof ServerLevel sl)) return;
-        sl.sendParticles(ParticleTypes.SPLASH,
-            getX(), getY(), getZ(), 40, 0.5, 0.5, 0.5, 0.15);
-        sl.sendParticles(ParticleTypes.HAPPY_VILLAGER,
-            getX(), getY(), getZ(), 12, 0.4, 0.4, 0.4, 0.08);
-        level().playSound(null, getX(), getY(), getZ(),
-            SoundEvents.SPLASH_POTION_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+
+        CompoundTag tag = getShakeTag();
+        boolean isTntExplosion = tag != null && tag.getBoolean("isTntExplosion");
+
+        if (isTntExplosion) {
+            // Real TNT explosion — power 4.0, breaks blocks, damages entities.
+            // Effects from the other ingredient were already applied in applyToTarget().
+            level().explode(this, getX(), getY(), getZ(), 4.0f, Level.ExplosionInteraction.TNT);
+        } else {
+            // Normal shake bomb splash VFX
+            sl.sendParticles(ParticleTypes.SPLASH,
+                getX(), getY(), getZ(), 40, 0.5, 0.5, 0.5, 0.15);
+            sl.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                getX(), getY(), getZ(), 12, 0.4, 0.4, 0.4, 0.08);
+            level().playSound(null, getX(), getY(), getZ(),
+                SoundEvents.SPLASH_POTION_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
         discard();
     }
 

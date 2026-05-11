@@ -269,6 +269,9 @@ public class ShakeItem extends Item {
         if (tag.getBoolean("enderTeleport")) {
             components.add(Component.literal("§5⚡ Ender-teleports you on drink"));
         }
+        if (tag.getBoolean("isTntExplosion")) {
+            components.add(Component.literal("§c💥 TNT explosion on impact!").withStyle(ChatFormatting.RED));
+        }
         if (tag.getBoolean("isBomb")) {
             components.add(Component.literal("§c⚠ Right-click to throw!").withStyle(ChatFormatting.RED));
             components.add(Component.literal("§7Applies effects on impact.").withStyle(ChatFormatting.GRAY));
