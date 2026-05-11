@@ -66,7 +66,12 @@ public final class MixerRecipes {
          * Right-clicking throws a ShakeBombEntity that applies all stored effects to
          * any entity it hits (direct hit) or nearby entities (AOE on block hit).
          */
-        boolean isBomb
+        boolean isBomb,
+        /**
+         * When true, the thrown shake (isBomb must also be true) detonates as a real
+         * TNT explosion (power 4.0) on impact, in addition to applying stored effects.
+         */
+        boolean isTntExplosion
     ) {}
 
     // ── Registry ───────────────────────────────────────────────────────────
@@ -302,6 +307,10 @@ public final class MixerRecipes {
         // Apple Bomb shake: makes the shake THROWABLE instead of drinkable.
         // The combined effects of the OTHER ingredient are applied to hit entities.
         registerBomb("apple_bomb");
+
+        // TNT Apple shake: throwable + real TNT explosion (power 4) on impact,
+        // AND applies the other ingredient's effects to nearby entities.
+        registerTntBomb("tnt_apple");
     }
 
     // ── Incompatibility rules ──────────────────────────────────────────────
@@ -365,7 +374,7 @@ public final class MixerRecipes {
                                   int dragonCharges, boolean lifesteal, boolean witherCurse) {
         REGISTRY.put(mod(itemName),
             new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse,
-                false, 1.0, false, false, false, false, false));
+                false, 1.0, false, false, false, false, false, false));
     }
 
     /**
@@ -377,7 +386,7 @@ public final class MixerRecipes {
                                   double durationMultiplier) {
         REGISTRY.put(mod(itemName),
             new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse,
-                false, durationMultiplier, false, false, false, false, false));
+                false, durationMultiplier, false, false, false, false, false, false));
     }
 
     /**
@@ -386,37 +395,43 @@ public final class MixerRecipes {
      */
     private static void registerCleansing(String itemName, List<EffectData> effects) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, 0, false, false, true, 1.0, false, false, false, false, false));
+            new ShakeContribution(effects, 0, false, false, true, 1.0, false, false, false, false, false, false));
     }
 
     /** Register a mod item that triggers the Void Apple launch mechanic. */
     private static void registerVoidLaunch(String itemName, List<EffectData> effects) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, 0, false, false, false, 1.0, true, false, false, false, false));
+            new ShakeContribution(effects, 0, false, false, false, 1.0, true, false, false, false, false, false));
     }
 
     /** Register a mod item whose shake rewinds the drinker 5 seconds back in time. */
     private static void registerRewind(String itemName) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, true, false, false, false));
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, true, false, false, false, false));
     }
 
     /** Register a mod item whose shake plants up to 6 trees at the drink/impact location. */
     private static void registerOrchard(String itemName) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, true, false, false));
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, true, false, false, false));
     }
 
     /** Register a mod item whose shake also teleports the entity in their look direction. */
     private static void registerEnderTeleport(String itemName, List<EffectData> effects) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(effects, 0, false, false, false, 1.0, false, false, false, true, false));
+            new ShakeContribution(effects, 0, false, false, false, 1.0, false, false, false, true, false, false));
     }
 
     /** Register a mod item that turns the shake into a throwable bomb. */
     private static void registerBomb(String itemName) {
         REGISTRY.put(mod(itemName),
-            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, false, false, true));
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, false, false, true, false));
+    }
+
+    /** Register a mod item that turns the shake into a throwable TNT bomb (real explosion + effects). */
+    private static void registerTntBomb(String itemName) {
+        REGISTRY.put(mod(itemName),
+            new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, false, false, false, true, true));
     }
 
     /** Register a vanilla Minecraft item (minecraft:<name>). */
@@ -424,7 +439,7 @@ public final class MixerRecipes {
                                          int dragonCharges, boolean lifesteal, boolean witherCurse) {
         REGISTRY.put(mc(itemName),
             new ShakeContribution(effects, dragonCharges, lifesteal, witherCurse,
-                false, 1.0, false, false, false, false, false));
+                false, 1.0, false, false, false, false, false, false));
     }
 
     /**

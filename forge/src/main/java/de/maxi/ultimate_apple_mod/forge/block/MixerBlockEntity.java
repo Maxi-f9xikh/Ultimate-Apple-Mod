@@ -199,8 +199,10 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         boolean rewindEffect = !clearsEffects && (c1.rewindEffect() || c2.rewindEffect());
         boolean orchardSpawn = !clearsEffects && (c1.orchardSpawn() || c2.orchardSpawn());
         boolean enderTeleport = !clearsEffects && (c1.enderTeleport() || c2.enderTeleport());
-        // isBomb: always throwable when either ingredient is the Apple Bomb
+        // isBomb: always throwable when either ingredient is the Apple Bomb or TNT Apple
         boolean isBomb = c1.isBomb() || c2.isBomb();
+        // isTntExplosion: real TNT explosion on impact when TNT Apple is involved
+        boolean isTntExplosion = c1.isTntExplosion() || c2.isTntExplosion();
 
         // Raw Longevity multiplier (2.0 if Longevity Apple present, 1.0 otherwise).
         double rawMultiplier = Math.max(c1.durationMultiplier(), c2.durationMultiplier());
@@ -238,6 +240,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         tag.putBoolean("orchardSpawn",   orchardSpawn);
         tag.putBoolean("enderTeleport",  enderTeleport);
         tag.putBoolean("isBomb",         isBomb);
+        tag.putBoolean("isTntExplosion", isTntExplosion);
         return tag;
     }
 
