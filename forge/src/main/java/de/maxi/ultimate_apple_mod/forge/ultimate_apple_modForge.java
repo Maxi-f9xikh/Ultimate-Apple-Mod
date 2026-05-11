@@ -18,6 +18,8 @@ import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
+import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
+import de.maxi.ultimate_apple_mod.item.TntAppleItem;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
 import de.maxi.ultimate_apple_mod.item.CupItem;
 import de.maxi.ultimate_apple_mod.item.EchoAppleItem;
@@ -123,6 +125,13 @@ public final class ultimate_apple_modForge {
                 .sized(0.25f, 0.25f)
                 .clientTrackingRange(4)
                 .build("shake_bomb"));
+
+    public static final RegistryObject<EntityType<TntAppleEntity>> TNT_APPLE_ENTITY =
+        ENTITY_TYPES.register("tnt_apple",
+            () -> EntityType.Builder.<TntAppleEntity>of(TntAppleEntity::new, MobCategory.MISC)
+                .sized(0.25f, 0.25f)
+                .clientTrackingRange(4)
+                .build("tnt_apple"));
 
     // ── Existing Items (with effects added) ──────────────────────────────────
 
@@ -296,6 +305,10 @@ public final class ultimate_apple_modForge {
         ITEMS.register("apple_bomb", () ->
             new AppleBombItem(new Item.Properties().stacksTo(16)));
 
+    public static final RegistryObject<Item> TNT_APPLE =
+        ITEMS.register("tnt_apple", () ->
+            new TntAppleItem(new Item.Properties().stacksTo(16)));
+
     // ── Second-Wave Items ────────────────────────────────────────────────────
 
     public static final RegistryObject<Item> WITHER_APPLE =
@@ -441,6 +454,7 @@ public final class ultimate_apple_modForge {
                 output.accept(ECHO_APPLE.get());
                 output.accept(REWIND_APPLE.get());
                 output.accept(APPLE_BOMB.get());
+                output.accept(TNT_APPLE.get());
                 output.accept(WITHER_APPLE.get());
                 output.accept(HONEY_APPLE.get());
                 output.accept(DRAGON_APPLE.get());
@@ -482,10 +496,11 @@ public final class ultimate_apple_modForge {
         event.enqueueWork(() -> {
 
             // ── Composter values ───────────────────────────────────────────────
-            // Rotten / burnt / negative apples: low chance (0.30)
+            // Rotten / burnt / negative / explosive apples: low chance (0.30)
             ComposterBlock.COMPOSTABLES.put(ROTTEN_APPLE.get(),       0.30f);
             ComposterBlock.COMPOSTABLES.put(BURNT_APPLE.get(),        0.30f);
             ComposterBlock.COMPOSTABLES.put(DIRT_APPLE.get(),         0.30f);
+            ComposterBlock.COMPOSTABLES.put(TNT_APPLE.get(),          0.30f);
 
             // Normal food apples: same as vanilla apple (0.65)
             ComposterBlock.COMPOSTABLES.put(BAKED_APPLE.get(),        0.65f);

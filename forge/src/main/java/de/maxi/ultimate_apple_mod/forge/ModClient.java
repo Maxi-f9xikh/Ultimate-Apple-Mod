@@ -3,6 +3,7 @@ package de.maxi.ultimate_apple_mod.forge;
 import de.maxi.ultimate_apple_mod.forge.block.MixerScreen;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
+import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,6 +48,8 @@ public class ModClient {
         event.registerEntityRenderer(ultimate_apple_modForge.APPLE_BOMB_ENTITY.get(),
             ThrownItemRenderer::new);
         event.registerEntityRenderer(ultimate_apple_modForge.SHAKE_BOMB_ENTITY.get(),
+            ThrownItemRenderer::new);
+        event.registerEntityRenderer(ultimate_apple_modForge.TNT_APPLE_ENTITY.get(),
             ThrownItemRenderer::new);
     }
 
