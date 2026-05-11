@@ -1,6 +1,6 @@
-{
+﻿{
   "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/nether_star"
+    "layer0": "ultimate_apple_mod:item/nether_star_apple"
   }
 }
