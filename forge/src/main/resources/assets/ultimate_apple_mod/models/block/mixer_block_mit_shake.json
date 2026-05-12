@@ -3,7 +3,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "ultimate_apple_mod:block/mixer_block_unten",
-		"glass": "minecraft:block/glass",
+		"glass": "ultimate_apple_mod:block/mixer_block_glas_shake",
 		"particle": "ultimate_apple_mod:block/mixer_block_unten"
 	},
 	"elements": [
