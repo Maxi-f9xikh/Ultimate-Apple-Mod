@@ -18,6 +18,7 @@ import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
+import de.maxi.ultimate_apple_mod.item.CoalAppleItem;
 import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
 import de.maxi.ultimate_apple_mod.item.TntAppleItem;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
@@ -305,6 +306,22 @@ public final class ultimate_apple_modForge {
         ITEMS.register("apple_bomb", () ->
             new AppleBombItem(new Item.Properties().stacksTo(16)));
 
+    public static final RegistryObject<Item> COAL_APPLE =
+        ITEMS.register("coal_apple", () ->
+            new CoalAppleItem(new Item.Properties()
+                .food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(2).saturationMod(0.0f).alwaysEat()
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                        MobEffects.HUNGER,    20 * 30, 2), 1.0f) // Hunger III, 30s
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                        MobEffects.CONFUSION, 20 * 10, 0), 1.0f) // Nausea, 10s
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                        MobEffects.MOVEMENT_SLOWDOWN, 20 * 15, 1), 1.0f) // Slowness II, 15s
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                        MobEffects.BLINDNESS, 20 * 5, 0), 1.0f) // Blindness, 5s
+                    .build())
+                .stacksTo(16)));
+
     public static final RegistryObject<Item> TNT_APPLE =
         ITEMS.register("tnt_apple", () ->
             new TntAppleItem(new Item.Properties().stacksTo(16)));
@@ -454,6 +471,7 @@ public final class ultimate_apple_modForge {
                 output.accept(ECHO_APPLE.get());
                 output.accept(REWIND_APPLE.get());
                 output.accept(APPLE_BOMB.get());
+                output.accept(COAL_APPLE.get());
                 output.accept(TNT_APPLE.get());
                 output.accept(WITHER_APPLE.get());
                 output.accept(HONEY_APPLE.get());
@@ -501,6 +519,7 @@ public final class ultimate_apple_modForge {
             ComposterBlock.COMPOSTABLES.put(BURNT_APPLE.get(),        0.30f);
             ComposterBlock.COMPOSTABLES.put(DIRT_APPLE.get(),         0.30f);
             ComposterBlock.COMPOSTABLES.put(TNT_APPLE.get(),          0.30f);
+            ComposterBlock.COMPOSTABLES.put(COAL_APPLE.get(),         0.30f);
 
             // Normal food apples: same as vanilla apple (0.65)
             ComposterBlock.COMPOSTABLES.put(BAKED_APPLE.get(),        0.65f);
