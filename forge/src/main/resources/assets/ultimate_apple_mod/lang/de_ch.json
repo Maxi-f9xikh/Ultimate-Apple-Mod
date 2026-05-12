@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "Kohlenapfel",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6Wirkt als Ofenbrennstoff für 100 Items.",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infusiert mit der dunklen Kraft der Kohle.",
+  "advancements.ultimate_apple_mod.coal_apple.title": "Knackige Kohle",
+  "advancements.ultimate_apple_mod.coal_apple.description": "Iss einen Kohlenapfel. Schmeckt nach Reue."
 }

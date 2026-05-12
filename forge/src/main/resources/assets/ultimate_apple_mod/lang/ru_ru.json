@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "Угольное яблоко",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6Горит в печи на 100 предметов.",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Наполнено тёмной силой угля.",
+  "advancements.ultimate_apple_mod.coal_apple.title": "Хрустящий Уголь",
+  "advancements.ultimate_apple_mod.coal_apple.description": "Съешьте Угольное яблоко. Вкус сожаления."
 }

@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "石炭のリンゴ",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6かまどで100個分の燃料になる。",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7石炭の闇の力が宿っている。",
+  "advancements.ultimate_apple_mod.coal_apple.title": "コリコリの石炭",
+  "advancements.ultimate_apple_mod.coal_apple.description": "石炭のリンゴを食べよう。後悔の味がする。"
 }
