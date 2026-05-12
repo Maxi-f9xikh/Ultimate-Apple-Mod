@@ -21,8 +21,10 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -202,8 +204,16 @@ public class ShakeItem extends Item {
         }
 
         // Ender teleport: look-direction teleport up to 256 blocks
+        // + 0.3 % chance of an Endermite spawning at the new position (mixing dilutes the effect)
         if (tag.getBoolean("enderTeleport")) {
             ShakeBombEntity.performEnderTeleport(player);
+            if (level instanceof net.minecraft.server.level.ServerLevel serverLevel
+                    && level.getRandom().nextFloat() < 0.003f) {
+                Endermite endermite = new Endermite(EntityType.ENDERMITE, serverLevel);
+                endermite.moveTo(player.getX(), player.getY(), player.getZ(),
+                    level.getRandom().nextFloat() * 360.0f, 0.0f);
+                serverLevel.addFreshEntity(endermite);
+            }
         }
     }
 
