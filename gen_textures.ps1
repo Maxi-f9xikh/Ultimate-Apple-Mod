@@ -299,8 +299,106 @@ $oCo = @{
 }
 Make-Tex "coal_apple" $pCo $oCo
 
+# ===========================================================================
+# 11. EXPOSED COPPER APPLE  -  warm copper body + small early teal patches
+# ===========================================================================
+$pEx = [int[]]@(
+    (HI "#1E0800"),(HI "#4A1C00"),(HI "#7A3C14"),(HI "#A85A2A"),
+    (HI "#C87B3D"),(HI "#D89550"),(HI "#E8AF6E"),(HI "#F2C88A"),(HI "#FDE0A8"))
+$oEx = @{
+    "9,1"=(HI "#6B4010"); "8,2"=(HI "#5A3010"); "9,2"=(HI "#6B4010"); "8,3"=(HI "#5A3010")
+    # small teal patch top-right
+    "10,4"=(HI "#52967A"); "11,4"=(HI "#3A6E50")
+    "10,5"=(HI "#3A6E50"); "11,5"=(HI "#52967A"); "12,5"=(HI "#3A6E50")
+    # tiny dot lower-left
+    "3,11"=(HI "#52967A"); "4,11"=(HI "#3A6E50")
+}
+Make-Tex "exposed_copper_apple" $pEx $oEx
+
+# ===========================================================================
+# 12. WEATHERED COPPER APPLE  -  teal dominant, copper hints remain
+# ===========================================================================
+$pWe = [int[]]@(
+    (HI "#0E2818"),(HI "#1A4030"),(HI "#265848"),(HI "#347060"),
+    (HI "#428C78"),(HI "#56A890"),(HI "#6EC4A8"),(HI "#88D8BC"),(HI "#A4ECD0"))
+$oWe = @{
+    "9,1"=(HI "#6B4010"); "8,2"=(HI "#5A3010"); "9,2"=(HI "#6B4010"); "8,3"=(HI "#5A3010")
+    # copper remnant patches
+    "3,5"=(HI "#C87B3D"); "4,5"=(HI "#A85A2A"); "3,6"=(HI "#A85A2A")
+    "10,9"=(HI "#C87B3D"); "11,9"=(HI "#A85A2A"); "11,10"=(HI "#C87B3D")
+    "6,12"=(HI "#A85A2A"); "7,12"=(HI "#C87B3D")
+}
+Make-Tex "weathered_copper_apple" $pWe $oWe
+
+# ===========================================================================
+# 13. OXIDIZED COPPER APPLE  -  fully teal/green, no copper remaining
+# ===========================================================================
+$pOx = [int[]]@(
+    (HI "#0A2018"),(HI "#143428"),(HI "#1E4838"),(HI "#285C48"),
+    (HI "#347060"),(HI "#408878"),(HI "#50A090"),(HI "#64B8A8"),(HI "#7ED0BC"))
+$oOx = @{
+    # stem - darkened, greenish-brown (fully oxidised)
+    "9,1"=(HI "#2A4030"); "8,2"=(HI "#1E3025"); "9,2"=(HI "#2A4030"); "8,3"=(HI "#1E3025")
+    # subtle dark texture variation
+    "4,6"=(HI "#1E4838");  "5,6"=(HI "#143428")
+    "9,8"=(HI "#143428");  "10,8"=(HI "#1E4838")
+    "3,10"=(HI "#1E4838"); "4,10"=(HI "#143428"); "3,11"=(HI "#143428")
+}
+Make-Tex "oxidized_copper_apple" $pOx $oOx
+
+# ===========================================================================
+# Helper: add yellow honeycomb dots to an existing bitmap
+# ===========================================================================
+function Add-WaxDots([System.Drawing.Bitmap]$bmp) {
+    $wax = [System.Drawing.Color]::FromArgb(255, 240, 180, 30)  # honey yellow
+    $waxDark = [System.Drawing.Color]::FromArgb(255, 200, 140, 10)
+    # Small hex-dot pattern
+    foreach ($pt in @("5,4","9,4","13,4","3,7","7,7","11,7","5,10","9,10","13,10","3,13","7,13","11,13")) {
+        $xy = $pt.Split(','); $bmp.SetPixel([int]$xy[0],[int]$xy[1],$wax)
+    }
+    foreach ($pt in @("6,4","10,4","4,7","8,7","12,7","6,10","10,10","4,13","8,13","12,13")) {
+        $xy = $pt.Split(','); $bmp.SetPixel([int]$xy[0],[int]$xy[1],$waxDark)
+    }
+}
+
+# ===========================================================================
+# 14-17. WAXED VARIANTS  -  base stage + honeycomb dot pattern overlay
+# ===========================================================================
+$waxedPairs = @(
+    @("copper_apple",           "waxed_copper_apple"),
+    @("exposed_copper_apple",   "waxed_exposed_copper_apple"),
+    @("weathered_copper_apple", "waxed_weathered_copper_apple"),
+    @("oxidized_copper_apple",  "waxed_oxidized_copper_apple")
+)
+foreach ($pair in $waxedPairs) {
+    $srcPath = "$texDir\$($pair[0]).png"
+    $dstName = $pair[1]
+    $src = [System.Drawing.Bitmap]::new($srcPath)
+    $dst = [System.Drawing.Bitmap]::new(16, 16, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+    # Copy all pixels
+    for ($y = 0; $y -lt 16; $y++) {
+        for ($x = 0; $x -lt 16; $x++) {
+            $dst.SetPixel($x, $y, $src.GetPixel($x, $y))
+        }
+    }
+    # Overlay wax dots (only on non-transparent pixels)
+    $wax     = [System.Drawing.Color]::FromArgb(255, 240, 180, 30)
+    $waxDark = [System.Drawing.Color]::FromArgb(255, 200, 140, 10)
+    foreach ($pt in @("5,4","9,4","13,4","3,7","7,7","11,7","5,10","9,10","13,10","7,13","11,13")) {
+        $xy = $pt.Split(','); $px = [int]$xy[0]; $py = [int]$xy[1]
+        if ($dst.GetPixel($px,$py).A -gt 0) { $dst.SetPixel($px,$py,$wax) }
+    }
+    foreach ($pt in @("6,4","10,4","4,7","8,7","12,7","6,10","10,10","8,13","12,13")) {
+        $xy = $pt.Split(','); $px = [int]$xy[0]; $py = [int]$xy[1]
+        if ($dst.GetPixel($px,$py).A -gt 0) { $dst.SetPixel($px,$py,$waxDark) }
+    }
+    $dst.Save("$texDir\$dstName.png", [System.Drawing.Imaging.ImageFormat]::Png)
+    $src.Dispose(); $dst.Dispose()
+    Write-Host "  Created $dstName.png"
+}
+
 $script:tmpl.Dispose()
-Write-Host "All 10 item textures done!"
+Write-Host "All 17 item textures done!"
 
 # ===========================================================================
 # MIXER BLOCK TEXTURE  (64×64 atlas, texture_size [64,64])
