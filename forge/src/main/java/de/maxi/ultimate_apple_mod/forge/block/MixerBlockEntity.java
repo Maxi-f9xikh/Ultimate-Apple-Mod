@@ -121,13 +121,40 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
                     }
                 }
 
+                // ── Coal Apple special-combo handling ───────────────────────────
+                ResourceLocation COAL_ID = new ResourceLocation("ultimate_apple_mod", "coal_apple");
+                ResourceLocation TNT_ID  = new ResourceLocation("ultimate_apple_mod", "tnt_apple");
+                ResourceLocation BOMB_ID = new ResourceLocation("ultimate_apple_mod", "apple_bomb");
+                ResourceLocation id1 = ForgeRegistries.ITEMS.getKey(be.items.get(SLOT_ING1).getItem());
+                ResourceLocation id2 = ForgeRegistries.ITEMS.getKey(be.items.get(SLOT_ING2).getItem());
+
+                boolean coalTnt  = (COAL_ID.equals(id1) && TNT_ID.equals(id2))
+                                || (TNT_ID.equals(id1)  && COAL_ID.equals(id2));
+                boolean coalBomb = (COAL_ID.equals(id1) && BOMB_ID.equals(id2))
+                                || (BOMB_ID.equals(id1) && COAL_ID.equals(id2));
+                boolean coalMix  = COAL_ID.equals(id1) || COAL_ID.equals(id2);
+
+                if (coalTnt) {
+                    // Coal + TNT → suppress coal's effects; only TNT explosion remains
+                    if (COAL_ID.equals(id1)) c1 = emptyContribution();
+                    else                     c2 = emptyContribution();
+                } else if (coalBomb) {
+                    // Coal + Apple Bomb → coal effects doubled (prolonged punishment)
+                    if (COAL_ID.equals(id1)) c1 = withDoubledDuration(c1);
+                    else                     c2 = withDoubledDuration(c2);
+                }
+
                 // Consume 1 of each item immediately (furnace-style)
                 be.consumeSlot(SLOT_CUP);
                 be.consumeSlot(SLOT_ING1);
                 be.consumeSlot(SLOT_ING2);
 
-                // Build the pending shake tag
-                be.pendingShakeTag = buildShakeNbt(c1, c2);
+                // Build the pending shake tag and mark fuel flag when applicable
+                CompoundTag shakeTag = buildShakeNbt(c1, c2);
+                if (coalMix && !coalTnt) {
+                    shakeTag.putBoolean("isCoalFuel", true);
+                }
+                be.pendingShakeTag = shakeTag;
                 be.progress = 0;
                 be.stateDirty = true;
                 be.setChanged();
@@ -242,6 +269,32 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         tag.putBoolean("isBomb",         isBomb);
         tag.putBoolean("isTntExplosion", isTntExplosion);
         return tag;
+    }
+
+    // ── Coal Apple helpers ───────────────────────────────────────────────────
+
+    /** Returns a blank ShakeContribution with no effects and all flags false. */
+    private static MixerRecipes.ShakeContribution emptyContribution() {
+        return new MixerRecipes.ShakeContribution(
+            List.of(), 0, false, false, false, 1.0,
+            false, false, false, false, false, false);
+    }
+
+    /**
+     * Returns a copy of the given contribution with every effect's duration doubled.
+     * Used for the Coal + Apple Bomb combo to prolong the coal punishment effects.
+     */
+    private static MixerRecipes.ShakeContribution withDoubledDuration(
+            MixerRecipes.ShakeContribution c) {
+        List<MixerRecipes.EffectData> doubled = c.effects().stream()
+            .map(e -> new MixerRecipes.EffectData(e.id(), e.duration() * 2, e.amplifier()))
+            .collect(java.util.stream.Collectors.toList());
+        return new MixerRecipes.ShakeContribution(
+            doubled,
+            c.dragonCharges(), c.lifesteal(), c.witherCurse(),
+            c.clearsEffects(), c.durationMultiplier(),
+            c.voidLaunch(), c.rewindEffect(), c.orchardSpawn(),
+            c.enderTeleport(), c.isBomb(), c.isTntExplosion());
     }
 
     private static void mergeEffect(Map<ResourceLocation, MixerRecipes.EffectData> map,
