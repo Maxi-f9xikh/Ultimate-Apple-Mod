@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "ultimate_apple_mod:weathered_copper_apple" },
+    { "item": "minecraft:honeycomb" }
+  ],
+  "result": {
+    "item": "ultimate_apple_mod:waxed_weathered_copper_apple"
+  }
+}
