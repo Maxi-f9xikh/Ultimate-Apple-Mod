@@ -281,14 +281,17 @@ Write-Host "All 9 item textures done!"
 
 # ===========================================================================
 # MIXER BLOCK TEXTURE  (64×64 atlas, texture_size [64,64])
-# UV unit = 4px.  Key face regions:
-#   x:0-8,  y:0-11   = right body east face    (side view from right)
-#   x:0-8,  y:11-22  = front body north face   ← MOST VISIBLE FRONT FACE
-#   x:16-24,y:11-22  = left body west face     (side view from left)
-#   x:8-16, y:0-11   = right body west (inner)
-#   x:16-24,y:0-11   = left body east  (inner)
-#   x:24-30,y:0-11   = front east/west thin strips
-#   Everything else  = legs, corners, top/bottom faces (use dark/mid tones)
+# UV unit = 4px.  Key face regions (UV × 4 = pixel):
+#   x:0-8,  y:0-11   = side body east (right side outer)
+#   x:0-8,  y:11-22  = FRONT north face  ← most visible
+#   x:16-24,y:11-22  = side body west (left side outer)
+#   x:8-16, y:0-11   = inner right
+#   x:16-24,y:0-11   = inner left
+#   x:24-30,y:0-22   = thin front strips
+#   x:0-30, y:22-33  = back faces
+#   x:0-30, y:33-64  = legs / feet / small corner details
+#   x:30-64,y:0-64   = remaining small pieces
+# Design goal: real blender look — dark collar top, silver body, dark base feet
 # ===========================================================================
 $blockTexDir = "E:\Programieren\Projekte\Ultimate Apple Mod\forge\src\main\resources\assets\ultimate_apple_mod\textures\block"
 New-Item -ItemType Directory -Force -Path $blockTexDir | Out-Null
@@ -297,78 +300,113 @@ $mixBmp = New-Object System.Drawing.Bitmap(64, 64, [System.Drawing.Imaging.Pixel
 $mg = [System.Drawing.Graphics]::FromImage($mixBmp)
 $mg.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNeighbor
 
-function MC { param([int]$r,[int]$g,[int]$b)
-    [System.Drawing.Color]::FromArgb(255,$r,$g,$b) }
-function MSB { param($c) [System.Drawing.SolidBrush]::new($c) }
+# Helper: create a SolidBrush from RGB
+function MB { param([int]$r,[int]$g,[int]$b)
+    [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(255,$r,$g,$b)) }
 
-$mDarkEdge  = MC 44  50  56     # #2C3238 shadow/border pixels
-$mDark      = MC 64  72  80     # #404850 dark body panels
-$mMid       = MC 96 104 112     # #606870 mid body
-$mLight     = MC 136 146 154    # #88929A light face panels
-$mSheen     = MC 176 184 192    # #B0B8C0 highlight sheen
-$mGreen1    = MC 50  90  40     # #325A28 dark green stripe
-$mGreen2    = MC 78 134  62     # #4E863E mid green
-$mGreen3    = MC 110 172  88    # #6EAC58 bright highlight on stripe
+# ── Pure-gray blender palette ─────────────────────────────────────────────────
+$bBlack  = MB  22  22  22   # very dark — top collar, base feet
+$bDark   = MB  52  52  52   # dark gray — transitions, back panels, inner faces
+$bMid    = MB  92  92  92   # medium gray — fill, secondary faces
+$bLight  = MB 148 148 148   # light gray — main visible body faces
+$bSheen  = MB 205 205 205   # near-white highlight stripe
 
-# ── Fill base ───────────────────────────────────────────────────────────────
-$mg.Clear($mMid)
-# Darkest fill for the "far" areas (x>30) — small legs/corner elements
-$mg.FillRectangle((MSB $mDark), 30, 0, 34, 64)
+# ── 1. Fill entire atlas with medium gray as neutral default ──────────────────
+$mg.Clear([System.Drawing.Color]::FromArgb(255, 92, 92, 92))
 
-# ── Right body east face  (x:0-8, y:0-11) — player sees from right ──────────
-$mg.FillRectangle((MSB $mLight), 0, 0, 8, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 0, 0, 1, 11)    # left shadow edge
-$mg.FillRectangle((MSB $mDarkEdge), 0, 0, 8, 1)     # top shadow
-$mg.FillRectangle((MSB $mSheen), 7, 1, 1, 10)        # right sheen stripe
+# ── 2. Feet / legs / tiny corner pieces (y:33-64 and x:30-64) — almost black ─
+$mg.FillRectangle(($bBlack), 0,  33, 64, 31)   # bottom rows (feet)
+$mg.FillRectangle(($bDark),  30,  0, 34, 33)   # right-side small pieces
 
-# ── Right body west face  (x:8-16, y:0-11) — inner, darker ─────────────────
-$mg.FillRectangle((MSB $mDark), 8, 0, 8, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 8, 0, 1, 11)
+# ── 3. Back faces (x:0-30, y:22-33) — dark rear of body ─────────────────────
+$mg.FillRectangle(($bDark),  0,  22, 30, 11)
+$mg.FillRectangle(($bBlack), 0,  22, 30,  2)   # dark separator line at top
 
-# ── Left body east face   (x:16-24, y:0-11) — inner ────────────────────────
-$mg.FillRectangle((MSB $mMid), 16, 0, 8, 11)
+# ── 4. Inner/secondary side faces (x:8-24, y:0-11) ──────────────────────────
+$mg.FillRectangle(($bDark),  8,   0,  8, 11)   # inner right
+$mg.FillRectangle(($bMid),  16,   0,  8, 11)   # inner left
 
-# ── Front body east/west thin strips  (x:24-30, y:0-11) ─────────────────────
-$mg.FillRectangle((MSB $mLight), 24, 0, 6, 11)
+# ── 5. Thin strips along front edges (x:24-30, y:0-22) ───────────────────────
+$mg.FillRectangle(($bMid),  24,   0,  6, 22)
 
-# ── FRONT north face  (x:0-8, y:11-22)  ← THE MAIN VISIBLE FACE ─────────────
-$mg.FillRectangle((MSB $mLight), 0, 11, 8, 11)
-# Borders
-$mg.FillRectangle((MSB $mDarkEdge), 0, 11, 1, 11)   # left border
-$mg.FillRectangle((MSB $mDarkEdge), 7, 11, 1, 11)   # right border
-$mg.FillRectangle((MSB $mDarkEdge), 0, 11, 8, 1)    # top border
-$mg.FillRectangle((MSB $mDarkEdge), 0, 21, 8, 1)    # bottom border
-# Green apple stripe (3px tall) in the vertical middle of the face
-$mg.FillRectangle((MSB $mGreen1), 1, 14, 6, 5)       # dark green base
-$mg.FillRectangle((MSB $mGreen2), 1, 15, 6, 3)       # mid stripe
-$mg.FillRectangle((MSB $mGreen3), 2, 15, 4, 1)       # bright top row of stripe
+# ── 6. Side right outer (x:0-8, y:0-11) — visible right side ─────────────────
+$mg.FillRectangle(($bLight),  0,  0,  8, 11)
+$mg.FillRectangle(($bBlack),  0,  0,  8,  2)   # dark collar top
+$mg.FillRectangle(($bDark),   0,  2,  1,  9)   # left shadow edge
+$mg.FillRectangle(($bSheen),  6,  3,  1,  7)   # right sheen stripe
 
-# ── Front south face  (x:8-16, y:11-22) — back of front body ────────────────
-$mg.FillRectangle((MSB $mMid), 8, 11, 8, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 8, 11, 1, 11)
+# ── 7. FRONT face (x:0-8, y:11-22) — main visible face ──────────────────────
+$mg.FillRectangle(($bLight),  0, 11,  8, 11)
+$mg.FillRectangle(($bBlack),  0, 11,  8,  2)   # dark collar band at top
+$mg.FillRectangle(($bBlack),  0, 20,  8,  2)   # dark base band at bottom
+$mg.FillRectangle(($bDark),   0, 13,  1,  7)   # left shadow
+$mg.FillRectangle(($bDark),   7, 13,  1,  7)   # right shadow
+$mg.FillRectangle(($bSheen),  2, 15,  4,  1)   # subtle center highlight line
+$mg.FillRectangle(($bSheen),  3, 17,  2,  1)   # second subtle highlight
 
-# ── Left body west face  (x:16-24, y:11-22) — player sees from left ─────────
-$mg.FillRectangle((MSB $mLight), 16, 11, 8, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 16, 11, 1, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 23, 11, 1, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 16, 11, 8, 1)
-$mg.FillRectangle((MSB $mDarkEdge), 16, 21, 8, 1)
-$mg.FillRectangle((MSB $mGreen1), 17, 14, 6, 5)
-$mg.FillRectangle((MSB $mGreen2), 17, 15, 6, 3)
-$mg.FillRectangle((MSB $mGreen3), 18, 15, 4, 1)
+# ── 8. Front back (x:8-16, y:11-22) — back of front panel ───────────────────
+$mg.FillRectangle(($bMid),   8, 11,  8, 11)
+$mg.FillRectangle(($bDark),  8, 11,  1, 11)    # edge shadow
 
-# ── Front body east/west thin strips  (x:24-30, y:11-22) ────────────────────
-$mg.FillRectangle((MSB $mMid), 24, 11, 6, 11)
-
-# ── Back body faces  (y:22-33) ───────────────────────────────────────────────
-$mg.FillRectangle((MSB $mDark), 0, 22, 16, 11)
-$mg.FillRectangle((MSB $mDarkEdge), 0, 22, 16, 1)   # top separator
-
-# ── Legs and misc small elements  (y:33-64 and x:0-30) ──────────────────────
-$mg.FillRectangle((MSB $mDark), 0, 33, 30, 31)
+# ── 9. Side left outer (x:16-24, y:11-22) — visible left side ───────────────
+$mg.FillRectangle(($bLight), 16, 11,  8, 11)
+$mg.FillRectangle(($bBlack), 16, 11,  8,  2)   # dark collar top
+$mg.FillRectangle(($bBlack), 16, 20,  8,  2)   # dark base bottom
+$mg.FillRectangle(($bDark),  16, 13,  1,  7)   # left shadow
+$mg.FillRectangle(($bDark),  23, 13,  1,  7)   # right shadow
+$mg.FillRectangle(($bSheen), 18, 15,  4,  1)   # highlight line
 
 $mg.Dispose()
 $mixBmp.Save("$blockTexDir\mixer_block_unten.png", [System.Drawing.Imaging.ImageFormat]::Png)
 $mixBmp.Dispose()
 Write-Host "  Created block/mixer_block_unten.png"
+
+# ===========================================================================
+# GREEN SHAKE GLASS TEXTURE  (16×16)
+# Used by mixer_block_mit_shake.json for the jar walls when a shake is ready.
+# Looks like green stained glass / smoothie jar.
+# ===========================================================================
+$glassBmp = New-Object System.Drawing.Bitmap(16, 16, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+
+# Fill transparent
+for ($gy = 0; $gy -lt 16; $gy++) {
+    for ($gx = 0; $gx -lt 16; $gx++) {
+        $glassBmp.SetPixel($gx, $gy, [System.Drawing.Color]::Transparent)
+    }
+}
+
+# Glass look: light greenish-white frame border, bright green fill, inner highlight
+$gFrame  = [System.Drawing.Color]::FromArgb(255, 190, 230, 170)  # light green-white (frame)
+$gFill   = [System.Drawing.Color]::FromArgb(255,  88, 185,  68)  # fresh green (body)
+$gDark   = [System.Drawing.Color]::FromArgb(255,  52, 130,  40)  # darker green (shadow side)
+$gSheen  = [System.Drawing.Color]::FromArgb(255, 210, 245, 195)  # near-white highlight
+
+# Outer border
+for ($i = 0; $i -lt 16; $i++) {
+    $glassBmp.SetPixel($i,  0, $gFrame)
+    $glassBmp.SetPixel($i, 15, $gFrame)
+    $glassBmp.SetPixel( 0, $i, $gFrame)
+    $glassBmp.SetPixel(15, $i, $gFrame)
+}
+# Inner fill (green body)
+for ($gy = 1; $gy -lt 15; $gy++) {
+    for ($gx = 1; $gx -lt 15; $gx++) {
+        $glassBmp.SetPixel($gx, $gy, $gFill)
+    }
+}
+# Inner top-left highlight (like light reflection on glass)
+for ($i = 1; $i -lt 15; $i++) {
+    $glassBmp.SetPixel($i,  1, $gSheen)   # top inner row
+    $glassBmp.SetPixel( 1, $i, $gSheen)   # left inner column
+}
+# Bottom-right shadow (depth)
+for ($i = 1; $i -lt 15; $i++) {
+    $glassBmp.SetPixel($i, 14, $gDark)
+    $glassBmp.SetPixel(14, $i, $gDark)
+}
+
+$glassBmp.Save("$blockTexDir\mixer_block_glas_shake.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$glassBmp.Dispose()
+Write-Host "  Created block/mixer_block_glas_shake.png"
+
 Write-Host "All textures done!"
