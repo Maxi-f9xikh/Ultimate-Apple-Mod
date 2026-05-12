@@ -24,7 +24,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Apple Bomb",
   "item.ultimate_apple_mod.tnt_apple": "TNT Apple",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Throw to create a vanilla TNT explosion.",
-  "tooltip.ultimate_apple_mod.tnt_apple.line2": "§7Mix with any apple for explosive effects!",
   "effect.ultimate_apple_mod.gravity_inversion": "Gravity Inversion",
   "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6First use sets a return point.",
@@ -150,5 +149,11 @@
   "advancements.ultimate_apple_mod.drink_first_shake.title": "Bottoms Up!",
   "advancements.ultimate_apple_mod.drink_first_shake.description": "Drink a Shake and taste the combined power of two apples.",
   "advancements.ultimate_apple_mod.eat_all_apples.title": "Apple Connoisseur",
-  "advancements.ultimate_apple_mod.eat_all_apples.description": "Eat every apple in the mod. A true apple lover."
+  "advancements.ultimate_apple_mod.eat_all_apples.description": "Eat every apple in the mod. A true apple lover.",
+
+  "advancements.ultimate_apple_mod.tnt_apple_throw.title": "Kaboom!",
+  "advancements.ultimate_apple_mod.tnt_apple_throw.description": "Throw a TNT Apple.",
+
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.title": "Ghast Slayer",
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Kill a Ghast with a TNT Apple. Fight fire with fire."
 }

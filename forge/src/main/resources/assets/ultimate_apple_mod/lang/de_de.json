@@ -1,4 +1,4 @@
-{
+﻿{
   "item.ultimate_apple_mod.diamond_apple": "Diamantapfel",
   "item.ultimate_apple_mod.iron_apple": "Eisenapfel",
   "item.ultimate_apple_mod.rotten_apple": "Vergammelter Apfel",
@@ -25,7 +25,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Apfel-Bombe",
   "item.ultimate_apple_mod.tnt_apple": "TNT-Apfel",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Werfen erzeugt eine echte TNT-Explosion.",
-  "tooltip.ultimate_apple_mod.tnt_apple.line2": "§7Im Mixer mischen fur explosive Effekte!",
   "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6Erster Verzehr setzt einen Rückkehrpunkt.",
   "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Zweiter Verzehr teleportiert zurück.",
@@ -186,5 +185,11 @@
   "advancements.ultimate_apple_mod.drink_first_shake.description": "Trink einen Shake und erlebe die kombinierte Kraft zweier Äpfel.",
 
   "advancements.ultimate_apple_mod.eat_all_apples.title": "Apfel-Kenner",
-  "advancements.ultimate_apple_mod.eat_all_apples.description": "Iss jeden Apfel im Mod. Ein wahrer Apfelliebhaber."
+  "advancements.ultimate_apple_mod.eat_all_apples.description": "Iss jeden Apfel im Mod. Ein wahrer Apfelliebhaber.",
+
+  "advancements.ultimate_apple_mod.tnt_apple_throw.title": "Kaboom!",
+  "advancements.ultimate_apple_mod.tnt_apple_throw.description": "Wirf einen TNT-Apfel.",
+
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.title": "Ghast-Jäger",
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Töte einen Ghast mit einem TNT-Apfel. Feuer mit Feuer bekämpfen."
 }
