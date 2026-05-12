@@ -334,7 +334,11 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return switch (slot) {
-            case SLOT_CUP  -> stack.getItem() instanceof CupItem;
+            // Only 1 cup allowed; can't place while shake is waiting to be collected
+            case SLOT_CUP  -> stack.getItem() instanceof CupItem
+                && items.get(SLOT_CUP).isEmpty()
+                && items.get(SLOT_OUTPUT).isEmpty()
+                && pendingShakeTag == null;
             case SLOT_ING1 -> {
                 if (MixerRecipes.getContribution(stack).isEmpty()) yield false;
                 ItemStack ing2 = items.get(SLOT_ING2);
