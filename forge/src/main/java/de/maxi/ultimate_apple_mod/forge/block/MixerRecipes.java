@@ -311,6 +311,17 @@ public final class MixerRecipes {
         // TNT Apple shake: throwable + real TNT explosion (power 4) on impact,
         // AND applies the other ingredient's effects to nearby entities.
         registerTntBomb("tnt_apple");
+
+        // Coal Apple shake: brings its negative effects into the mix.
+        // Special combo rules (handled in MixerBlockEntity.buildShakeNbt):
+        //   + TNT Apple  → coal effects suppressed, only TNT explosion remains
+        //   + Apple Bomb → coal effects get 2× duration (prolonged punishment)
+        //   + any other  → normal combine, shake gains isCoalFuel=true (usable as furnace fuel)
+        register("coal_apple", List.of(
+            new EffectData(hunger,   20 * 30, 2),   // Hunger III, 30s
+            new EffectData(nausea,   20 * 10, 0),   // Nausea, 10s
+            new EffectData(slowness, 20 * 15, 1)    // Slowness II, 15s
+        ), 0, false, false);
     }
 
     // ── Incompatibility rules ──────────────────────────────────────────────
