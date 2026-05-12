@@ -9,7 +9,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Endermite;
+import de.maxi.ultimate_apple_mod.item.TntAppleItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -73,6 +76,19 @@ public class EnderPearlAppleItem extends Item {
 
                     // Kurzer Cooldown
                     player.getCooldowns().addCooldown(this, 20);
+
+                    // 5 % Chance eine Endermite am Zielort zu spawnen (wie bei vanilla Enderperle)
+                    if (level instanceof ServerLevel serverLevel
+                            && level.getRandom().nextFloat() < 0.05f) {
+                        Endermite endermite = new Endermite(EntityType.ENDERMITE, serverLevel);
+                        endermite.moveTo(
+                            teleportPos.getX() + 0.5,
+                            teleportPos.getY(),
+                            teleportPos.getZ() + 0.5,
+                            level.getRandom().nextFloat() * 360.0f, 0.0f);
+                        serverLevel.addFreshEntity(endermite);
+                        TntAppleItem.grantAdvancement(player, "ender_pearl_endermite");
+                    }
                 }
             }
         }
