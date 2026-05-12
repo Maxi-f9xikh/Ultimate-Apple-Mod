@@ -408,4 +408,58 @@ $glassBmp.Save("$blockTexDir\mixer_block_glas_shake.png", [System.Drawing.Imagin
 $glassBmp.Dispose()
 Write-Host "  Created block/mixer_block_glas_shake.png"
 
+# ===========================================================================
+# MIXER BODY TEXTURE  (16×16)  — silver brushed-aluminum look
+# ===========================================================================
+$bodyBmp = New-Object System.Drawing.Bitmap(16, 16, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+$bodyG   = [System.Drawing.Graphics]::FromImage($bodyBmp)
+$bodyG.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNeighbor
+
+function SB([int]$r,[int]$g,[int]$b) {
+    [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(255,$r,$g,$b)) }
+
+# Base silver fill
+$bodyG.Clear([System.Drawing.Color]::FromArgb(255, 172, 172, 172))
+# Top dark band (collar transition)
+$bodyG.FillRectangle((SB 40 40 40),  0,  0, 16, 1)
+$bodyG.FillRectangle((SB 60 60 60),  0,  1, 16, 1)
+# Highlight just below top band
+$bodyG.FillRectangle((SB 200 200 200), 0, 2, 16, 1)
+# Center sheen lines
+$bodyG.FillRectangle((SB 192 192 192), 0, 6, 16, 1)
+$bodyG.FillRectangle((SB 198 198 198), 0, 7, 16, 2)
+$bodyG.FillRectangle((SB 192 192 192), 0, 9, 16, 1)
+# Bottom dark band (foot transition)
+$bodyG.FillRectangle((SB 60 60 60),  0, 14, 16, 1)
+$bodyG.FillRectangle((SB 40 40 40),  0, 15, 16, 1)
+# Left edge shadow
+$bodyG.FillRectangle((SB 120 120 120), 0, 0, 1, 16)
+# Right edge shadow
+$bodyG.FillRectangle((SB 135 135 135), 15, 0, 1, 16)
+
+$bodyG.Dispose()
+$bodyBmp.Save("$blockTexDir\mixer_body.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$bodyBmp.Dispose()
+Write-Host "  Created block/mixer_body.png"
+
+# ===========================================================================
+# MIXER DARK TEXTURE  (16×16)  — near-black for collar and feet
+# ===========================================================================
+$darkBmp = New-Object System.Drawing.Bitmap(16, 16, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+$darkG   = [System.Drawing.Graphics]::FromImage($darkBmp)
+
+$darkG.Clear([System.Drawing.Color]::FromArgb(255, 22, 22, 22))
+# Slight top/bottom edge variation
+$darkG.FillRectangle((SB 12 12 12),  0,  0, 16, 1)
+$darkG.FillRectangle((SB 32 32 32),  0,  1, 16, 1)
+$darkG.FillRectangle((SB 32 32 32),  0, 14, 16, 1)
+$darkG.FillRectangle((SB 12 12 12),  0, 15, 16, 1)
+# Visible left edge (slight highlight so not totally flat)
+$darkG.FillRectangle((SB 42 42 42),  0,  0, 1, 16)
+
+$darkG.Dispose()
+$darkBmp.Save("$blockTexDir\mixer_dark.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$darkBmp.Dispose()
+Write-Host "  Created block/mixer_dark.png"
+
 Write-Host "All textures done!"
