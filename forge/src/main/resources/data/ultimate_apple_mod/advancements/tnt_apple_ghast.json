@@ -1,0 +1,17 @@
+{
+  "display": {
+    "icon": { "item": "ultimate_apple_mod:tnt_apple" },
+    "title": { "translate": "advancements.ultimate_apple_mod.tnt_apple_ghast.title" },
+    "description": { "translate": "advancements.ultimate_apple_mod.tnt_apple_ghast.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "ultimate_apple_mod:tnt_apple_throw",
+  "criteria": {
+    "killed_ghast_with_tnt_apple": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
