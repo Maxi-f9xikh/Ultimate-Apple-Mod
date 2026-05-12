@@ -453,6 +453,7 @@ public final class ultimate_apple_modForge {
             .icon(() -> new ItemStack(DIAMOND_APPLE.get()))
             .displayItems((parameters, output) -> {
                 output.accept(LAPISLAZULI_APPLE.get());
+                output.accept(COAL_APPLE.get());
                 output.accept(COPPER_APPLE.get());
                 output.accept(REDSTONE_APPLE.get());
                 output.accept(IRON_APPLE.get());
@@ -471,7 +472,6 @@ public final class ultimate_apple_modForge {
                 output.accept(ECHO_APPLE.get());
                 output.accept(REWIND_APPLE.get());
                 output.accept(APPLE_BOMB.get());
-                output.accept(COAL_APPLE.get());
                 output.accept(TNT_APPLE.get());
                 output.accept(WITHER_APPLE.get());
                 output.accept(HONEY_APPLE.get());
