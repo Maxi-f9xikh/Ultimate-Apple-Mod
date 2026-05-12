@@ -276,8 +276,31 @@ $oTNT = @{
 }
 Make-Tex "tnt_apple" $pTNT $oTNT
 
+# ===========================================================================
+# 10. COAL APPLE  -  black coal body, dark brown veins, brown stem
+# ===========================================================================
+$pCo = [int[]]@(
+    (HI "#0A0808"),(HI "#181412"),(HI "#242020"),(HI "#342C28"),
+    (HI "#443C38"),(HI "#564E4A"),(HI "#6A605C"),(HI "#807874"),(HI "#A09490"))
+$oCo = @{
+    # stem - earthy brown (like a real apple stem)
+    "9,1"=(HI "#6B4010"); "8,2"=(HI "#5A3010"); "9,2"=(HI "#6B4010"); "8,3"=(HI "#5A3010")
+    # coal vein 1 - diagonal crack upper-left
+    "3,5"=(HI "#2A1A10"); "4,6"=(HI "#1E1008"); "5,6"=(HI "#2A1A10")
+    "5,7"=(HI "#1E1008"); "6,7"=(HI "#2A1A10")
+    # coal vein 2 - horizontal streak middle-right
+    "8,9"=(HI "#1E1008");  "9,9"=(HI "#2A1A10"); "10,9"=(HI "#1E1008"); "11,9"=(HI "#2A1A10")
+    # coal vein 3 - lower cluster
+    "4,11"=(HI "#2A1A10"); "5,11"=(HI "#1E1008"); "5,12"=(HI "#2A1A10")
+    "9,12"=(HI "#1E1008"); "10,12"=(HI "#2A1A10")
+    # subtle gray sheen highlight (top-right of apple body)
+    "10,5"=(HI "#8A7C78"); "11,5"=(HI "#7A6C68")
+    "11,6"=(HI "#7A6C68"); "12,6"=(HI "#6A5C58")
+}
+Make-Tex "coal_apple" $pCo $oCo
+
 $script:tmpl.Dispose()
-Write-Host "All 9 item textures done!"
+Write-Host "All 10 item textures done!"
 
 # ===========================================================================
 # MIXER BLOCK TEXTURE  (64×64 atlas, texture_size [64,64])
