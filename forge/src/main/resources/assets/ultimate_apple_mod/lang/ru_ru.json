@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Наполнено тёмной силой угля.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Хрустящий Уголь",
   "advancements.ultimate_apple_mod.coal_apple.description": "Съешьте Угольное яблоко. Вкус сожаления."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Слегка окислённое медное яблоко",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Выветрившееся медное яблоко",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Окислённое медное яблоко",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Вощёное медное яблоко",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Вощёное слегка окислённое медное яблоко",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Вощёное выветрившееся медное яблоко",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Вощёное окислённое медное яблоко",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Покрыто воском - больше не окисляется.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Окисление: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Полностью окислено.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Зелёное яблоко",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Дайте медному яблоку полностью окислиться.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Запечатано воском",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Покройте медное яблоко воском с помощью сот.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Ваше медное яблоко начинает покрываться патиной...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Ваше медное яблоко выветрилось.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Ваше медное яблоко полностью окислилось!"
 }

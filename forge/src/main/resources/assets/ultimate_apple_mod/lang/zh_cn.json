@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7蕴含着煤炭的黑暗力量。",
   "advancements.ultimate_apple_mod.coal_apple.title": "酥脆煤炭",
   "advancements.ultimate_apple_mod.coal_apple.description": "吃一个煤炭苹果，尝尝后悔的滋味。"
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "斑驳铜苹果",
+  "item.ultimate_apple_mod.weathered_copper_apple": "锈化铜苹果",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "氧化铜苹果",
+  "item.ultimate_apple_mod.waxed_copper_apple": "涂蜡铜苹果",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "涂蜡斑驳铜苹果",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "涂蜡锈化铜苹果",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "涂蜡氧化铜苹果",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6已涂蜡 - 不再继续氧化。",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7氧化程度：%s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7已完全氧化。",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "绿色苹果",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "让你的铜苹果完全氧化。",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "蜡封铜苹果",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "用蜂巢对铜苹果进行涂蜡处理。",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6你的铜苹果开始出现锈斑...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6你的铜苹果已锈化。",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6你的铜苹果已完全氧化！"
 }

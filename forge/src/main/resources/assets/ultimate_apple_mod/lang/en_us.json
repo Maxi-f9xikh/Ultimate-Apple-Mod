@@ -1,4 +1,4 @@
-﻿{
+{
   "item.ultimate_apple_mod.diamond_apple": "Diamond Apple",
   "item.ultimate_apple_mod.iron_apple": "Iron Apple",
   "item.ultimate_apple_mod.rotten_apple": "Rotten Apple",
@@ -202,4 +202,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infused with the dark power of coal.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Crunchy Coal",
   "advancements.ultimate_apple_mod.coal_apple.description": "Eat a Coal Apple. Tastes like regret."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Exposed Copper Apple",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Weathered Copper Apple",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Oxidized Copper Apple",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Waxed Copper Apple",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Waxed Exposed Copper Apple",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Waxed Weathered Copper Apple",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Waxed Oxidized Copper Apple",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Waxed - will not oxidize further.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidation: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Fully oxidized.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "The Green Apple",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Let your Copper Apple fully oxidize into a teal relic.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Sealed in Wax",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Wax a Copper Apple with a Honeycomb to freeze its oxidation stage.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Your Copper Apple is showing some tarnish...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Your Copper Apple has turned weathered.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Your Copper Apple is fully oxidized!"
 }

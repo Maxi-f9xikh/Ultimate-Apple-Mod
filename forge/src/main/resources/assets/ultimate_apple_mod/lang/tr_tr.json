@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Kömürün karanlık gücüyle dolu.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Çıtır Kömür",
   "advancements.ultimate_apple_mod.coal_apple.description": "Bir Kömür Elması ye. Pişmanlık tadı verir."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Açık Bakır Elması",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Yıpranmış Bakır Elması",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Okside Bakır Elması",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Mumlanmış Bakır Elması",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Mumlanmış Açık Bakır Elması",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Mumlanmış Yıpranmış Bakır Elması",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Mumlanmış Okside Bakır Elması",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Mumlanmış - artık okside olmaz.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oksidasyon: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Tamamen okside.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Yeşil Elma",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Bakır Elmanın tamamen okside olmasına izin ver.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Mumla Mühürlendi",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Bir Bakır Elmayı petek ile mumla.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Bakır Elmanın üzerinde pas belirtileri görülüyor...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Bakır Elman yıprandı.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Bakır Elman tamamen okside oldu!"
 }

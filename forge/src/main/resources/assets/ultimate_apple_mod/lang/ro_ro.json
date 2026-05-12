@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infuzat cu puterea întunecată a cărbunelui.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Cărbune Crocant",
   "advancements.ultimate_apple_mod.coal_apple.description": "Mănâncă un Măr de Cărbune. Are gust de regret."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Măr de Cupru Expus",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Măr de Cupru Deteriorat",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Măr de Cupru Oxidat",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Măr de Cupru Ceruit",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Măr de Cupru Expus Ceruit",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Măr de Cupru Deteriorat Ceruit",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Măr de Cupru Oxidat Ceruit",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Ceruit - nu se va oxida mai mult.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidare: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Complet oxidat.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Mărul Verde",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Lasă Mărul de Cupru să se oxideze complet.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Sigilat cu Ceară",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Ceruiște un Măr de Cupru cu un fagure de miere.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Mărul tău de Cupru arată primele semne de patinare...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Mărul tău de Cupru s-a deteriorat.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Mărul tău de Cupru este complet oxidat!"
 }

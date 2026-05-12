@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7石炭の闇の力が宿っている。",
   "advancements.ultimate_apple_mod.coal_apple.title": "コリコリの石炭",
   "advancements.ultimate_apple_mod.coal_apple.description": "石炭のリンゴを食べよう。後悔の味がする。"
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "初期風化銅リンゴ",
+  "item.ultimate_apple_mod.weathered_copper_apple": "風化銅リンゴ",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "酸化銅リンゴ",
+  "item.ultimate_apple_mod.waxed_copper_apple": "蠢引き銅リンゴ",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "蠢引き初期風化銅リンゴ",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "蠢引き風化銅リンゴ",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "蠢引き酸化銅リンゴ",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6蠢引き済み - これ以上酸化しません。",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7酸化度: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7完全に酸化しています。",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "緑色のリンゴ",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "銅リンゴを完全に酸化させよう。",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "蠢で封印",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "蠢の巣で銅リンゴを蠢引きしよう。",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6銅リンゴが少し錐びてきた...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6銅リンゴがさらに風化した。",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6銅リンゴが完全に酸化した！"
 }

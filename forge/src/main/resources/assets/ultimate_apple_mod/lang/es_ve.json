@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Impregnada con el oscuro poder del carbón.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Carbón Crujiente",
   "advancements.ultimate_apple_mod.coal_apple.description": "Come una Manzana de Carbón. Sabe a arrepentimiento."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Manzana de Cobre Expuesto",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Manzana de Cobre Desgastado",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Manzana de Cobre Oxidado",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Manzana de Cobre Encerada",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Manzana de Cobre Expuesto Encerada",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Manzana de Cobre Desgastado Encerada",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Manzana de Cobre Oxidado Encerada",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Encerada - no oxidará más.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidación: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Completamente oxidada.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "La Manzana Verde",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Deja que tu Manzana de Cobre se oxide completamente.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Sellada con Cera",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Encera una Manzana de Cobre con un panal.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Tu Manzana de Cobre muestra pátina inicial...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Tu Manzana de Cobre se ha desgastado.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6¡Tu Manzana de Cobre está completamente oxidada!"
 }
