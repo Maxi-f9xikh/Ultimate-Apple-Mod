@@ -24,7 +24,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Bomba de maca",
   "item.ultimate_apple_mod.tnt_apple": "Maca TNT",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Jogar para criar uma explosao TNT.",
-  "tooltip.ultimate_apple_mod.tnt_apple.line2": "§7Misturar com qualquer maca para efeitos explosivos!",
   "effect.ultimate_apple_mod.gravity_inversion": "Gravity Inversion",
   "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6Primeiro uso: define um ponto de retorno.",
@@ -150,5 +149,11 @@
   "advancements.ultimate_apple_mod.drink_first_shake.title": "Saude!",
   "advancements.ultimate_apple_mod.drink_first_shake.description": "Beba um Shake e prove o poder de duas macas.",
   "advancements.ultimate_apple_mod.eat_all_apples.title": "Conhecedor de macas",
-  "advancements.ultimate_apple_mod.eat_all_apples.description": "Coma cada maca do mod. Um verdadeiro amante das macas."
+  "advancements.ultimate_apple_mod.eat_all_apples.description": "Coma cada maca do mod. Um verdadeiro amante das macas.",
+
+  "advancements.ultimate_apple_mod.tnt_apple_throw.title": "Kaboom!",
+  "advancements.ultimate_apple_mod.tnt_apple_throw.description": "Throw a TNT Apple.",
+
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.title": "Ghast Slayer",
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Kill a Ghast with a TNT Apple. Fight fire with fire."
 }
