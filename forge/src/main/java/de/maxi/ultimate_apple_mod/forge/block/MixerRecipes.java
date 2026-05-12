@@ -197,6 +197,42 @@ public final class MixerRecipes {
             new EffectData(resistance, 20 * 25, 0)     // Resistance I, 25s
         ), 0, false, false);
 
+        register("exposed_copper_apple", List.of(
+            new EffectData(haste,    20 * 20, 0),      // Haste I, 20s
+            new EffectData(strength, 20 * 15, 0)       // Strength I, 15s
+        ), 0, false, false);
+
+        register("weathered_copper_apple", List.of(
+            new EffectData(haste, 20 * 10, 0)          // Haste I, 10s
+        ), 0, false, false);
+
+        ResourceLocation weakness = mc("weakness");
+        register("oxidized_copper_apple", List.of(
+            new EffectData(slowness, 20 * 5, 0),       // Slowness I, 5s
+            new EffectData(weakness, 20 * 5, 0)        // Weakness I, 5s
+        ), 0, false, false);
+
+        // Waxed variants — identical effects to their base stage
+        register("waxed_copper_apple", List.of(
+            new EffectData(haste,      20 * 25, 1),
+            new EffectData(strength,   20 * 25, 0),
+            new EffectData(resistance, 20 * 25, 0)
+        ), 0, false, false);
+
+        register("waxed_exposed_copper_apple", List.of(
+            new EffectData(haste,    20 * 20, 0),
+            new EffectData(strength, 20 * 15, 0)
+        ), 0, false, false);
+
+        register("waxed_weathered_copper_apple", List.of(
+            new EffectData(haste, 20 * 10, 0)
+        ), 0, false, false);
+
+        register("waxed_oxidized_copper_apple", List.of(
+            new EffectData(slowness, 20 * 5, 0),
+            new EffectData(weakness, 20 * 5, 0)
+        ), 0, false, false);
+
         // ender_pearl_apple registered below via registerEnderTeleport (line ~295)
 
         register("moon_apple", List.of(
