@@ -462,4 +462,63 @@ $darkBmp.Save("$blockTexDir\mixer_dark.png", [System.Drawing.Imaging.ImageFormat
 $darkBmp.Dispose()
 Write-Host "  Created block/mixer_dark.png"
 
+# ===========================================================================
+# MIXER JAR TEXTURE  (16×16)  — clear glass cup walls (transparent center)
+# ===========================================================================
+$jarBmp = New-Object System.Drawing.Bitmap(16, 16, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+$jarG   = [System.Drawing.Graphics]::FromImage($jarBmp)
+# Fill fully transparent
+$jarG.Clear([System.Drawing.Color]::Transparent)
+$jarG.Dispose()
+
+# Draw glass border: 2px white/light-blue rim, transparent interior
+$rimColor    = [System.Drawing.Color]::FromArgb(255, 210, 235, 240)  # light ice-blue
+$rimDark     = [System.Drawing.Color]::FromArgb(180, 150, 195, 205)  # semi-transparent inner rim
+$rimHighlight= [System.Drawing.Color]::FromArgb(255, 240, 250, 255)  # bright top
+
+for ($i = 0; $i -lt 16; $i++) {
+    # Top/bottom solid rim
+    $jarBmp.SetPixel($i,  0, $rimHighlight)
+    $jarBmp.SetPixel($i,  1, $rimColor)
+    $jarBmp.SetPixel($i, 14, $rimDark)
+    $jarBmp.SetPixel($i, 15, $rimDark)
+    # Left/right solid rim
+    $jarBmp.SetPixel( 0, $i, $rimColor)
+    $jarBmp.SetPixel( 1, $i, $rimDark)
+    $jarBmp.SetPixel(14, $i, $rimDark)
+    $jarBmp.SetPixel(15, $i, $rimColor)
+}
+# Small highlight reflections on the glass face
+$jarBmp.SetPixel(3,  4, [System.Drawing.Color]::FromArgb(200, 240, 250, 255))
+$jarBmp.SetPixel(3,  5, [System.Drawing.Color]::FromArgb(150, 240, 250, 255))
+$jarBmp.SetPixel(4,  4, [System.Drawing.Color]::FromArgb(120, 240, 250, 255))
+$jarBmp.SetPixel(12, 8, [System.Drawing.Color]::FromArgb(120, 240, 250, 255))
+$jarBmp.SetPixel(12, 9, [System.Drawing.Color]::FromArgb(80,  240, 250, 255))
+
+$jarBmp.Save("$blockTexDir\mixer_jar.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$jarBmp.Dispose()
+Write-Host "  Created block/mixer_jar.png"
+
+# ===========================================================================
+# MIXER LIQUID TEXTURE  (16×16)  — green shake liquid (inside the jar)
+# ===========================================================================
+$liqBmp = New-Object System.Drawing.Bitmap(16, 16, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+$liqG   = [System.Drawing.Graphics]::FromImage($liqBmp)
+$liqG.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNeighbor
+
+# Base green (like the shake item color)
+$liqG.Clear([System.Drawing.Color]::FromArgb(255, 70, 170, 55))
+# Lighter top (surface highlight)
+$liqG.FillRectangle((SB 110 210 90),  0,  0, 16, 2)
+# Darker bottom (depth shadow)
+$liqG.FillRectangle((SB 45 130 35),   0, 13, 16, 3)
+# Subtle vertical variation (bubbles / texture)
+$liqG.FillRectangle((SB 80 185 65),   4,  3,  2, 8)
+$liqG.FillRectangle((SB 80 185 65),  10,  5,  2, 6)
+
+$liqG.Dispose()
+$liqBmp.Save("$blockTexDir\mixer_liquid.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$liqBmp.Dispose()
+Write-Host "  Created block/mixer_liquid.png"
+
 Write-Host "All textures done!"
