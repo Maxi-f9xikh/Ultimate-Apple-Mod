@@ -1,0 +1,17 @@
+{
+  "display": {
+    "icon": { "item": "ultimate_apple_mod:tnt_apple" },
+    "title": { "translate": "advancements.ultimate_apple_mod.tnt_apple_throw.title" },
+    "description": { "translate": "advancements.ultimate_apple_mod.tnt_apple_throw.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "ultimate_apple_mod:root",
+  "criteria": {
+    "threw_tnt_apple": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
