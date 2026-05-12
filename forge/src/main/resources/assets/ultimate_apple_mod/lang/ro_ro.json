@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "Măr de Cărbune",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6Funcționează ca combustibil pentru 100 obiecte.",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infuzat cu puterea întunecată a cărbunelui.",
+  "advancements.ultimate_apple_mod.coal_apple.title": "Cărbune Crocant",
+  "advancements.ultimate_apple_mod.coal_apple.description": "Mănâncă un Măr de Cărbune. Are gust de regret."
 }

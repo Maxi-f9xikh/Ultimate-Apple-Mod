@@ -196,4 +196,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "Coal Apple",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6Burns as furnace fuel for 100 items.",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infused with the dark power of coal.",
+  "advancements.ultimate_apple_mod.coal_apple.title": "Crunchy Coal",
+  "advancements.ultimate_apple_mod.coal_apple.description": "Eat a Coal Apple. Tastes like regret."
 }

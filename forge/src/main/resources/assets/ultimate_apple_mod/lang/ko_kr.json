@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "석탄 사과",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6용광로에서 100개를 제련할 연료가 됩니다.",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7석탄의 어두운 힘이 담겨 있습니다.",
+  "advancements.ultimate_apple_mod.coal_apple.title": "바삭한 석탄",
+  "advancements.ultimate_apple_mod.coal_apple.description": "석탄 사과를 먹으세요. 후회의 맛이 납니다."
 }

@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "Pomme de Charbon",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6Sert de combustible pour 100 objets.",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infusée du sombre pouvoir du charbon.",
+  "advancements.ultimate_apple_mod.coal_apple.title": "Charbon Croquant",
+  "advancements.ultimate_apple_mod.coal_apple.description": "Mange une Pomme de Charbon. Goût de regret."
 }

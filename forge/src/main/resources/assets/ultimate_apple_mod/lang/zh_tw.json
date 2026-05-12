@@ -159,4 +159,10 @@
 
   "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
   "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
+
+  "item.ultimate_apple_mod.coal_apple": "煤炭蘋果",
+  "tooltip.ultimate_apple_mod.coal_apple.line1": "§6可作為熔爐燃料，可冶煉100個物品。",
+  "tooltip.ultimate_apple_mod.coal_apple.line2": "§7蘊含著煤炭的黑暗力量。",
+  "advancements.ultimate_apple_mod.coal_apple.title": "酥脆煤炭",
+  "advancements.ultimate_apple_mod.coal_apple.description": "吃一個煤炭蘋果，嚐嚐後悔的滋味。"
 }
