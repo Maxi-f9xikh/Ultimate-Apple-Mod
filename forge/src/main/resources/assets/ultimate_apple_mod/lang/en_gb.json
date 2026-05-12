@@ -155,5 +155,8 @@
   "advancements.ultimate_apple_mod.tnt_apple_throw.description": "Throw a TNT Apple.",
 
   "advancements.ultimate_apple_mod.tnt_apple_ghast.title": "Ghast Slayer",
-  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Kill a Ghast with a TNT Apple. Fight fire with fire."
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Kill a Ghast with a TNT Apple. Fight fire with fire.",
+
+  "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Uninvited Guest",
+  "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleport with an Ender Pearl Apple and accidentally summon an Endermite. A 5 % chance you didn't want."
 }
