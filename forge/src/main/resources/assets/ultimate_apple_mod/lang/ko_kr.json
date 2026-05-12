@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7석탄의 어두운 힘이 담겨 있습니다.",
   "advancements.ultimate_apple_mod.coal_apple.title": "바삭한 석탄",
   "advancements.ultimate_apple_mod.coal_apple.description": "석탄 사과를 먹으세요. 후회의 맛이 납니다."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "약간 산화된 구리 사과",
+  "item.ultimate_apple_mod.weathered_copper_apple": "풍화된 구리 사과",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "산화된 구리 사과",
+  "item.ultimate_apple_mod.waxed_copper_apple": "밀랍 처리된 구리 사과",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "밀랍 처리된 약간 산화된 구리 사과",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "밀랍 처리된 풍화된 구리 사과",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "밀랍 처리된 산화된 구리 사과",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6밀랍 처리됨 - 더 이상 산화되지 않습니다.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7산화도: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7완전히 산화되었습니다.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "초록 사과",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "구리 사과를 완전히 산화시키세요.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "밀랍으로 봉인",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "벌집으로 구리 사과에 밀랍을 입히세요.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6구리 사과에 녹이 슬기 시작했습니다...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6구리 사과가 풍화되었습니다.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6구리 사과가 완전히 산화되었습니다!"
 }

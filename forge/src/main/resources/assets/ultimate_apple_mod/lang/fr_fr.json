@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infusée du sombre pouvoir du charbon.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Charbon Croquant",
   "advancements.ultimate_apple_mod.coal_apple.description": "Mange une Pomme de Charbon. Goût de regret."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Pomme de Cuivre Exposée",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Pomme de Cuivre Patinée",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Pomme de Cuivre Oxydée",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Pomme de Cuivre Cirée",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Pomme de Cuivre Exposée Cirée",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Pomme de Cuivre Patinée Cirée",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Pomme de Cuivre Oxydée Cirée",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Cirée - n'oxyde plus.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxydation : %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Complètement oxydée.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "La Pomme Verte",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Laissez votre Pomme de Cuivre s'oxyder complètement.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Scellée à la Cire",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Cirez une Pomme de Cuivre avec un rayon de miel.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Votre Pomme de Cuivre montre une légère patine...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Votre Pomme de Cuivre s'est patinée.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Votre Pomme de Cuivre est complètement oxydée !"
 }

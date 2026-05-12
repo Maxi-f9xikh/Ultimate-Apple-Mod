@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Mit da finstan Kraft vo da Kohle.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Knackiga Kohle",
   "advancements.ultimate_apple_mod.coal_apple.description": "Friss an Kohlenapfe. Schmeckt ned guat."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "A bissl oxidierter Kupferapfe",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Verwitterter Kupferapfe",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Voi oxidierter Kupferapfe",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Gwachster Kupferapfe",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Gwachster a bissl oxidierter Kupferapfe",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Gwachster verwitterter Kupferapfe",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Gwachster voi oxidierter Kupferapfe",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Gwachst - oxidiert nimma weida.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidation: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Voi oxidiert.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Da grüa Apfe",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Lass dei Kupferapfe voi oxidieren.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Mit Wachs versiegelt",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Wachse an Kupferapfe mit ana Honigwabe.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Dei Kupferapfe kriagt a bissl Patina...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Dei Kupferapfe is verwittert.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Dei Kupferapfe is voi oxidiert!"
 }

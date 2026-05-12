@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Gennemsyret af kullets mørke kraft.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Sprød Kul",
   "advancements.ultimate_apple_mod.coal_apple.description": "Spis en Kulobjekt. Smager som fortrydelse."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Eksponeret Kobberaæble",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Vejrbidt Kobberaæble",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Oxideret Kobberaæble",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Vokset Kobberaæble",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Vokset Eksponeret Kobberaæble",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Vokset Vejrbidt Kobberaæble",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Vokset Oxideret Kobberaæble",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Vokset - oxiderer ikke længere.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidation: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Fuldt oxideret.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Det Grønne Æble",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Lad dit Kobberaæble oxidere fuldtændigt.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Forseglet med Voks",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Voks et Kobberaæble med en honningkam.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Dit Kobberaæble begynder at patinere...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Dit Kobberaæble er blevet vejrbidt.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Dit Kobberaæble er fuldt oxideret!"
 }

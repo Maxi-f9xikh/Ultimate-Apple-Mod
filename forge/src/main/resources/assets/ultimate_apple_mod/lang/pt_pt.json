@@ -165,4 +165,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infundida com o poder sombrio do carvão.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Carvão Crocante",
   "advancements.ultimate_apple_mod.coal_apple.description": "Coma uma Maçã de Carvão. Tem gosto de arrependimento."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Maçã de Cobre Exposta",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Maçã de Cobre Desgastada",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Maçã de Cobre Oxidada",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Maçã de Cobre Encerada",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Maçã de Cobre Exposta Encerada",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Maçã de Cobre Desgastada Encerada",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Maçã de Cobre Oxidada Encerada",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Encerada - não oxidará mais.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidação: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Completamente oxidada.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "A Maçã Verde",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Deixa que a tua Maçã de Cobre oxide completamente.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Selada com Cera",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Encera uma Maçã de Cobre com um favo de mel.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6A tua Maçã de Cobre está a mostrar pátina...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6A tua Maçã de Cobre ficou desgastada.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6A tua Maçã de Cobre está completamente oxidada!"
 }

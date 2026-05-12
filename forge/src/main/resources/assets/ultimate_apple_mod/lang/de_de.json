@@ -201,4 +201,22 @@
   "tooltip.ultimate_apple_mod.coal_apple.line2": "§7Infusiert mit der dunklen Kraft der Kohle.",
   "advancements.ultimate_apple_mod.coal_apple.title": "Knackige Kohle",
   "advancements.ultimate_apple_mod.coal_apple.description": "Iss einen Kohlenapfel. Schmeckt nach Reue."
+,
+  "item.ultimate_apple_mod.exposed_copper_apple": "Leicht oxidierter Kupferapfel",
+  "item.ultimate_apple_mod.weathered_copper_apple": "Verwitterter Kupferapfel",
+  "item.ultimate_apple_mod.oxidized_copper_apple": "Oxidierter Kupferapfel",
+  "item.ultimate_apple_mod.waxed_copper_apple": "Gewachster Kupferapfel",
+  "item.ultimate_apple_mod.waxed_exposed_copper_apple": "Gewachster leicht oxidierter Kupferapfel",
+  "item.ultimate_apple_mod.waxed_weathered_copper_apple": "Gewachster verwitterter Kupferapfel",
+  "item.ultimate_apple_mod.waxed_oxidized_copper_apple": "Gewachster oxidierter Kupferapfel",
+  "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Gewachst - oxidiert nicht weiter.",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidation: %s%%",
+  "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Vollständig oxidiert.",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Der grüne Apfel",
+  "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Lass deinen Kupferapfel vollständig oxidieren.",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.title": "In Wachs versiegelt",
+  "advancements.ultimate_apple_mod.waxed_copper_apple.description": "Versiegle einen Kupferapfel mit einer Honigwabe.",
+  "message.ultimate_apple_mod.copper_apple.stage1": "§6Dein Kupferapfel bekommt erste Patina...",
+  "message.ultimate_apple_mod.copper_apple.stage2": "§6Dein Kupferapfel ist verwittert.",
+  "message.ultimate_apple_mod.copper_apple.stage3": "§6Dein Kupferapfel ist vollständig oxidiert!"
 }
