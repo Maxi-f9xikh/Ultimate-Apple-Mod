@@ -304,57 +304,56 @@ $mg.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::NearestNei
 function MB { param([int]$r,[int]$g,[int]$b)
     [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(255,$r,$g,$b)) }
 
-# ── Pure-gray blender palette ─────────────────────────────────────────────────
-$bBlack  = MB  22  22  22   # very dark — top collar, base feet
-$bDark   = MB  52  52  52   # dark gray — transitions, back panels, inner faces
-$bMid    = MB  92  92  92   # medium gray — fill, secondary faces
-$bLight  = MB 148 148 148   # light gray — main visible body faces
-$bSheen  = MB 205 205 205   # near-white highlight stripe
+# ── Real blender palette: very light silver body, near-black collar/feet ──────
+$bBlack  = MB  18  18  18   # near black  — collar top, base feet
+$bDark   = MB  45  45  45   # dark        — edges, inner/back faces
+$bMid    = MB 110 110 110   # mid gray    — secondary faces, transitions
+$bSilver = MB 185 185 185   # light silver — main visible body (like brushed alu)
+$bSheen  = MB 225 225 225   # bright sheen — highlight lines
 
-# ── 1. Fill entire atlas with medium gray as neutral default ──────────────────
-$mg.Clear([System.Drawing.Color]::FromArgb(255, 92, 92, 92))
+# ── 1. Fill entire atlas with dark as safe default ───────────────────────────
+$mg.Clear([System.Drawing.Color]::FromArgb(255, 45, 45, 45))
 
-# ── 2. Feet / legs / tiny corner pieces (y:33-64 and x:30-64) — almost black ─
-$mg.FillRectangle(($bBlack), 0,  33, 64, 31)   # bottom rows (feet)
-$mg.FillRectangle(($bDark),  30,  0, 34, 33)   # right-side small pieces
+# ── 2. Feet / legs (y:33-64 and x:30-64) — near black ───────────────────────
+$mg.FillRectangle(($bBlack), 0,  33, 64, 31)
+$mg.FillRectangle(($bDark),  30,  0, 34, 33)
 
-# ── 3. Back faces (x:0-30, y:22-33) — dark rear of body ─────────────────────
+# ── 3. Back/inner faces (x:0-30, y:22-33) ────────────────────────────────────
 $mg.FillRectangle(($bDark),  0,  22, 30, 11)
-$mg.FillRectangle(($bBlack), 0,  22, 30,  2)   # dark separator line at top
 
-# ── 4. Inner/secondary side faces (x:8-24, y:0-11) ──────────────────────────
-$mg.FillRectangle(($bDark),  8,   0,  8, 11)   # inner right
-$mg.FillRectangle(($bMid),  16,   0,  8, 11)   # inner left
+# ── 4. Inner side faces (x:8-24, y:0-11) ─────────────────────────────────────
+$mg.FillRectangle(($bDark),  8,   0,  8, 11)
+$mg.FillRectangle(($bMid),  16,   0,  8, 11)
 
-# ── 5. Thin strips along front edges (x:24-30, y:0-22) ───────────────────────
+# ── 5. Thin edge strips (x:24-30, y:0-22) ────────────────────────────────────
 $mg.FillRectangle(($bMid),  24,   0,  6, 22)
 
-# ── 6. Side right outer (x:0-8, y:0-11) — visible right side ─────────────────
-$mg.FillRectangle(($bLight),  0,  0,  8, 11)
-$mg.FillRectangle(($bBlack),  0,  0,  8,  2)   # dark collar top
-$mg.FillRectangle(($bDark),   0,  2,  1,  9)   # left shadow edge
-$mg.FillRectangle(($bSheen),  6,  3,  1,  7)   # right sheen stripe
+# ── 6. Side right outer (x:0-8, y:0-11) ─────────────────────────────────────
+$mg.FillRectangle(($bSilver),  0,  0,  8, 11)   # silver main face
+$mg.FillRectangle(($bBlack),   0,  0,  8,  3)   # BLACK collar at top
+$mg.FillRectangle(($bDark),    0,  3,  1,  8)   # shadow left edge
+$mg.FillRectangle(($bSheen),   6,  4,  1,  6)   # bright sheen stripe
 
-# ── 7. FRONT face (x:0-8, y:11-22) — main visible face ──────────────────────
-$mg.FillRectangle(($bLight),  0, 11,  8, 11)
-$mg.FillRectangle(($bBlack),  0, 11,  8,  2)   # dark collar band at top
-$mg.FillRectangle(($bBlack),  0, 20,  8,  2)   # dark base band at bottom
-$mg.FillRectangle(($bDark),   0, 13,  1,  7)   # left shadow
-$mg.FillRectangle(($bDark),   7, 13,  1,  7)   # right shadow
-$mg.FillRectangle(($bSheen),  2, 15,  4,  1)   # subtle center highlight line
-$mg.FillRectangle(($bSheen),  3, 17,  2,  1)   # second subtle highlight
+# ── 7. FRONT face (x:0-8, y:11-22) — most visible face ──────────────────────
+$mg.FillRectangle(($bSilver),  0, 11,  8, 11)   # silver body
+$mg.FillRectangle(($bBlack),   0, 11,  8,  3)   # BLACK collar band
+$mg.FillRectangle(($bBlack),   0, 19,  8,  3)   # BLACK base band
+$mg.FillRectangle(($bDark),    0, 14,  1,  5)   # left shadow
+$mg.FillRectangle(($bDark),    7, 14,  1,  5)   # right shadow
+$mg.FillRectangle(($bSheen),   2, 15,  4,  1)   # horizontal sheen line
+$mg.FillRectangle(($bSheen),   2, 17,  3,  1)   # second sheen line
 
-# ── 8. Front back (x:8-16, y:11-22) — back of front panel ───────────────────
+# ── 8. Front back panel (x:8-16, y:11-22) ────────────────────────────────────
 $mg.FillRectangle(($bMid),   8, 11,  8, 11)
-$mg.FillRectangle(($bDark),  8, 11,  1, 11)    # edge shadow
+$mg.FillRectangle(($bDark),  8, 11,  1, 11)
 
-# ── 9. Side left outer (x:16-24, y:11-22) — visible left side ───────────────
-$mg.FillRectangle(($bLight), 16, 11,  8, 11)
-$mg.FillRectangle(($bBlack), 16, 11,  8,  2)   # dark collar top
-$mg.FillRectangle(($bBlack), 16, 20,  8,  2)   # dark base bottom
-$mg.FillRectangle(($bDark),  16, 13,  1,  7)   # left shadow
-$mg.FillRectangle(($bDark),  23, 13,  1,  7)   # right shadow
-$mg.FillRectangle(($bSheen), 18, 15,  4,  1)   # highlight line
+# ── 9. Side left outer (x:16-24, y:11-22) ────────────────────────────────────
+$mg.FillRectangle(($bSilver), 16, 11,  8, 11)   # silver main face
+$mg.FillRectangle(($bBlack),  16, 11,  8,  3)   # BLACK collar band
+$mg.FillRectangle(($bBlack),  16, 19,  8,  3)   # BLACK base band
+$mg.FillRectangle(($bDark),   16, 14,  1,  5)
+$mg.FillRectangle(($bDark),   23, 14,  1,  5)
+$mg.FillRectangle(($bSheen),  18, 15,  4,  1)
 
 $mg.Dispose()
 $mixBmp.Save("$blockTexDir\mixer_block_unten.png", [System.Drawing.Imaging.ImageFormat]::Png)
