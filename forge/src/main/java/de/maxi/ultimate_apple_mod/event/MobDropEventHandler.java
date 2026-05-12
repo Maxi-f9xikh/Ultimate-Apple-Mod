@@ -5,6 +5,7 @@ import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
@@ -36,6 +37,8 @@ import java.util.Random;
  *   Wither (boss)  →  Wither Apple     100 %
  *   Elder Guardian →  Prism Apple       50 %  (kept from original)
  *   Drowned        →  Prism Apple        5 %  (kept from original)
+ *   Parrot         →  Banana            30 %
+ *   Zombie (all)   →  Pear Apple         2.5 % (same as vanilla potato drop)
  */
 @Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MobDropEventHandler {
@@ -101,6 +104,20 @@ public class MobDropEventHandler {
         }
         else if (entity instanceof Drowned) {
             roll(event, ultimate_apple_modForge.PRISM_APPLE.get(), 0.05);
+        }
+
+        // ── Jungle mobs ───────────────────────────────────────────────────────
+
+        else if (entity instanceof Parrot) {
+            roll(event, ultimate_apple_modForge.BANANA.get(), 0.30);
+        }
+
+        // ── Zombie variants → Pear Apple (independent check, not in else-if chain)
+        // Covers Zombie, Husk, ZombieVillager and Drowned (all extend Zombie).
+        // Drowned can therefore drop BOTH a Prism Apple (above) AND a Pear Apple.
+
+        if (entity instanceof Zombie) {
+            roll(event, ultimate_apple_modForge.BIRNE.get(), 0.025);
         }
     }
 
