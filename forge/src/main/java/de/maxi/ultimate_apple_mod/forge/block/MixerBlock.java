@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -32,13 +33,19 @@ public class MixerBlock extends BaseEntityBlock {
     public static final BooleanProperty HAS_JAR   = BooleanProperty.create("has_jar");
     public static final BooleanProperty HAS_SHAKE  = BooleanProperty.create("has_shake");
 
-    // Custom hitbox slightly smaller than a full block so it matches the model
-    private static final VoxelShape SHAPE = box(2, 0, 2, 14, 12, 14);
+    // Base hitbox (no jar): foot + body + collar, up to y=12
+    private static final VoxelShape SHAPE_BASE = box(2, 0, 2, 14, 12, 14);
+
+    // With jar/shake: union of base + glass jar column (y=11–22)
+    private static final VoxelShape SHAPE_WITH_JAR = Shapes.or(
+        box(2, 0, 2, 14, 12, 14),
+        box(4, 11, 4, 12, 22, 12)
+    );
 
     public MixerBlock() {
         super(BlockBehaviour.Properties.of()
             .mapColor(MapColor.METAL)
-            .strength(3.5f)
+            .strength(3.5f, 6.0f)   // destroyTime=3.5 (like iron block), blastResistance=6
             .sound(SoundType.METAL)
             .noOcclusion()
             .requiresCorrectToolForDrops());
@@ -56,7 +63,9 @@ public class MixerBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return (state.getValue(HAS_JAR) || state.getValue(HAS_SHAKE))
+            ? SHAPE_WITH_JAR
+            : SHAPE_BASE;
     }
 
     // ── Rendering: show the custom Blockbench model ──────────────────────
