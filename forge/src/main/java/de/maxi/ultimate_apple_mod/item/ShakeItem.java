@@ -31,6 +31,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -53,6 +54,21 @@ public class ShakeItem extends Item {
                 .alwaysEat()
                 .build())
             .stacksTo(1));   // shakes never stack — each has unique NBT
+    }
+
+    // ── Furnace fuel (coal-infused shake) ────────────────────────────────────
+
+    /**
+     * A shake made with a Coal Apple can be used as furnace fuel.
+     * Burn time: {@value CoalAppleItem#SHAKE_BURN_TIME} ticks (120 items; 20% bonus over raw coal apple).
+     */
+    @Override
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.getBoolean("isCoalFuel")) {
+            return CoalAppleItem.SHAKE_BURN_TIME;
+        }
+        return 0;  // not a fuel by default
     }
 
     // ── Use animation ───────────────────────────────────────────────────────
@@ -278,6 +294,9 @@ public class ShakeItem extends Item {
         }
         if (tag.getBoolean("enderTeleport")) {
             components.add(Component.literal("§5⚡ Ender-teleports you on drink"));
+        }
+        if (tag.getBoolean("isCoalFuel")) {
+            components.add(Component.literal("§6🔥 Usable as furnace fuel (120 items)").withStyle(ChatFormatting.GOLD));
         }
         if (tag.getBoolean("isTntExplosion")) {
             components.add(Component.literal("§c💥 TNT explosion on impact!").withStyle(ChatFormatting.RED));
