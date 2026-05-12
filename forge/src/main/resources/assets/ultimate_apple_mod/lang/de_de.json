@@ -191,5 +191,8 @@
   "advancements.ultimate_apple_mod.tnt_apple_throw.description": "Wirf einen TNT-Apfel.",
 
   "advancements.ultimate_apple_mod.tnt_apple_ghast.title": "Ghast-Jäger",
-  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Töte einen Ghast mit einem TNT-Apfel. Feuer mit Feuer bekämpfen."
+  "advancements.ultimate_apple_mod.tnt_apple_ghast.description": "Töte einen Ghast mit einem TNT-Apfel. Feuer mit Feuer bekämpfen.",
+
+  "advancements.ultimate_apple_mod.ender_pearl_endermite.title": "Ungebetener Gast",
+  "advancements.ultimate_apple_mod.ender_pearl_endermite.description": "Teleportiere dich mit einem Enderperlenapfel und beschwöre dabei versehentlich eine Endermite. 5 % Pech."
 }
