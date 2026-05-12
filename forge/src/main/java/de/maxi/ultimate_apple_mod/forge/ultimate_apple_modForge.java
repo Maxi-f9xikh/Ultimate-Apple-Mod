@@ -19,6 +19,7 @@ import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
 import de.maxi.ultimate_apple_mod.item.CoalAppleItem;
+import de.maxi.ultimate_apple_mod.item.CopperAppleItem;
 import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
 import de.maxi.ultimate_apple_mod.item.TntAppleItem;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
@@ -253,15 +254,79 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
+    // ── Copper Apple — 4 oxidation stages + 4 waxed variants ─────────────────
+
     public static final RegistryObject<Item> COPPER_APPLE = ITEMS.register("copper_apple", () ->
-        new Item(new Item.Properties()
+        new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(5).saturationMod(0.6f).alwaysEat()
                 .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f) // Haste II, 25s
                 .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f) // Strength I, 25s
                 .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f) // Resistance I, 25s
                 .build())
-            .stacksTo(64)));
+            .stacksTo(64), 0, false));
+
+    public static final RegistryObject<Item> EXPOSED_COPPER_APPLE = ITEMS.register("exposed_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(4).saturationMod(0.5f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,    20 * 20, 0), 1.0f) // Haste I, 20s
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f) // Strength I, 15s
+                .build())
+            .stacksTo(64), 1, false));
+
+    public static final RegistryObject<Item> WEATHERED_COPPER_APPLE = ITEMS.register("weathered_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(3).saturationMod(0.3f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 10, 0), 1.0f) // Haste I, 10s
+                .build())
+            .stacksTo(64), 2, false));
+
+    public static final RegistryObject<Item> OXIDIZED_COPPER_APPLE = ITEMS.register("oxidized_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(2).saturationMod(0.1f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f) // Slowness I, 5s
+                .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS,          20 * 5, 0), 1.0f) // Weakness I, 5s
+                .build())
+            .stacksTo(64), 3, false));
+
+    public static final RegistryObject<Item> WAXED_COPPER_APPLE = ITEMS.register("waxed_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(5).saturationMod(0.6f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f)
+                .build())
+            .stacksTo(64), 0, true));
+
+    public static final RegistryObject<Item> WAXED_EXPOSED_COPPER_APPLE = ITEMS.register("waxed_exposed_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(4).saturationMod(0.5f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,    20 * 20, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f)
+                .build())
+            .stacksTo(64), 1, true));
+
+    public static final RegistryObject<Item> WAXED_WEATHERED_COPPER_APPLE = ITEMS.register("waxed_weathered_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(3).saturationMod(0.3f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 10, 0), 1.0f)
+                .build())
+            .stacksTo(64), 2, true));
+
+    public static final RegistryObject<Item> WAXED_OXIDIZED_COPPER_APPLE = ITEMS.register("waxed_oxidized_copper_apple", () ->
+        new CopperAppleItem(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                .nutrition(2).saturationMod(0.1f).alwaysEat()
+                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f)
+                .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS,          20 * 5, 0), 1.0f)
+                .build())
+            .stacksTo(64), 3, true));
 
     public static final RegistryObject<Item> ENDER_PEARL_APPLE =
         ITEMS.register("ender_pearl_apple", EnderPearlAppleItem::new);
@@ -455,6 +520,13 @@ public final class ultimate_apple_modForge {
                 output.accept(LAPISLAZULI_APPLE.get());
                 output.accept(COAL_APPLE.get());
                 output.accept(COPPER_APPLE.get());
+                output.accept(EXPOSED_COPPER_APPLE.get());
+                output.accept(WEATHERED_COPPER_APPLE.get());
+                output.accept(OXIDIZED_COPPER_APPLE.get());
+                output.accept(WAXED_COPPER_APPLE.get());
+                output.accept(WAXED_EXPOSED_COPPER_APPLE.get());
+                output.accept(WAXED_WEATHERED_COPPER_APPLE.get());
+                output.accept(WAXED_OXIDIZED_COPPER_APPLE.get());
                 output.accept(REDSTONE_APPLE.get());
                 output.accept(IRON_APPLE.get());
                 output.accept(DIAMOND_APPLE.get());
@@ -532,7 +604,14 @@ public final class ultimate_apple_modForge {
 
             // Crafted / ore-tier apples: 0.65
             ComposterBlock.COMPOSTABLES.put(IRON_APPLE.get(),         0.65f);
-            ComposterBlock.COMPOSTABLES.put(COPPER_APPLE.get(),       0.65f);
+            ComposterBlock.COMPOSTABLES.put(COPPER_APPLE.get(),              0.65f);
+            ComposterBlock.COMPOSTABLES.put(EXPOSED_COPPER_APPLE.get(),      0.65f);
+            ComposterBlock.COMPOSTABLES.put(WEATHERED_COPPER_APPLE.get(),    0.65f);
+            ComposterBlock.COMPOSTABLES.put(OXIDIZED_COPPER_APPLE.get(),     0.65f);
+            ComposterBlock.COMPOSTABLES.put(WAXED_COPPER_APPLE.get(),        0.65f);
+            ComposterBlock.COMPOSTABLES.put(WAXED_EXPOSED_COPPER_APPLE.get(),0.65f);
+            ComposterBlock.COMPOSTABLES.put(WAXED_WEATHERED_COPPER_APPLE.get(),0.65f);
+            ComposterBlock.COMPOSTABLES.put(WAXED_OXIDIZED_COPPER_APPLE.get(),0.65f);
             ComposterBlock.COMPOSTABLES.put(LAPISLAZULI_APPLE.get(),  0.65f);
             ComposterBlock.COMPOSTABLES.put(REDSTONE_APPLE.get(),     0.65f);
             ComposterBlock.COMPOSTABLES.put(EMERALD_APPLE.get(),      0.65f);
