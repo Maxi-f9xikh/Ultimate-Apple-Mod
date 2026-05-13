@@ -74,7 +74,7 @@ public class CopperAppleItem extends Item {
 
         CompoundTag tag = stack.getOrCreateTag();
         int ticks = tag.getInt("oxidationTicks");
-        ticks += player.isInRain() ? 2 : 1;
+        ticks += player.level().isRainingAt(player.blockPosition()) ? 2 : 1;
 
         if (ticks >= OXIDATION_THRESHOLD) {
             // Advance one stage
