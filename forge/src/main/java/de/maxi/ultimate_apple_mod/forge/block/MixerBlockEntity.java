@@ -43,12 +43,12 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     // ── State ──────────────────────────────────────────────────────────────
 
     private final NonNullList<ItemStack> items =
-        NonNullList.withSize(4, ItemStack.EMPTY);
+            NonNullList.withSize(4, ItemStack.EMPTY);
 
     /**
      * Non-null while a mix is in progress.
      * The NBT tag that will be attached to the output shake when done.
-     * Ingredients are consumed WHEN this is set (at mix-start), not at mix-end.
+     * Ingredients are consumed WHEN progress reaches MAX (at mix-end), not at mix-start.
      */
     @Nullable
     private CompoundTag pendingShakeTag = null;
@@ -85,7 +85,12 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
             // A mix is in progress — tick the bar
             be.progress++;
             if (be.progress >= MAX_PROGRESS) {
-                // Produce the shake
+                // ── Balken fertig: JETZT erst Items konsumieren ──
+                be.consumeSlot(SLOT_CUP);
+                be.consumeSlot(SLOT_ING1);
+                be.consumeSlot(SLOT_ING2);
+
+                // Shake produzieren
                 ItemStack shake = new ItemStack(ultimate_apple_modForge.SHAKE_ITEM.get());
                 shake.setTag(be.pendingShakeTag.copy());
                 be.items.set(SLOT_OUTPUT, shake);
@@ -97,19 +102,19 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         } else {
             // Idle — try to start a new mix
             if (be.canStartMix()) {
-                // Derive contributions before consuming items
+                // Derive contributions before starting (items still present in slots)
                 MixerRecipes.ShakeContribution c1 =
-                    MixerRecipes.getContribution(be.items.get(SLOT_ING1)).get();
+                        MixerRecipes.getContribution(be.items.get(SLOT_ING1)).get();
                 MixerRecipes.ShakeContribution c2 =
-                    MixerRecipes.getContribution(be.items.get(SLOT_ING2)).get();
+                        MixerRecipes.getContribution(be.items.get(SLOT_ING2)).get();
 
                 // Quantum Apple: replace its fixed contribution with a random one
                 // from the registry so every shake with Quantum is a surprise.
                 ResourceLocation quantumId =
-                    new ResourceLocation("ultimate_apple_mod", "quantum_apple");
+                        new ResourceLocation("ultimate_apple_mod", "quantum_apple");
                 var rng = level.getRandom();
                 List<MixerRecipes.ShakeContribution> pool =
-                    MixerRecipes.getRandomizableContributions();
+                        MixerRecipes.getRandomizableContributions();
                 if (!pool.isEmpty()) {
                     if (quantumId.equals(
                             ForgeRegistries.ITEMS.getKey(be.items.get(SLOT_ING1).getItem()))) {
@@ -129,9 +134,9 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
                 ResourceLocation id2 = ForgeRegistries.ITEMS.getKey(be.items.get(SLOT_ING2).getItem());
 
                 boolean coalTnt  = (COAL_ID.equals(id1) && TNT_ID.equals(id2))
-                                || (TNT_ID.equals(id1)  && COAL_ID.equals(id2));
+                        || (TNT_ID.equals(id1)  && COAL_ID.equals(id2));
                 boolean coalBomb = (COAL_ID.equals(id1) && BOMB_ID.equals(id2))
-                                || (BOMB_ID.equals(id1) && COAL_ID.equals(id2));
+                        || (BOMB_ID.equals(id1) && COAL_ID.equals(id2));
                 boolean coalMix  = COAL_ID.equals(id1) || COAL_ID.equals(id2);
 
                 if (coalTnt) {
@@ -144,12 +149,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
                     else                     c2 = withDoubledDuration(c2);
                 }
 
-                // Consume 1 of each item immediately (furnace-style)
-                be.consumeSlot(SLOT_CUP);
-                be.consumeSlot(SLOT_ING1);
-                be.consumeSlot(SLOT_ING2);
-
-                // Build the pending shake tag and mark fuel flag when applicable
+                // ── Items werden NICHT konsumiert — nur Shake-Tag berechnen und Balken starten ──
                 CompoundTag shakeTag = buildShakeNbt(c1, c2);
                 if (coalMix && !coalTnt) {
                     shakeTag.putBoolean("isCoalFuel", true);
@@ -191,7 +191,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         if (MixerRecipes.areIncompatible(ing1, ing2)) return false;
 
         return MixerRecipes.getContribution(ing1).isPresent()
-            && MixerRecipes.getContribution(ing2).isPresent();
+                && MixerRecipes.getContribution(ing2).isPresent();
     }
 
     // ── Shake production ─────────────────────────────────────────────────────
@@ -201,14 +201,9 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
      * Duplicate effects are deduplicated: highest amplifier and longest duration win.
      */
     private static CompoundTag buildShakeNbt(MixerRecipes.ShakeContribution c1,
-                                              MixerRecipes.ShakeContribution c2) {
+                                             MixerRecipes.ShakeContribution c2) {
         boolean clearsEffects = c1.clearsEffects() || c2.clearsEffects();
 
-        // When the Honey Apple (or any cleansing ingredient) is involved, ONLY its
-        // own effects are kept — the other ingredient's effects are discarded.
-        // This means the shake clears pre-existing effects AND only applies the
-        // Honey Apple's Slowness, nothing from the second ingredient.
-        // For normal (non-cleansing) pairs, both ingredients contribute as usual.
         Map<ResourceLocation, MixerRecipes.EffectData> merged = new LinkedHashMap<>();
         if (clearsEffects) {
             if (c1.clearsEffects()) for (MixerRecipes.EffectData e : c1.effects()) mergeEffect(merged, e);
@@ -218,7 +213,6 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
             for (MixerRecipes.EffectData e : c2.effects()) mergeEffect(merged, e);
         }
 
-        // Sum / OR the special values — also zeroed out when cleansing.
         int dragonCharges  = clearsEffects ? 0 : (c1.dragonCharges() + c2.dragonCharges());
         boolean lifesteal    = !clearsEffects && (c1.lifesteal()    || c2.lifesteal());
         boolean witherCurse  = !clearsEffects && (c1.witherCurse()  || c2.witherCurse());
@@ -226,26 +220,19 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         boolean rewindEffect = !clearsEffects && (c1.rewindEffect() || c2.rewindEffect());
         boolean orchardSpawn = !clearsEffects && (c1.orchardSpawn() || c2.orchardSpawn());
         boolean enderTeleport = !clearsEffects && (c1.enderTeleport() || c2.enderTeleport());
-        // isBomb: always throwable when either ingredient is the Apple Bomb or TNT Apple
         boolean isBomb = c1.isBomb() || c2.isBomb();
-        // isTntExplosion: real TNT explosion on impact when TNT Apple is involved
         boolean isTntExplosion = c1.isTntExplosion() || c2.isTntExplosion();
 
-        // Raw Longevity multiplier (2.0 if Longevity Apple present, 1.0 otherwise).
         double rawMultiplier = Math.max(c1.durationMultiplier(), c2.durationMultiplier());
 
-        // Duration factor applied to every effect duration:
-        //   Normal pair:          +20 % × Longevity multiplier  (e.g. 1.2 or 2.4)
-        //   Honey + normal apple: −20 %  (factor = 0.80)
-        //   Honey + Longevity:    effects removed entirely (merged cleared below)
         final double durationFactor;
         if (clearsEffects && rawMultiplier >= 2.0) {
-            merged.clear();           // Honey + Longevity → no effects at all
-            durationFactor = 1.0;     // irrelevant — loop will not run
+            merged.clear();
+            durationFactor = 1.0;
         } else if (clearsEffects) {
-            durationFactor = 0.80;    // Honey + anything else → −20 %
+            durationFactor = 0.80;
         } else {
-            durationFactor = 1.20 * rawMultiplier;  // normal → +20 % (× Longevity)
+            durationFactor = 1.20 * rawMultiplier;
         }
 
         CompoundTag tag = new CompoundTag();
@@ -276,8 +263,8 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     /** Returns a blank ShakeContribution with no effects and all flags false. */
     private static MixerRecipes.ShakeContribution emptyContribution() {
         return new MixerRecipes.ShakeContribution(
-            List.of(), 0, false, false, false, 1.0,
-            false, false, false, false, false, false);
+                List.of(), 0, false, false, false, 1.0,
+                false, false, false, false, false, false);
     }
 
     /**
@@ -287,18 +274,18 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     private static MixerRecipes.ShakeContribution withDoubledDuration(
             MixerRecipes.ShakeContribution c) {
         List<MixerRecipes.EffectData> doubled = c.effects().stream()
-            .map(e -> new MixerRecipes.EffectData(e.id(), e.duration() * 2, e.amplifier()))
-            .collect(java.util.stream.Collectors.toList());
+                .map(e -> new MixerRecipes.EffectData(e.id(), e.duration() * 2, e.amplifier()))
+                .collect(java.util.stream.Collectors.toList());
         return new MixerRecipes.ShakeContribution(
-            doubled,
-            c.dragonCharges(), c.lifesteal(), c.witherCurse(),
-            c.clearsEffects(), c.durationMultiplier(),
-            c.voidLaunch(), c.rewindEffect(), c.orchardSpawn(),
-            c.enderTeleport(), c.isBomb(), c.isTntExplosion());
+                doubled,
+                c.dragonCharges(), c.lifesteal(), c.witherCurse(),
+                c.clearsEffects(), c.durationMultiplier(),
+                c.voidLaunch(), c.rewindEffect(), c.orchardSpawn(),
+                c.enderTeleport(), c.isBomb(), c.isTntExplosion());
     }
 
     private static void mergeEffect(Map<ResourceLocation, MixerRecipes.EffectData> map,
-                                     MixerRecipes.EffectData e) {
+                                    MixerRecipes.EffectData e) {
         if (map.containsKey(e.id())) {
             MixerRecipes.EffectData existing = map.get(e.id());
             int amp = Math.max(existing.amplifier(), e.amplifier());
@@ -321,16 +308,15 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     }
 
     private void syncBlockState(Level level, BlockPos pos, BlockState state) {
-        // HAS_JAR = mixing in progress OR cup / ingredient items are present
         boolean hasJar = (pendingShakeTag != null)
-            || !items.get(SLOT_CUP).isEmpty()
-            || !items.get(SLOT_ING1).isEmpty()
-            || !items.get(SLOT_ING2).isEmpty();
+                || !items.get(SLOT_CUP).isEmpty()
+                || !items.get(SLOT_ING1).isEmpty()
+                || !items.get(SLOT_ING2).isEmpty();
         boolean hasShake = !items.get(SLOT_OUTPUT).isEmpty();
 
         BlockState newState = state
-            .setValue(MixerBlock.HAS_JAR,   hasJar)
-            .setValue(MixerBlock.HAS_SHAKE, hasShake);
+                .setValue(MixerBlock.HAS_JAR,   hasJar)
+                .setValue(MixerBlock.HAS_SHAKE, hasShake);
         if (!newState.equals(state)) {
             level.setBlock(pos, newState, 3);
         }
@@ -371,9 +357,9 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     public boolean stillValid(Player player) {
         if (level == null || level.getBlockEntity(worldPosition) != this) return false;
         return player.distanceToSqr(
-            worldPosition.getX() + 0.5,
-            worldPosition.getY() + 0.5,
-            worldPosition.getZ() + 0.5) <= 64.0;
+                worldPosition.getX() + 0.5,
+                worldPosition.getY() + 0.5,
+                worldPosition.getZ() + 0.5) <= 64.0;
     }
 
     @Override
@@ -387,26 +373,25 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
         return switch (slot) {
-            // Only 1 cup allowed; can't place while shake is waiting to be collected
             case SLOT_CUP  -> stack.getItem() instanceof CupItem
-                && items.get(SLOT_CUP).isEmpty()
-                && items.get(SLOT_OUTPUT).isEmpty()
-                && pendingShakeTag == null;
+                    && items.get(SLOT_CUP).isEmpty()
+                    && items.get(SLOT_OUTPUT).isEmpty()
+                    && pendingShakeTag == null;
             case SLOT_ING1 -> {
                 if (MixerRecipes.getContribution(stack).isEmpty()) yield false;
                 ItemStack ing2 = items.get(SLOT_ING2);
                 yield ing2.isEmpty()
-                    || (ing2.getItem() != stack.getItem()
+                        || (ing2.getItem() != stack.getItem()
                         && !MixerRecipes.areIncompatible(stack, ing2));
             }
             case SLOT_ING2 -> {
                 if (MixerRecipes.getContribution(stack).isEmpty()) yield false;
                 ItemStack ing1 = items.get(SLOT_ING1);
                 yield ing1.isEmpty()
-                    || (ing1.getItem() != stack.getItem()
+                        || (ing1.getItem() != stack.getItem()
                         && !MixerRecipes.areIncompatible(stack, ing1));
             }
-            case SLOT_OUTPUT -> false;  // output-only
+            case SLOT_OUTPUT -> false;
             default -> false;
         };
     }
@@ -429,7 +414,7 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
         ContainerHelper.loadAllItems(tag, items);
         progress = tag.getInt("Progress");
         pendingShakeTag = tag.contains("PendingShake", Tag.TAG_COMPOUND)
-            ? tag.getCompound("PendingShake").copy()
-            : null;
+                ? tag.getCompound("PendingShake").copy()
+                : null;
     }
 }
