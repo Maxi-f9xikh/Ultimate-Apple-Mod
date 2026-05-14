@@ -24,8 +24,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Bomba de maca",
   "item.ultimate_apple_mod.tnt_apple": "Maca TNT",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Jogar para criar uma explosao TNT.",
-  "effect.ultimate_apple_mod.gravity_inversion": "Gravity Inversion",
-  "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6Primeiro uso: define um ponto de retorno.",
   "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Segundo uso: teleporta de volta.",
   "tooltip.ultimate_apple_mod.rewind_apple.line1": "§6Te teleporta para a posicao ha 5 segundos.",
