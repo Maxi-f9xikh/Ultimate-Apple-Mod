@@ -150,8 +150,11 @@ $oN = @{
 Make-Tex "nether_star_apple" $pN $oN
 
 # ===========================================================================
-# 5. TOTEM APPLE  -  deep gold body, geometric totem engravings (no face)
-#    Style: symmetric diamond/cross motifs like the Minecraft Totem of Undying
+# 5. TOTEM APPLE  -  warm gold body, green eyes + nose, matching vanilla
+#    Minecraft Totem of Undying style.
+#    Eyes: two 4-wide x 2-tall green rectangles with 1-px dark frame.
+#    Nose: two dark marks below center.
+#    Body palette: same warm gold/amber as the Totem item.
 # ===========================================================================
 $pTo = [int[]]@(
     (HI "#1A1000"),(HI "#362000"),(HI "#604000"),(HI "#8A6010"),
@@ -159,28 +162,35 @@ $pTo = [int[]]@(
 $oTo = @{
     # stem - dark golden-brown
     "9,1"=(HI "#5C3800"); "8,2"=(HI "#4A2C00"); "9,2"=(HI "#5C3800"); "8,3"=(HI "#4A2C00")
-    # Top cross-bar ornament (y=4, x=4-11)
-    "4,4"=(HI "#1A0A00"); "5,4"=(HI "#1A0A00"); "6,4"=(HI "#1A0A00"); "7,4"=(HI "#1A0A00")
-    "8,4"=(HI "#1A0A00"); "9,4"=(HI "#1A0A00"); "10,4"=(HI "#1A0A00"); "11,4"=(HI "#1A0A00")
-    # Vertical center spine (x=7, y=5-12)
-    "7,5"=(HI "#1A0A00"); "7,6"=(HI "#1A0A00"); "7,7"=(HI "#1A0A00"); "7,8"=(HI "#1A0A00")
-    "7,9"=(HI "#1A0A00"); "7,10"=(HI "#1A0A00"); "7,11"=(HI "#1A0A00"); "7,12"=(HI "#1A0A00")
-    # Left diamond ornament (x=3-6, y=6-9): outline only
-    "4,6"=(HI "#1A0A00"); "5,6"=(HI "#1A0A00"); "6,6"=(HI "#1A0A00")
-    "3,7"=(HI "#1A0A00"); "4,7"=(HI "#F0D055"); "5,7"=(HI "#FAE88A"); "6,7"=(HI "#1A0A00")
-    "3,8"=(HI "#1A0A00"); "4,8"=(HI "#F0D055"); "5,8"=(HI "#FAE88A"); "6,8"=(HI "#1A0A00")
-    "4,9"=(HI "#1A0A00"); "5,9"=(HI "#1A0A00"); "6,9"=(HI "#1A0A00")
-    # Right diamond ornament (x=8-11, y=6-9): outline only
-    "8,6"=(HI "#1A0A00"); "9,6"=(HI "#1A0A00"); "10,6"=(HI "#1A0A00")
-    "8,7"=(HI "#1A0A00"); "9,7"=(HI "#FAE88A"); "10,7"=(HI "#F0D055"); "11,7"=(HI "#1A0A00")
-    "8,8"=(HI "#1A0A00"); "9,8"=(HI "#FAE88A"); "10,8"=(HI "#F0D055"); "11,8"=(HI "#1A0A00")
-    "8,9"=(HI "#1A0A00"); "9,9"=(HI "#1A0A00"); "10,9"=(HI "#1A0A00")
-    # Bottom cross-bar ornament (y=12, x=4-11)
+
+    # ── LEFT EYE  (dark frame: x=2-6, y=6-9 ; green fill: x=3-5, y=7-8) ──
+    # top edge
+    "2,6"=(HI "#1A0A00"); "3,6"=(HI "#1A0A00"); "4,6"=(HI "#1A0A00"); "5,6"=(HI "#1A0A00"); "6,6"=(HI "#1A0A00")
+    # middle rows: left-side dark, 3px green, right-side dark
+    "2,7"=(HI "#1A0A00"); "3,7"=(HI "#30C838"); "4,7"=(HI "#44D84C"); "5,7"=(HI "#30C838"); "6,7"=(HI "#1A0A00")
+    "2,8"=(HI "#1A0A00"); "3,8"=(HI "#30C838"); "4,8"=(HI "#44D84C"); "5,8"=(HI "#30C838"); "6,8"=(HI "#1A0A00")
+    # bottom edge
+    "2,9"=(HI "#1A0A00"); "3,9"=(HI "#1A0A00"); "4,9"=(HI "#1A0A00"); "5,9"=(HI "#1A0A00"); "6,9"=(HI "#1A0A00")
+
+    # ── RIGHT EYE  (dark frame: x=8-12, y=6-9 ; green fill: x=9-11, y=7-8) ──
+    # top edge
+    "8,6"=(HI "#1A0A00"); "9,6"=(HI "#1A0A00"); "10,6"=(HI "#1A0A00"); "11,6"=(HI "#1A0A00"); "12,6"=(HI "#1A0A00")
+    # middle rows
+    "8,7"=(HI "#1A0A00"); "9,7"=(HI "#30C838"); "10,7"=(HI "#44D84C"); "11,7"=(HI "#30C838"); "12,7"=(HI "#1A0A00")
+    "8,8"=(HI "#1A0A00"); "9,8"=(HI "#30C838"); "10,8"=(HI "#44D84C"); "11,8"=(HI "#30C838"); "12,8"=(HI "#1A0A00")
+    # bottom edge
+    "8,9"=(HI "#1A0A00"); "9,9"=(HI "#1A0A00"); "10,9"=(HI "#1A0A00"); "11,9"=(HI "#1A0A00"); "12,9"=(HI "#1A0A00")
+
+    # ── NOSE  (two marks below centre gap, matching totem nostril style) ──
+    "5,10"=(HI "#1A0A00"); "6,10"=(HI "#1A0A00")
+    "8,10"=(HI "#1A0A00"); "9,10"=(HI "#1A0A00")
+
+    # ── FOREHEAD LINE  (single-pixel accent above eyes) ──────────────────
+    "5,5"=(HI "#1A0A00"); "6,5"=(HI "#1A0A00"); "8,5"=(HI "#1A0A00"); "9,5"=(HI "#1A0A00")
+
+    # ── CHIN ORNAMENT  (horizontal dark accent below nose) ───────────────
     "4,12"=(HI "#1A0A00"); "5,12"=(HI "#1A0A00"); "6,12"=(HI "#1A0A00")
-    "8,12"=(HI "#1A0A00"); "9,12"=(HI "#1A0A00"); "10,12"=(HI "#1A0A00"); "11,12"=(HI "#1A0A00")
-    # Corner accent dots
-    "4,5"=(HI "#1A0A00"); "10,5"=(HI "#1A0A00")
-    "4,11"=(HI "#1A0A00"); "10,11"=(HI "#1A0A00")
+    "8,12"=(HI "#1A0A00"); "9,12"=(HI "#1A0A00"); "10,12"=(HI "#1A0A00")
 }
 Make-Tex "totem_apple" $pTo $oTo
 

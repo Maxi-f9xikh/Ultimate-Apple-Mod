@@ -174,6 +174,10 @@
   "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Gewachst - oxidiert nicht weiter.",
   "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidation: %s%%",
   "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Vollständig oxidiert.",
+  "tooltip.ultimate_apple_mod.copper_apple.time_to_oxidize": "Oxidiert in ca. 15-20 Min. (trocken)",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidizes_slowly": "Oxidiert langsam mit der Zeit.",
+  "tooltip.ultimate_apple_mod.copper_apple.rain_doubles": "Regen verdoppelt die Oxidationsgeschwindigkeit.",
+  "tooltip.ultimate_apple_mod.copper_apple.wax_to_stop": "Mit Bienenwabe wachsen, um die Oxidation zu stoppen."
   "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Der grüne Apfel",
   "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Lass deinen Kupferapfel vollständig oxidieren.",
   "advancements.ultimate_apple_mod.waxed_copper_apple.title": "In Wachs versiegelt",

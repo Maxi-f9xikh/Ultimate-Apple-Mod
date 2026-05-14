@@ -174,6 +174,10 @@
   "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Покрыто воском - больше не окисляется.",
   "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Окисление: %s%%",
   "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Полностью окислено.",
+  "tooltip.ultimate_apple_mod.copper_apple.time_to_oxidize": "Okislyaetsya za ~15-20 min (suho)",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidizes_slowly": "Okislyaetsya medlenno so vremenem.",
+  "tooltip.ultimate_apple_mod.copper_apple.rain_doubles": "Dozhdj udvaivaet skorost okisleniya.",
+  "tooltip.ultimate_apple_mod.copper_apple.wax_to_stop": "Voskovoj sotoj ostanovit okislenie."
   "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Зелёное яблоко",
   "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Дайте медному яблоку полностью окислиться.",
   "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Запечатано воском",
