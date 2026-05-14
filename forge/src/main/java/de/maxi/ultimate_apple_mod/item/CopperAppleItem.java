@@ -1,6 +1,7 @@
 package de.maxi.ultimate_apple_mod.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -102,41 +103,31 @@ public class CopperAppleItem extends Item {
                 "tooltip.ultimate_apple_mod.copper_apple.waxed")
                 .withStyle(ChatFormatting.YELLOW));
         } else if (stage < 3) {
-            // Show oxidation progress as a percentage
-            int ticks   = stack.hasTag() ? stack.getTag().getInt("oxidationTicks") : 0;
-            int percent = (int)(ticks * 100.0 / OXIDATION_THRESHOLD);
-            components.add(Component.translatable(
-                "tooltip.ultimate_apple_mod.copper_apple.oxidation", percent)
+            // Show remaining time to next oxidation stage
+            int ticks     = stack.hasTag() ? stack.getTag().getInt("oxidationTicks") : 0;
+            int remaining = OXIDATION_THRESHOLD - ticks; // seconds at 1 tick/s dry
+            String timeStr;
+            if (remaining >= 120) {
+                timeStr = "~" + (remaining / 60) + " min";
+            } else if (remaining >= 60) {
+                timeStr = "~1 min";
+            } else {
+                timeStr = "~" + remaining + "s";
+            }
+            components.add(Component.literal("§7Next stage in " + timeStr + " (dry)")
                 .withStyle(ChatFormatting.GRAY));
+            if (Screen.hasShiftDown()) {
+                components.add(Component.literal("§7Oxidizes slowly over time.")
+                    .withStyle(ChatFormatting.GRAY));
+                components.add(Component.literal("§7Rain doubles the oxidation speed.")
+                    .withStyle(ChatFormatting.GRAY));
+                components.add(Component.literal("§7Wax with a Honeycomb to stop oxidation.")
+                    .withStyle(ChatFormatting.DARK_GRAY));
+            }
         } else {
             components.add(Component.translatable(
                 "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized")
                 .withStyle(ChatFormatting.DARK_GREEN));
         }
-    }
-
-    // ── Barcode (optional): show oxidation as durability-style bar ──────────
-
-    /**
-     * Show a faint green "oxidation" bar on the item icon — only for non-waxed
-     * apples that are progressing toward the next stage.
-     */
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return !waxed && stage < 3
-            && stack.hasTag()
-            && stack.getTag().getInt("oxidationTicks") > 0;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        int ticks = stack.hasTag() ? stack.getTag().getInt("oxidationTicks") : 0;
-        return Math.round(13.0f * ticks / OXIDATION_THRESHOLD);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        // Teal colour matching oxidised copper
-        return 0x4EC994;
     }
 }
