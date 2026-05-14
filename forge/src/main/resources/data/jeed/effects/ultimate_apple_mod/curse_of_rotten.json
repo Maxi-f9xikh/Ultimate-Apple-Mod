@@ -1,0 +1,8 @@
+{
+  "effect": "ultimate_apple_mod:curse_of_rotten",
+  "description": "A curse bestowed by rotten apples. Shrinks the player's hitbox, raises movement speed unnaturally, and makes the player uncontrollable for its duration.",
+  "grant_sources": [
+    { "type": "item", "item": "ultimate_apple_mod:rotten_apple" },
+    { "type": "item", "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}

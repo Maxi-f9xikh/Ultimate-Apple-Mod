@@ -36,6 +36,12 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'namedElements')
     implementation project(":common")
+
+    // JEI (Just Enough Items) — compile-only: mod works without it, integrates when present
+    compileOnly "mezz.jei:jei-1.20.1-common-api:15.3.0.4"
+    compileOnly "mezz.jei:jei-1.20.1-forge-api:15.3.0.4"
+    // Uncomment to test JEI features in the dev environment:
+    // runtimeOnly "mezz.jei:jei-1.20.1-forge:15.3.0.4"
 }
 
 processResources {
