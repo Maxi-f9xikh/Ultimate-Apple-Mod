@@ -6,11 +6,12 @@
     "GNG"
   ],
   "key": {
-    "G": { "item": "minecraft:golden_apple" },
+    "G": { "item": "minecraft:gold_ingot" },
     "A": { "item": "minecraft:apple" },
     "N": { "item": "minecraft:nether_star" }
   },
   "result": {
-    "item": "ultimate_apple_mod:nether_star_apple"
+    "item": "ultimate_apple_mod:nether_star_apple",
+    "count": 1
   }
 }

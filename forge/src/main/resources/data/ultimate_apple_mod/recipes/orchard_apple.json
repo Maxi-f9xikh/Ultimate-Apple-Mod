@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "SBS",
-    "BAB",
-    "SBS"
+    "FFF",
+    "FDF",
+    "FFF"
   ],
   "key": {
-    "S": { "item": "minecraft:oak_sapling" },
-    "B": { "item": "minecraft:bone_meal" },
-    "A": { "item": "minecraft:apple" }
+    "F": { "tag": "minecraft:flowers" },
+    "D": { "item": "ultimate_apple_mod:dirt_apple" }
   },
   "result": {
-    "item": "ultimate_apple_mod:orchard_caller"
+    "item": "ultimate_apple_mod:orchard_apple",
+    "count": 1
   }
 }

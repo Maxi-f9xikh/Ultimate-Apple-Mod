@@ -2,12 +2,16 @@ package de.maxi.ultimate_apple_mod.event;
 
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
+import net.minecraft.advancements.critereon.EntityFlagsPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -21,7 +25,7 @@ import net.minecraftforge.fml.common.Mod;
  *
  * Mob drop summary
  * ─────────────────────────────────────────────────────────────────────────
- *  Baby Zombie    → Rotten Apple       10 %  (babyzombiedroppt, event only)
+ *  Baby Zombie    → Rotten Apple       10 %  ← loot table w/ is_baby (JER visible)
  *  Blaze          → Blaze Apple        25 %  ← loot table (JER visible)
  *  Enderman       → Ender Pearl Apple  25 %  ← loot table (JER visible)
  *  Skeleton       → Iron Apple          8 %  ← loot table (JER visible)
@@ -31,8 +35,10 @@ import net.minecraftforge.fml.common.Mod;
  *  Iron Golem     → Iron Apple         20 %  ← loot table (JER visible)
  *  Pillager       → Apple Bomb          5 %  ← loot table (JER visible)
  *  Evoker         → Totem Apple        50 %  (MobDropEventHandler, event only)
+ *  Wither Skeleton→ Wither Apple      6.7 %  ← loot table (JER visible)
+ *  Wither (boss)  → Wither Apple +         (MobDropEventHandler, 50 % both together)
+ *                   Nether Star Apple  50 %
  *  Shulker        → Void Apple          8 %  ← loot table (JER visible)
- *  Wither (boss)  → Wither Apple      100 %  ← loot table (JER visible)
  *  Elder Guardian → Prism Apple        50 %  ← loot table (JER visible)
  *  Drowned        → Prism Apple         5 %  ← loot table (JER visible)
  *  Parrot         → Banana             30 %  ← loot table (JER visible)
@@ -125,16 +131,14 @@ public class LootTableHandler {
             event.getTable().addPool(pool("uam_shulker", 2, 23,
                 item(ultimate_apple_modForge.VOID_APPLE.get(), 2, 1, 1)));
 
-        // ── Boss mobs ─────────────────────────────────────────────────────────
+        // ── Nether mobs ───────────────────────────────────────────────────────
 
-        } else if (name.equals(rl("entities/wither"))) {
-            // 100 % — Wither Apple is the whole point of fighting the Wither
-            event.getTable().addPool(LootPool.lootPool()
-                .name("uam_wither")
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(ultimate_apple_modForge.WITHER_APPLE.get())
-                    .setWeight(1).apply(count(1, 1)))
-                .build());
+        } else if (name.equals(rl("entities/wither_skeleton"))) {
+            // ~6.7 %: weight 1 / total 15 — rare Wither Apple drop from Wither Skeletons
+            event.getTable().addPool(pool("uam_wither_skeleton", 1, 14,
+                item(ultimate_apple_modForge.WITHER_APPLE.get(), 1, 1, 1)));
+
+        // ── Boss mobs — Wither handled via MobDropEventHandler (50/50 pair) ──
 
         // ── Ocean mobs ────────────────────────────────────────────────────────
 
@@ -159,9 +163,22 @@ public class LootTableHandler {
         // Each zombie-type mob gets its own entry so all variants are covered.
 
         } else if (name.equals(rl("entities/zombie"))) {
-            // ~2.5 %: weight 1 / total 40
+            // ~2.5 %: weight 1 / total 40 — all zombie variants
             event.getTable().addPool(pool("uam_zombie_pear", 1, 39,
                 item(ultimate_apple_modForge.BIRNE.get(), 1, 1, 1)));
+            // ~10 % ONLY from baby zombies (pool condition filters adults out)
+            event.getTable().addPool(LootPool.lootPool()
+                .name("uam_baby_zombie_rotten")
+                .setRolls(ConstantValue.exactly(1))
+                .when(LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity()
+                        .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())
+                ))
+                .add(LootItem.lootTableItem(ultimate_apple_modForge.ROTTEN_APPLE.get())
+                    .setWeight(1).apply(count(1, 1)))
+                .add(EmptyLootItem.emptyItem().setWeight(9))
+                .build());
 
         } else if (name.equals(rl("entities/husk"))) {
             event.getTable().addPool(pool("uam_husk_pear", 1, 39,
