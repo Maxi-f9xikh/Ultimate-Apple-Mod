@@ -150,8 +150,8 @@ $oN = @{
 Make-Tex "nether_star_apple" $pN $oN
 
 # ===========================================================================
-# 5. TOTEM APPLE  -  yellow-gold body, proper outlined eyes + totem face
-#    Matches the Minecraft Totem of Undying: large bordered eyes, nose, teeth
+# 5. TOTEM APPLE  -  deep gold body, geometric totem engravings (no face)
+#    Style: symmetric diamond/cross motifs like the Minecraft Totem of Undying
 # ===========================================================================
 $pTo = [int[]]@(
     (HI "#1A1000"),(HI "#362000"),(HI "#604000"),(HI "#8A6010"),
@@ -159,23 +159,28 @@ $pTo = [int[]]@(
 $oTo = @{
     # stem - dark golden-brown
     "9,1"=(HI "#5C3800"); "8,2"=(HI "#4A2C00"); "9,2"=(HI "#5C3800"); "8,3"=(HI "#4A2C00")
-    # left eye: 4x4 box (x=3-6, y=5-8), dark border, white fill, pupil at (5,7)
-    "3,5"=(HI "#1A0A00"); "4,5"=(HI "#1A0A00"); "5,5"=(HI "#1A0A00"); "6,5"=(HI "#1A0A00")
-    "3,6"=(HI "#1A0A00"); "4,6"=(HI "#FFFFFF"); "5,6"=(HI "#FFFFFF"); "6,6"=(HI "#1A0A00")
-    "3,7"=(HI "#1A0A00"); "4,7"=(HI "#FFFFFF"); "5,7"=(HI "#1A0A00"); "6,7"=(HI "#1A0A00")
-    "3,8"=(HI "#1A0A00"); "4,8"=(HI "#1A0A00"); "5,8"=(HI "#1A0A00"); "6,8"=(HI "#1A0A00")
-    # right eye: 4x4 box (x=9-12, y=5-8), dark border, white fill, pupil at (11,7)
-    "9,5"=(HI "#1A0A00"); "10,5"=(HI "#1A0A00"); "11,5"=(HI "#1A0A00"); "12,5"=(HI "#1A0A00")
-    "9,6"=(HI "#1A0A00"); "10,6"=(HI "#FFFFFF"); "11,6"=(HI "#FFFFFF"); "12,6"=(HI "#1A0A00")
-    "9,7"=(HI "#1A0A00"); "10,7"=(HI "#FFFFFF"); "11,7"=(HI "#1A0A00"); "12,7"=(HI "#1A0A00")
-    "9,8"=(HI "#1A0A00"); "10,8"=(HI "#1A0A00"); "11,8"=(HI "#1A0A00"); "12,8"=(HI "#1A0A00")
-    # nose: two dark dots
-    "7,9"=(HI "#1A0A00"); "8,9"=(HI "#1A0A00")
-    # mouth: solid dark upper lip + alternating white teeth / dark gaps below
-    "5,10"=(HI "#1A0A00"); "6,10"=(HI "#1A0A00"); "7,10"=(HI "#1A0A00")
-    "8,10"=(HI "#1A0A00"); "9,10"=(HI "#1A0A00"); "10,10"=(HI "#1A0A00")
-    "5,11"=(HI "#FFFFFF"); "6,11"=(HI "#1A0A00"); "7,11"=(HI "#FFFFFF")
-    "8,11"=(HI "#1A0A00"); "9,11"=(HI "#FFFFFF"); "10,11"=(HI "#1A0A00")
+    # Top cross-bar ornament (y=4, x=4-11)
+    "4,4"=(HI "#1A0A00"); "5,4"=(HI "#1A0A00"); "6,4"=(HI "#1A0A00"); "7,4"=(HI "#1A0A00")
+    "8,4"=(HI "#1A0A00"); "9,4"=(HI "#1A0A00"); "10,4"=(HI "#1A0A00"); "11,4"=(HI "#1A0A00")
+    # Vertical center spine (x=7, y=5-12)
+    "7,5"=(HI "#1A0A00"); "7,6"=(HI "#1A0A00"); "7,7"=(HI "#1A0A00"); "7,8"=(HI "#1A0A00")
+    "7,9"=(HI "#1A0A00"); "7,10"=(HI "#1A0A00"); "7,11"=(HI "#1A0A00"); "7,12"=(HI "#1A0A00")
+    # Left diamond ornament (x=3-6, y=6-9): outline only
+    "4,6"=(HI "#1A0A00"); "5,6"=(HI "#1A0A00"); "6,6"=(HI "#1A0A00")
+    "3,7"=(HI "#1A0A00"); "4,7"=(HI "#F0D055"); "5,7"=(HI "#FAE88A"); "6,7"=(HI "#1A0A00")
+    "3,8"=(HI "#1A0A00"); "4,8"=(HI "#F0D055"); "5,8"=(HI "#FAE88A"); "6,8"=(HI "#1A0A00")
+    "4,9"=(HI "#1A0A00"); "5,9"=(HI "#1A0A00"); "6,9"=(HI "#1A0A00")
+    # Right diamond ornament (x=8-11, y=6-9): outline only
+    "8,6"=(HI "#1A0A00"); "9,6"=(HI "#1A0A00"); "10,6"=(HI "#1A0A00")
+    "8,7"=(HI "#1A0A00"); "9,7"=(HI "#FAE88A"); "10,7"=(HI "#F0D055"); "11,7"=(HI "#1A0A00")
+    "8,8"=(HI "#1A0A00"); "9,8"=(HI "#FAE88A"); "10,8"=(HI "#F0D055"); "11,8"=(HI "#1A0A00")
+    "8,9"=(HI "#1A0A00"); "9,9"=(HI "#1A0A00"); "10,9"=(HI "#1A0A00")
+    # Bottom cross-bar ornament (y=12, x=4-11)
+    "4,12"=(HI "#1A0A00"); "5,12"=(HI "#1A0A00"); "6,12"=(HI "#1A0A00")
+    "8,12"=(HI "#1A0A00"); "9,12"=(HI "#1A0A00"); "10,12"=(HI "#1A0A00"); "11,12"=(HI "#1A0A00")
+    # Corner accent dots
+    "4,5"=(HI "#1A0A00"); "10,5"=(HI "#1A0A00")
+    "4,11"=(HI "#1A0A00"); "10,11"=(HI "#1A0A00")
 }
 Make-Tex "totem_apple" $pTo $oTo
 
