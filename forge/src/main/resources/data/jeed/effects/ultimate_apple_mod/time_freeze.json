@@ -1,0 +1,8 @@
+{
+  "effect": "ultimate_apple_mod:time_freeze",
+  "description": "Freezes all nearby mobs in place for the effect duration. Frozen mobs cannot move, attack, or deal damage, but will resume normal behaviour when the effect expires.",
+  "grant_sources": [
+    { "type": "item", "item": "ultimate_apple_mod:time_freeze_apple" },
+    { "type": "item", "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}

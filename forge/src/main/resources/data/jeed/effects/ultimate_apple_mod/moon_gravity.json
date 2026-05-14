@@ -1,0 +1,8 @@
+{
+  "effect": "ultimate_apple_mod:moon_gravity",
+  "description": "Reduces gravitational pull to approximately one-sixth of normal, allowing the player to jump roughly three times as high and float slowly back down.",
+  "grant_sources": [
+    { "type": "item", "item": "ultimate_apple_mod:moon_apple" },
+    { "type": "item", "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}

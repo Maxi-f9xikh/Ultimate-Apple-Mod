@@ -1,0 +1,8 @@
+{
+  "effect": "ultimate_apple_mod:totem_protection",
+  "description": "When a fatal blow is received, Totem Protection absorbs it and grants a brief window of invincibility. The player survives with a small amount of health.",
+  "grant_sources": [
+    { "type": "item", "item": "ultimate_apple_mod:totem_apple" },
+    { "type": "item", "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}

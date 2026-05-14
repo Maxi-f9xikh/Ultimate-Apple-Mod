@@ -1,0 +1,8 @@
+{
+  "effect": "ultimate_apple_mod:lifesteal",
+  "description": "A portion of all melee damage dealt is returned to the player as health. Higher amplifier levels increase the stolen fraction.",
+  "grant_sources": [
+    { "type": "item", "item": "ultimate_apple_mod:wither_apple" },
+    { "type": "item", "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}
