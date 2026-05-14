@@ -82,6 +82,18 @@ public class MixerBlockEntity extends BlockEntity implements Container, MenuProv
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, MixerBlockEntity be) {
         if (be.pendingShakeTag != null) {
+            // ── Guard: if any ingredient was removed, cancel the mix ──────────
+            boolean cupPresent  = be.items.get(SLOT_CUP).getItem() instanceof CupItem;
+            boolean ing1Present = !be.items.get(SLOT_ING1).isEmpty();
+            boolean ing2Present = !be.items.get(SLOT_ING2).isEmpty();
+            if (!cupPresent || !ing1Present || !ing2Present) {
+                be.pendingShakeTag = null;
+                be.progress = 0;
+                be.stateDirty = true;
+                be.setChanged();
+                return;
+            }
+
             // A mix is in progress — tick the bar
             be.progress++;
             if (be.progress >= MAX_PROGRESS) {
