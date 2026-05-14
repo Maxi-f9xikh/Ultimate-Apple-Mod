@@ -25,7 +25,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Apfel-Bombe",
   "item.ultimate_apple_mod.tnt_apple": "TNT-Apfel",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Werfen erzeugt eine echte TNT-Explosion.",
-  "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6Erster Verzehr setzt einen Rückkehrpunkt.",
   "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Zweiter Verzehr teleportiert zurück.",
   "tooltip.ultimate_apple_mod.rewind_apple.line1": "§6Teleportiert dich zu deiner Position vor 5 Sekunden.",

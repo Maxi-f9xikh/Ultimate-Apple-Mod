@@ -24,8 +24,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Bombe-pomme",
   "item.ultimate_apple_mod.tnt_apple": "Pomme TNT",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Lancer pour creer une explosion TNT.",
-  "effect.ultimate_apple_mod.gravity_inversion": "Gravity Inversion",
-  "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6Premiere utilisation : definit un point de retour.",
   "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Deuxieme utilisation : teleportation vers ce point.",
   "tooltip.ultimate_apple_mod.rewind_apple.line1": "§6Te teleporte a ta position il y a 5 secondes.",

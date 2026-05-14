@@ -24,8 +24,6 @@
   "item.ultimate_apple_mod.apple_bomb": "Apple Bomb",
   "item.ultimate_apple_mod.tnt_apple": "TNT Apple",
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Throw to create a vanilla TNT explosion.",
-  "effect.ultimate_apple_mod.gravity_inversion": "Gravity Inversion",
-  "effect.ultimate_apple_mod.glitch": "Glitch",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6First use sets a return point.",
   "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Second use teleports you back.",
   "tooltip.ultimate_apple_mod.rewind_apple.line1": "§6Teleports you back to where you were 5 seconds ago.",
