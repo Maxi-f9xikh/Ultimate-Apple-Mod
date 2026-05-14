@@ -10,9 +10,18 @@
   },
   "parent": "ultimate_apple_mod:copper_apple",
   "criteria": {
-    "ate_item": {
+    "ate_waxed": {
       "trigger": "minecraft:consume_item",
-      "conditions": { "item": { "items": ["ultimate_apple_mod:waxed_copper_apple"] } }
+      "conditions": {
+        "item": {
+          "items": [
+            "ultimate_apple_mod:waxed_copper_apple",
+            "ultimate_apple_mod:waxed_exposed_copper_apple",
+            "ultimate_apple_mod:waxed_weathered_copper_apple",
+            "ultimate_apple_mod:waxed_oxidized_copper_apple"
+          ]
+        }
+      }
     }
   }
 }

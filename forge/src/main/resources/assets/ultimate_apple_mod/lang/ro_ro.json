@@ -174,6 +174,10 @@
   "tooltip.ultimate_apple_mod.copper_apple.waxed": "§6Ceruit - nu se va oxida mai mult.",
   "tooltip.ultimate_apple_mod.copper_apple.oxidation": "§7Oxidare: %s%%",
   "tooltip.ultimate_apple_mod.copper_apple.fully_oxidized": "§7Complet oxidat.",
+  "tooltip.ultimate_apple_mod.copper_apple.time_to_oxidize": "Oxidizes in ~15-20 min (dry)",
+  "tooltip.ultimate_apple_mod.copper_apple.oxidizes_slowly": "Oxidizes slowly over time.",
+  "tooltip.ultimate_apple_mod.copper_apple.rain_doubles": "Rain doubles the oxidation speed.",
+  "tooltip.ultimate_apple_mod.copper_apple.wax_to_stop": "Wax with a Honeycomb to stop oxidation."
   "advancements.ultimate_apple_mod.oxidized_copper_apple.title": "Mărul Verde",
   "advancements.ultimate_apple_mod.oxidized_copper_apple.description": "Lasă Mărul de Cupru să se oxideze complet.",
   "advancements.ultimate_apple_mod.waxed_copper_apple.title": "Sigilat cu Ceară",

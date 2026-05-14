@@ -2,7 +2,6 @@ package de.maxi.ultimate_apple_mod.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -21,23 +20,31 @@ import java.util.List;
  *
  * <p>Four stages (stage 0–3):
  * <ol>
- *   <li>copper_apple       — full effects (Haste II, Strength I, Resistance I)</li>
- *   <li>exposed_copper_apple   — reduced (Haste I, Strength I)</li>
- *   <li>weathered_copper_apple — minimal (Haste I short)</li>
- *   <li>oxidized_copper_apple  — negative (Slowness I, Weakness I)</li>
+ *   <li>copper_apple            — full effects (Haste II, Strength I, Resistance I)</li>
+ *   <li>exposed_copper_apple    — reduced (Haste I, Strength I)</li>
+ *   <li>weathered_copper_apple  — minimal (Haste I short)</li>
+ *   <li>oxidized_copper_apple   — negative (Slowness I, Weakness I)</li>
  * </ol>
  *
- * <p>Progress is stored as NBT key {@code oxidationTicks} on the ItemStack.
- * The counter increments once per second; rain doubles the rate.
- * Waxed variants (waxed=true) never advance.
+ * <p>Oxidation is probabilistic — no NBT is stored, so items of the same
+ * stage always stack perfectly.  Each apple independently has a small
+ * random chance to advance every second (expected: 15–20 minutes per stage).
+ * Rain doubles the per-second probability.  Waxed variants never advance.
+ *
+ * <p>When a single apple in a stack triggers, exactly ONE item is consumed
+ * and one next-stage item is added to the player's inventory, leaving the
+ * rest of the stack unchanged.
  */
 public class CopperAppleItem extends Item {
 
-    /**
-     * Seconds of dry inventory time before one oxidation stage advances.
-     * 1 200 s = 20 real-time minutes.  Rain counts as 2 s per real second.
-     */
-    public static final int OXIDATION_THRESHOLD = 1_200;
+    /** Minimum dry seconds before a stage can advance (~15 min). */
+    public static final int OXIDATION_MIN_SECONDS = 900;
+    /** Maximum dry seconds before a stage can advance (~20 min). */
+    public static final int OXIDATION_MAX_SECONDS = 1_200;
+
+    /** Average seconds used for probability calculation. */
+    private static final double OXIDATION_AVG_SECONDS =
+        (OXIDATION_MIN_SECONDS + OXIDATION_MAX_SECONDS) / 2.0; // 1050 s
 
     private static final String[] NEXT_STAGE_IDS = {
         "exposed_copper_apple",
@@ -60,8 +67,8 @@ public class CopperAppleItem extends Item {
         this.waxed = waxed;
     }
 
-    public int getStage()   { return stage; }
-    public boolean isWaxed(){ return waxed; }
+    public int getStage()    { return stage; }
+    public boolean isWaxed() { return waxed; }
 
     // ── Oxidation tick ──────────────────────────────────────────────────────
 
@@ -73,23 +80,31 @@ public class CopperAppleItem extends Item {
         // Sample once per second to keep overhead low
         if (level.getGameTime() % 20 != 0) return;
 
-        CompoundTag tag = stack.getOrCreateTag();
-        int ticks = tag.getInt("oxidationTicks");
-        ticks += player.level().isRainingAt(player.blockPosition()) ? 2 : 1;
+        // Probabilistic approach — no NBT stored.
+        // P(one specific apple oxidizes this second) = 1 / avgSeconds
+        // Rain counts double, so the apple effectively ages 2 s per real second.
+        double p = 1.0 / OXIDATION_AVG_SECONDS;
+        if (player.level().isRainingAt(player.blockPosition())) p *= 2.0;
 
-        if (ticks >= OXIDATION_THRESHOLD) {
-            // Advance one stage
+        // P(at least one apple in a stack of N fires) = 1 - (1-p)^N
+        int count = stack.getCount();
+        double pAny = 1.0 - Math.pow(1.0 - p, count);
+
+        if (level.getRandom().nextDouble() < pAny) {
             ResourceLocation nextId = new ResourceLocation(
                 "ultimate_apple_mod", NEXT_STAGE_IDS[stage]);
             Item nextItem = ForgeRegistries.ITEMS.getValue(nextId);
             if (nextItem != null && nextItem != net.minecraft.world.item.Items.AIR) {
-                ItemStack nextStack = new ItemStack(nextItem, stack.getCount());
-                player.getInventory().setItem(slot, nextStack);
+                // Oxidise exactly ONE apple — shrink the stack by one…
+                stack.shrink(1);
+                // …then hand the player a single next-stage apple.
+                ItemStack nextStack = new ItemStack(nextItem, 1);
+                if (!player.getInventory().add(nextStack)) {
+                    player.drop(nextStack, false);
+                }
                 player.displayClientMessage(
                     Component.translatable(OXIDATION_MESSAGES[stage]), true);
             }
-        } else {
-            tag.putInt("oxidationTicks", ticks);
         }
     }
 
@@ -103,25 +118,18 @@ public class CopperAppleItem extends Item {
                 "tooltip.ultimate_apple_mod.copper_apple.waxed")
                 .withStyle(ChatFormatting.YELLOW));
         } else if (stage < 3) {
-            // Show remaining time to next oxidation stage
-            int ticks     = stack.hasTag() ? stack.getTag().getInt("oxidationTicks") : 0;
-            int remaining = OXIDATION_THRESHOLD - ticks; // seconds at 1 tick/s dry
-            String timeStr;
-            if (remaining >= 120) {
-                timeStr = "~" + (remaining / 60) + " min";
-            } else if (remaining >= 60) {
-                timeStr = "~1 min";
-            } else {
-                timeStr = "~" + remaining + "s";
-            }
-            components.add(Component.literal("§7Next stage in " + timeStr + " (dry)")
+            components.add(Component.translatable(
+                "tooltip.ultimate_apple_mod.copper_apple.time_to_oxidize")
                 .withStyle(ChatFormatting.GRAY));
             if (Screen.hasShiftDown()) {
-                components.add(Component.literal("§7Oxidizes slowly over time.")
+                components.add(Component.translatable(
+                    "tooltip.ultimate_apple_mod.copper_apple.oxidizes_slowly")
                     .withStyle(ChatFormatting.GRAY));
-                components.add(Component.literal("§7Rain doubles the oxidation speed.")
+                components.add(Component.translatable(
+                    "tooltip.ultimate_apple_mod.copper_apple.rain_doubles")
                     .withStyle(ChatFormatting.GRAY));
-                components.add(Component.literal("§7Wax with a Honeycomb to stop oxidation.")
+                components.add(Component.translatable(
+                    "tooltip.ultimate_apple_mod.copper_apple.wax_to_stop")
                     .withStyle(ChatFormatting.DARK_GRAY));
             }
         } else {
