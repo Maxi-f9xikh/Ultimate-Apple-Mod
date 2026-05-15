@@ -386,7 +386,7 @@ public final class ultimate_apple_modForge {
                     .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
                         MobEffects.BLINDNESS, 20 * 5, 0), 1.0f) // Blindness, 5s
                     .build())
-                .stacksTo(16)));
+                .stacksTo(64)));
 
     public static final RegistryObject<Item> TNT_APPLE =
         ITEMS.register("tnt_apple", () ->
