@@ -18,6 +18,8 @@ import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.AppleBombItem;
 import de.maxi.ultimate_apple_mod.item.CoalAppleItem;
 import de.maxi.ultimate_apple_mod.item.CopperAppleItem;
+import de.maxi.ultimate_apple_mod.item.NuclearAppleEntity;
+import de.maxi.ultimate_apple_mod.item.NuclearAppleItem;
 import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
 import de.maxi.ultimate_apple_mod.item.TntAppleItem;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
@@ -126,6 +128,13 @@ public final class ultimate_apple_modForge {
                 .sized(0.25f, 0.25f)
                 .clientTrackingRange(4)
                 .build("tnt_apple"));
+
+    public static final RegistryObject<EntityType<NuclearAppleEntity>> NUCLEAR_APPLE_ENTITY =
+        ENTITY_TYPES.register("nuclear_apple",
+            () -> EntityType.Builder.<NuclearAppleEntity>of(NuclearAppleEntity::new, MobCategory.MISC)
+                .sized(0.25f, 0.25f)
+                .clientTrackingRange(8)
+                .build("nuclear_apple"));
 
     // ── Existing Items (with effects added) ──────────────────────────────────
 
@@ -383,6 +392,12 @@ public final class ultimate_apple_modForge {
         ITEMS.register("tnt_apple", () ->
             new TntAppleItem(new Item.Properties().stacksTo(16)));
 
+    public static final RegistryObject<Item> NUCLEAR_APPLE =
+        ITEMS.register("nuclear_apple", () ->
+            new NuclearAppleItem(new Item.Properties()
+                .stacksTo(1)
+                .fireResistant()));
+
     // ── Second-Wave Items ────────────────────────────────────────────────────
 
     public static final RegistryObject<Item> WITHER_APPLE =
@@ -537,6 +552,7 @@ public final class ultimate_apple_modForge {
                 output.accept(REWIND_APPLE.get());
                 output.accept(APPLE_BOMB.get());
                 output.accept(TNT_APPLE.get());
+                output.accept(NUCLEAR_APPLE.get());
                 output.accept(WITHER_APPLE.get());
                 output.accept(HONEY_APPLE.get());
                 output.accept(DRAGON_APPLE.get());
