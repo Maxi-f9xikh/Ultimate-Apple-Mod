@@ -133,23 +133,35 @@ $oNetherite["5,13"] = (HI "#A87808"); $oNetherite["10,13"] = (HI "#A87808")
 Make-Tex "netherite_apple" $pNetherite $oNetherite
 
 # ---------------------------------------------------------------------------
-# 5. TOTEM APPLE — gold body, clean 2x2 green eyes, simple dark mouth
-#    No border pixels: gold-vs-green contrast carries the face.
+# 5. TOTEM APPLE — gold body, Totem-of-Undying face:
+#    dark brow ridges, white hollow 3x3 eyes with dark pupils,
+#    U-shaped open grin with two white teeth.
 # ---------------------------------------------------------------------------
 $pTotem = [int[]]@(
     (HI "#1A1000"),(HI "#3A2400"),(HI "#5A3800"),(HI "#7A5000"),
     (HI "#9A6808"),(HI "#BA8418"),(HI "#D4A028"),(HI "#ECC048"),(HI "#FAE070"))
 
 $oTotem = $stemBrown.Clone()
-# Left eye (2x2 solid green)
-$oTotem["5,7"]  = (HI "#00D800"); $oTotem["6,7"]  = (HI "#00D800")
-$oTotem["5,8"]  = (HI "#00D800"); $oTotem["6,8"]  = (HI "#00D800")
-# Right eye (2x2 solid green)
-$oTotem["9,7"]  = (HI "#00D800"); $oTotem["10,7"] = (HI "#00D800")
-$oTotem["9,8"]  = (HI "#00D800"); $oTotem["10,8"] = (HI "#00D800")
-# Straight mouth (4 dark pixels)
-$oTotem["6,11"] = (HI "#1A1000"); $oTotem["7,11"] = (HI "#1A1000")
-$oTotem["8,11"] = (HI "#1A1000"); $oTotem["9,11"] = (HI "#1A1000")
+# Eyebrows — dark bar above each eye (totem's intense brow ridge)
+$oTotem["4,5"]  = (HI "#1A1000"); $oTotem["5,5"]  = (HI "#1A1000"); $oTotem["6,5"]  = (HI "#1A1000")
+$oTotem["9,5"]  = (HI "#1A1000"); $oTotem["10,5"] = (HI "#1A1000"); $oTotem["11,5"] = (HI "#1A1000")
+# Left eye — hollow 3x3 white ring with dark pupil in centre
+$oTotem["4,6"]  = (HI "#FFFFFF"); $oTotem["5,6"]  = (HI "#FFFFFF"); $oTotem["6,6"]  = (HI "#FFFFFF")
+$oTotem["4,7"]  = (HI "#FFFFFF"); $oTotem["5,7"]  = (HI "#1A1000"); $oTotem["6,7"]  = (HI "#FFFFFF")
+$oTotem["4,8"]  = (HI "#FFFFFF"); $oTotem["5,8"]  = (HI "#FFFFFF"); $oTotem["6,8"]  = (HI "#FFFFFF")
+# Right eye — hollow 3x3 white ring with dark pupil in centre
+$oTotem["9,6"]  = (HI "#FFFFFF"); $oTotem["10,6"] = (HI "#FFFFFF"); $oTotem["11,6"] = (HI "#FFFFFF")
+$oTotem["9,7"]  = (HI "#FFFFFF"); $oTotem["10,7"] = (HI "#1A1000"); $oTotem["11,7"] = (HI "#FFFFFF")
+$oTotem["9,8"]  = (HI "#FFFFFF"); $oTotem["10,8"] = (HI "#FFFFFF"); $oTotem["11,8"] = (HI "#FFFFFF")
+# Nose bridge (two small dark pixels between the eyes)
+$oTotem["7,8"]  = (HI "#3A2400"); $oTotem["8,8"]  = (HI "#3A2400")
+# Wide U-shaped grin — sides + bottom outline, gold bg shows inside as "open mouth"
+$oTotem["5,10"] = (HI "#1A1000"); $oTotem["10,10"]= (HI "#1A1000")
+$oTotem["5,11"] = (HI "#1A1000"); $oTotem["10,11"]= (HI "#1A1000")
+$oTotem["6,12"] = (HI "#1A1000"); $oTotem["7,12"] = (HI "#1A1000")
+$oTotem["8,12"] = (HI "#1A1000"); $oTotem["9,12"] = (HI "#1A1000")
+# Two white teeth visible inside the grin
+$oTotem["7,11"] = (HI "#FFFFFF"); $oTotem["8,11"] = (HI "#FFFFFF")
 Make-Tex "totem_apple" $pTotem $oTotem
 
 # ---------------------------------------------------------------------------
