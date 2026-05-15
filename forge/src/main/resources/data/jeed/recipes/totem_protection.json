@@ -1,0 +1,8 @@
+{
+  "type": "jeed:effect_provider",
+  "effect": "ultimate_apple_mod:totem_protection",
+  "providers": [
+    { "item": "ultimate_apple_mod:totem_apple" },
+    { "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}

@@ -1,4 +1,4 @@
-{
+﻿{
   "item.ultimate_apple_mod.diamond_apple": "다이아몬드 사과",
   "item.ultimate_apple_mod.iron_apple": "철 사과",
   "item.ultimate_apple_mod.rotten_apple": "썩은 사과",
@@ -207,5 +207,13 @@
   "jei.ultimate_apple_mod.quantum_apple.info3": "Crafted in the §dMixer§r - the ultimate apple.",
   "jei.ultimate_apple_mod.rewind_apple.info": "§aReverts§r the player's position and health to a few seconds in the past.",
   "jei.ultimate_apple_mod.time_freeze_apple.info1": "Grants §3Time Freeze§r - all nearby mobs are frozen in place for 30 s.",
-  "jei.ultimate_apple_mod.quantum_apple.info1": "Grants §5ALL effects§r from every apple in this mod simultaneously."
+  "jei.ultimate_apple_mod.quantum_apple.info1": "Grants §5ALL effects§r from every apple in this mod simultaneously.",
+  "item.ultimate_apple_mod.nuclear_apple": "Nuclear Apple",
+  "tooltip.ultimate_apple_mod.nuclear_apple.line1": "§4!! Obliterates an entire chunk §r(16x16x384 blocks).",
+  "tooltip.ultimate_apple_mod.nuclear_apple.line2": "§7Throw it. Watch it land. Watch everything disappear.",
+  "effect.ultimate_apple_mod.lifesteal.description": "A portion of all melee damage dealt is returned to you as health. Higher amplifier levels increase the stolen fraction.",
+  "effect.ultimate_apple_mod.totem_protection.description": "When a fatal blow is received, this effect absorbs it and grants a brief window of invincibility, keeping you alive with a small amount of health.",
+  "effect.ultimate_apple_mod.moon_gravity.description": "Reduces gravitational pull to about one-sixth of normal, letting you jump roughly three times higher and float slowly back down.",
+  "effect.ultimate_apple_mod.time_freeze.description": "Freezes all nearby mobs in place. Frozen mobs cannot move, attack, or deal damage until the effect expires.",
+  "effect.ultimate_apple_mod.curse_of_rotten.description": "A curse from rotten apples. Shrinks your hitbox, raises movement speed unnaturally, and makes you uncontrollable for its duration."
 }
