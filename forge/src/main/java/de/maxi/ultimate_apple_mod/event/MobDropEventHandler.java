@@ -32,6 +32,12 @@ public class MobDropEventHandler {
 
     private static final Random RNG = new Random();
 
+    /** Spawns an ItemEntity for {@code stack} at the dying entity's position. */
+    private static void addDrop(LivingDropsEvent event, ItemStack stack) {
+        var e = event.getEntity();
+        event.getDrops().add(new ItemEntity(e.level(), e.getX(), e.getY(), e.getZ(), stack));
+    }
+
     @SubscribeEvent
     public static void onLivingDrops(LivingDropsEvent event) {
         var entity = event.getEntity();
