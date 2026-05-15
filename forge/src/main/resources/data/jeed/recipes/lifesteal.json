@@ -1,0 +1,8 @@
+{
+  "type": "jeed:effect_provider",
+  "effect": "ultimate_apple_mod:lifesteal",
+  "providers": [
+    { "item": "ultimate_apple_mod:wither_apple" },
+    { "item": "ultimate_apple_mod:quantum_apple" }
+  ]
+}

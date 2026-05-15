@@ -1,4 +1,4 @@
-{
+﻿{
   "item.ultimate_apple_mod.diamond_apple": "Diamantapfel",
   "item.ultimate_apple_mod.iron_apple": "Eisenapfel",
   "item.ultimate_apple_mod.rotten_apple": "Vergammelter Apfel",
@@ -244,5 +244,13 @@
   "jei.ultimate_apple_mod.quantum_apple.info3": "Im §dMixer§r hergestellt - der ultimative Apfel.",
   "jei.ultimate_apple_mod.rewind_apple.info": "§aSetzt§r Position und Gesundheit einige Sekunden zuruck.",
   "jei.ultimate_apple_mod.time_freeze_apple.info1": "Verleiht §3Zeiteinfrierung§r - alle nahen Monster werden fur 30 s eingefroren.",
-  "jei.ultimate_apple_mod.quantum_apple.info1": "Verleiht §5ALLE Effekte§r aus jedem Apfel dieses Mods gleichzeitig."
+  "jei.ultimate_apple_mod.quantum_apple.info1": "Verleiht §5ALLE Effekte§r aus jedem Apfel dieses Mods gleichzeitig.",
+  "item.ultimate_apple_mod.nuclear_apple": "Nuklearapfel",
+  "tooltip.ultimate_apple_mod.nuclear_apple.line1": "§4!! Vernichtet einen ganzen Chunk §r(16x16x384 Blocks).",
+  "tooltip.ultimate_apple_mod.nuclear_apple.line2": "§7Wirf ihn. Er landet. Alles verschwindet.",
+  "effect.ultimate_apple_mod.lifesteal.description": "Ein Teil des ausgeteilten Nahkampfschadens wird dir als Gesundheit zurueckgegeben. Hoehere Verstaerker-Level erhoehen den gestohlenen Anteil.",
+  "effect.ultimate_apple_mod.totem_protection.description": "Wenn ein toedlicher Schlag erhalten wird, absorbiert dieser Effekt ihn und gewaehrt ein kurzes Fenster der Unverwundbarkeit.",
+  "effect.ultimate_apple_mod.moon_gravity.description": "Reduziert die Schwerkraft auf etwa ein Sechstel des Normalen, sodass du etwa dreimal so hoch springen und langsam sinken kannst.",
+  "effect.ultimate_apple_mod.time_freeze.description": "Friert alle nahen Mobs ein. Eingefrorene Mobs koennen sich nicht bewegen, angreifen oder Schaden anrichten, bis der Effekt ablaeuft.",
+  "effect.ultimate_apple_mod.curse_of_rotten.description": "Ein Fluch fauler Aepfel. Verkleinert deine Hitbox, erhoeht die Bewegungsgeschwindigkeit unnatuerlich und macht dich fuer seine Dauer unkontrollierbar."
 }
