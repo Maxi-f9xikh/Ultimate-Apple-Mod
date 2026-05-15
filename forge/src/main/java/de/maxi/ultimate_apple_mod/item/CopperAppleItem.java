@@ -37,10 +37,10 @@ import java.util.List;
  */
 public class CopperAppleItem extends Item {
 
-    /** Minimum dry seconds before a stage can advance (~15 min). */
-    public static final int OXIDATION_MIN_SECONDS = 900;
-    /** Maximum dry seconds before a stage can advance (~20 min). */
-    public static final int OXIDATION_MAX_SECONDS = 1_200;
+    /** Minimum dry seconds before a stage can advance (~40 min). */
+    public static final int OXIDATION_MIN_SECONDS = 2_400;
+    /** Maximum dry seconds before a stage can advance (~60 min). */
+    public static final int OXIDATION_MAX_SECONDS = 3_600;
 
     /** Average seconds used for probability calculation. */
     private static final double OXIDATION_AVG_SECONDS =
