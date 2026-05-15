@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TST",
+    "SNS",
+    "TST"
+  ],
+  "key": {
+    "T": { "item": "ultimate_apple_mod:tnt_apple" },
+    "S": { "item": "minecraft:tnt" },
+    "N": { "item": "ultimate_apple_mod:netherite_apple" }
+  },
+  "result": {
+    "item": "ultimate_apple_mod:nuclear_apple",
+    "count": 1
+  }
+}
