@@ -1,8 +1,8 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.event.RewindTracker;
-import de.maxi.ultimate_apple_mod.forge.block.MixerRecipes;
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.RewindPositionCache;
+import de.maxi.ultimate_apple_mod.block.MixerRecipes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -147,7 +147,7 @@ public class QuantumAppleItem extends Item {
         // ── Lifesteal (60 s) ──────────────────────────────────────────────
         if (chosen.lifesteal()) {
             player.addEffect(new MobEffectInstance(
-                ultimate_apple_modForge.LIFESTEAL_EFFECT.get(), 20 * 60, 0));
+                ModRegistries.LIFESTEAL.get(), 20 * 60, 0));
         }
 
         // ── Wither curse — Wither II on nearby mobs ───────────────────────
@@ -181,7 +181,7 @@ public class QuantumAppleItem extends Item {
 
         // ── Rewind — teleport back 5 seconds ─────────────────────────────
         if (chosen.rewindEffect()) {
-            Vec3 oldPos = RewindTracker.getPositionFiveSecondsAgo(player);
+            Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
             if (oldPos != null) {
                 player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                 player.fallDistance = 0;

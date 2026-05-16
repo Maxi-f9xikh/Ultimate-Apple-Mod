@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class EchoAppleItem extends Item {
@@ -23,7 +24,7 @@ public class EchoAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level,
+    public void appendHoverText(ItemStack stack, @Nullable Level level,
             List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line1"));
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line2"));

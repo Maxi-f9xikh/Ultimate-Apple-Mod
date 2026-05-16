@@ -1,7 +1,7 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.event.RewindTracker;
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -36,7 +36,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -106,7 +106,7 @@ public class ShakeItem extends Item {
                 return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
             }
             return InteractionResultHolder.sidedSuccess(
-                new ItemStack(ultimate_apple_modForge.CUP_ITEM.get()), level.isClientSide());
+                new ItemStack(ModRegistries.CUP_ITEM.get()), level.isClientSide());
         }
 
         // Not a bomb — drink normally
@@ -129,7 +129,7 @@ public class ShakeItem extends Item {
         }
 
         // Return an empty cup so it stays in the player's hand / inventory
-        return new ItemStack(ultimate_apple_modForge.CUP_ITEM.get());
+        return new ItemStack(ModRegistries.CUP_ITEM.get());
     }
 
     private void applyShakeEffects(@Nullable CompoundTag tag, ServerPlayer player, Level level) {
@@ -166,7 +166,7 @@ public class ShakeItem extends Item {
         // Lifesteal effect (60 s)
         if (tag.getBoolean("lifesteal")) {
             player.addEffect(new MobEffectInstance(
-                ultimate_apple_modForge.LIFESTEAL_EFFECT.get(), 20 * 60, 0));
+                ModRegistries.LIFESTEAL.get(), 20 * 60, 0));
         }
 
         // Wither curse — applies Wither II to nearby mobs
@@ -200,7 +200,7 @@ public class ShakeItem extends Item {
 
         // Rewind: teleport back 5 seconds in position history
         if (tag.getBoolean("rewindEffect")) {
-            Vec3 oldPos = RewindTracker.getPositionFiveSecondsAgo(player);
+            Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
             if (oldPos != null) {
                 player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                 player.displayClientMessage(

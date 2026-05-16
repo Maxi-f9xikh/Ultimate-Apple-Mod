@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class WitherAppleItem extends Item {
@@ -37,7 +37,7 @@ public class WitherAppleItem extends Item {
                     Component.translatable("message.ultimate_apple_mod.wither_curse_applied"), true);
             }
             // Always grant 1 minute of lifesteal
-            player.addEffect(new MobEffectInstance(ultimate_apple_modForge.LIFESTEAL_EFFECT.get(), 20 * 60, 0));
+            player.addEffect(new MobEffectInstance(ModRegistries.LIFESTEAL.get(), 20 * 60, 0));
         }
         return result;
     }
