@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -93,7 +93,7 @@ public class CopperAppleItem extends Item {
         if (level.getRandom().nextDouble() < pAny) {
             ResourceLocation nextId = new ResourceLocation(
                 "ultimate_apple_mod", NEXT_STAGE_IDS[stage]);
-            Item nextItem = ForgeRegistries.ITEMS.getValue(nextId);
+            Item nextItem = BuiltInRegistries.ITEM.get(nextId);
             if (nextItem != null && nextItem != net.minecraft.world.item.Items.AIR) {
                 // Oxidise exactly ONE apple — shrink the stack by one…
                 stack.shrink(1);

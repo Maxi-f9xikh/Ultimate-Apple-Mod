@@ -1,9 +1,9 @@
-package de.maxi.ultimate_apple_mod.forge.block;
+package de.maxi.ultimate_apple_mod.block;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.List;
@@ -378,8 +378,8 @@ public final class MixerRecipes {
      */
     public static boolean areIncompatible(ItemStack a, ItemStack b) {
         if (a.isEmpty() || b.isEmpty()) return false;
-        ResourceLocation idA = ForgeRegistries.ITEMS.getKey(a.getItem());
-        ResourceLocation idB = ForgeRegistries.ITEMS.getKey(b.getItem());
+        ResourceLocation idA = BuiltInRegistries.ITEM.getKey(a.getItem());
+        ResourceLocation idB = BuiltInRegistries.ITEM.getKey(b.getItem());
         if (idA == null || idB == null) return false;
         return pair(idA, idB, ID_APPLE_BOMB,        ID_ENDER_PEARL_APPLE)
             || pair(idA, idB, ID_ENDER_PEARL_APPLE, ID_REWIND_APPLE);
@@ -403,13 +403,13 @@ public final class MixerRecipes {
 
     public static Optional<ShakeContribution> getContribution(ItemStack stack) {
         if (stack.isEmpty()) return Optional.empty();
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if (id == null) return Optional.empty();
         return Optional.ofNullable(REGISTRY.get(id));
     }
 
     public static Optional<ShakeContribution> getContribution(Item item) {
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
         if (id == null) return Optional.empty();
         return Optional.ofNullable(REGISTRY.get(id));
     }

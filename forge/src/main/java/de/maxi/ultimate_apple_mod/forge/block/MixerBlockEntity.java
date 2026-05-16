@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.forge.block;
 
+import de.maxi.ultimate_apple_mod.block.MixerRecipes;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.item.CupItem;
 import net.minecraft.core.BlockPos;

@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -43,9 +43,9 @@ public class TotemAppleItem extends Item {
         ItemStack result = super.finishUsingItem(stack, level, entity);
         if (!level.isClientSide && entity instanceof Player player) {
             // Eating another Totem Apple while already protected resets the timer.
-            player.removeEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get());
+            player.removeEffect(ModRegistries.TOTEM_PROTECTION.get());
             player.addEffect(new MobEffectInstance(
-                ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get(),
+                ModRegistries.TOTEM_PROTECTION.get(),
                 PROTECTION_DURATION, 0,
                 false,   // not ambient
                 false,   // no particles
