@@ -91,6 +91,19 @@ META-INF/
 `fabric/src/main/resources/` keeps only:
 - `fabric.mod.json`
 
+### Fabric Entity Renderer Registration
+
+Registered in `FabricModClient.java` inside `onInitializeClient()`:
+
+```java
+EntityRendererRegistry.register(ModRegistries.APPLE_BOMB_ENTITY.get(),    ThrownItemRenderer::new);
+EntityRendererRegistry.register(ModRegistries.SHAKE_BOMB_ENTITY.get(),    ThrownItemRenderer::new);
+EntityRendererRegistry.register(ModRegistries.TNT_APPLE_ENTITY.get(),     ThrownItemRenderer::new);
+EntityRendererRegistry.register(ModRegistries.NUCLEAR_APPLE_ENTITY.get(), ThrownItemRenderer::new);
+```
+
+Fabric equivalent of Forge's `EntityRenderersEvent.RegisterRenderers` in `ModClient.java`.
+
 ---
 
 ## 2. Registry Pattern (`ModRegistries.java`)
@@ -234,6 +247,13 @@ ServerPlayNetworking.registerGlobalReceiver(FireDragonBreathPayload.TYPE, (paylo
 // Client send (called from FabricClientHandler on key press)
 ClientPlayNetworking.send(new FireDragonBreathPayload());
 ```
+
+### Wichtig: Packet Direction
+
+`FireDragonBreath` ist **C2S (Client → Server)** — der einzige Packet den der Mod sendet.
+Fabric braucht kein S2C-Äquivalent: alle anderen Effekte sind vollständig server-seitig
+und syncen automatisch über vanilla Entity- und BlockEntity-Datenmechanismen
+(`SynchedEntityData`, `ClientboundBlockEntityDataPacket`).
 
 ---
 
