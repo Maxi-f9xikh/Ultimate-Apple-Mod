@@ -27,7 +27,6 @@ public class FabricPlayerEffectHandler {
         // ── Totem Apple: cancel death ─────────────────────────────────────────
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
             if (!(entity instanceof ServerPlayer player)) return true;
-            if (!(player.level() instanceof ServerLevel)) return true;
             try {
                 if (!player.hasEffect(ModRegistries.TOTEM_PROTECTION.get())) return true;
             } catch (NullPointerException ignored) { return true; }
