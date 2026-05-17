@@ -174,11 +174,10 @@ public class FabricLootTableHandler {
         return SetItemCountFunction.setCount(UniformGenerator.between(min, max));
     }
 
-    private static LootPool pool(String name, int itemWeight, int emptyWeight, LootItem.Builder<?> entry) {
+    private static LootPool.Builder pool(String name, int itemWeight, int emptyWeight, LootItem.Builder<?> entry) {
         return LootPool.lootPool().name(name).setRolls(ConstantValue.exactly(1))
             .add(entry.setWeight(itemWeight))
-            .add(EmptyLootItem.emptyItem().setWeight(emptyWeight))
-            .build();
+            .add(EmptyLootItem.emptyItem().setWeight(emptyWeight));
     }
 
     private static LootItem.Builder<?> item(net.minecraft.world.item.Item item, int min, int max) {
