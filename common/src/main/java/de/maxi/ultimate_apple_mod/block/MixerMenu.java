@@ -1,7 +1,6 @@
-package de.maxi.ultimate_apple_mod.forge.block;
+package de.maxi.ultimate_apple_mod.block;
 
-import de.maxi.ultimate_apple_mod.block.MixerRecipes;
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.item.CupItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +21,9 @@ public class MixerMenu extends AbstractContainerMenu {
 
     // ── Server-side constructor (called by block entity) ───────────────────
 
+    @SuppressWarnings("unchecked")
     public MixerMenu(int id, Inventory playerInv, Container container, ContainerData data) {
-        super(ultimate_apple_modForge.MIXER_MENU_TYPE.get(), id);
+        super((MenuType<MixerMenu>) ModRegistries.MIXER_MENU_TYPE.get(), id);
         this.container = container;
         this.data       = data;
 
@@ -32,7 +33,7 @@ public class MixerMenu extends AbstractContainerMenu {
         // ── Mixer slots ─────────────────────────────────────────────────────
 
         // Slot 0 – Cup (accepts only CupItem)
-        addSlot(new Slot(container, MixerBlockEntity.SLOT_CUP, 26, 35) {
+        addSlot(new Slot(container, MixerBlockEntityBase.SLOT_CUP, 26, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof CupItem;
@@ -40,7 +41,7 @@ public class MixerMenu extends AbstractContainerMenu {
         });
 
         // Slot 1 – Ingredient 1 (accepts any mixable item)
-        addSlot(new Slot(container, MixerBlockEntity.SLOT_ING1, 62, 17) {
+        addSlot(new Slot(container, MixerBlockEntityBase.SLOT_ING1, 62, 17) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return MixerRecipes.getContribution(stack).isPresent();
@@ -48,7 +49,7 @@ public class MixerMenu extends AbstractContainerMenu {
         });
 
         // Slot 2 – Ingredient 2
-        addSlot(new Slot(container, MixerBlockEntity.SLOT_ING2, 62, 53) {
+        addSlot(new Slot(container, MixerBlockEntityBase.SLOT_ING2, 62, 53) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return MixerRecipes.getContribution(stack).isPresent();
@@ -56,7 +57,7 @@ public class MixerMenu extends AbstractContainerMenu {
         });
 
         // Slot 3 – Output (extract only) — position matches MixerScreen.OUT_X/OUT_Y
-        addSlot(new Slot(container, MixerBlockEntity.SLOT_OUTPUT, MixerScreen.OUT_X, MixerScreen.OUT_Y) {
+        addSlot(new Slot(container, MixerBlockEntityBase.SLOT_OUTPUT, MixerScreen.OUT_X, MixerScreen.OUT_Y) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;

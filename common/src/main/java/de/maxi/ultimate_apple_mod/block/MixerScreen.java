@@ -1,11 +1,11 @@
-package de.maxi.ultimate_apple_mod.forge.block;
+package de.maxi.ultimate_apple_mod.block;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * Pure-Java Mixer GUI — no external texture PNG required.
@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  *   │  [  ][  ][  ][  ][  ][  ][  ][  ][  ]           │  y=142 (hotbar)
  *   └──────────────────────────────────────────────────┘
  */
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class MixerScreen extends AbstractContainerScreen<MixerMenu> {
 
     // ── Colours (ARGB) ─────────────────────────────────────────────────────
