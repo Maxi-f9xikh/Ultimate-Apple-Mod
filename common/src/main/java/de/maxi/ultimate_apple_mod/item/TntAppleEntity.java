@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -16,12 +16,12 @@ public class TntAppleEntity extends ThrowableItemProjectile {
     }
 
     public TntAppleEntity(LivingEntity thrower, Level level) {
-        super(ultimate_apple_modForge.TNT_APPLE_ENTITY.get(), thrower, level);
+        super(ModRegistries.TNT_APPLE_ENTITY.get(), thrower, level);
     }
 
     @Override
     protected Item getDefaultItem() {
-        return ultimate_apple_modForge.TNT_APPLE.get();
+        return ModRegistries.TNT_APPLE.get();
     }
 
     @Override

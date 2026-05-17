@@ -1,7 +1,7 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.event.RewindTracker;
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import de.maxi.ultimate_apple_mod.item.OrchardCallerItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,7 +32,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A throwable shake produced by mixing any apple with the Apple Bomb.
@@ -60,13 +60,13 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
 
     /** Called from ShakeItem.use() when throwing a bomb shake. */
     public ShakeBombEntity(LivingEntity thrower, Level level, ItemStack shakeStack) {
-        super(ultimate_apple_modForge.SHAKE_BOMB_ENTITY.get(), thrower, level);
+        super(ModRegistries.SHAKE_BOMB_ENTITY.get(), thrower, level);
         setItem(shakeStack);
     }
 
     @Override
     protected Item getDefaultItem() {
-        return ultimate_apple_modForge.SHAKE_ITEM.get();
+        return ModRegistries.SHAKE_ITEM.get();
     }
 
     // ── Impact handlers ──────────────────────────────────────────────────────
@@ -155,7 +155,7 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
 
             // Rewind: teleport back 5 seconds
             if (tag.getBoolean("rewindEffect")) {
-                Vec3 oldPos = RewindTracker.getPositionFiveSecondsAgo(player);
+                Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
                 if (oldPos != null) {
                     player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                     player.displayClientMessage(
@@ -183,7 +183,7 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
             }
             if (tag.getBoolean("lifesteal")) {
                 thrower.addEffect(new MobEffectInstance(
-                    ultimate_apple_modForge.LIFESTEAL_EFFECT.get(), 20 * 60, 0));
+                    ModRegistries.LIFESTEAL.get(), 20 * 60, 0));
             }
         }
     }

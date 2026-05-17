@@ -48,7 +48,7 @@ public final class MixerRecipes {
         boolean voidLaunch,
         /**
          * When true, drinking the shake teleports the player back 5 seconds in time
-         * using the RewindTracker position history (same as Rewind Apple).
+         * using the RewindPositionCache position history (same as Rewind Apple).
          */
         boolean rewindEffect,
         /**
