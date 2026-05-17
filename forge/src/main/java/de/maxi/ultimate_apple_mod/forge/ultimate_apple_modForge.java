@@ -594,11 +594,69 @@ public final class ultimate_apple_modForge {
         java.util.function.Supplier<net.minecraft.world.inventory.MenuType<?>> menuSupplier =
             (java.util.function.Supplier<net.minecraft.world.inventory.MenuType<?>>) (java.util.function.Supplier<?>) MIXER_MENU_TYPE;
 
-        ModRegistries.SHAKE_ITEM        = SHAKE_ITEM;
+        // ── Effects ──────────────────────────────────────────────────────────
+        ModRegistries.CURSE_OF_ROTTEN    = CURSE_OF_ROTTEN;
+        ModRegistries.MOON_GRAVITY       = MOON_GRAVITY_EFFECT;
+        ModRegistries.LIFESTEAL          = LIFESTEAL_EFFECT;
+        ModRegistries.TOTEM_PROTECTION   = TOTEM_PROTECTION_EFFECT;
+        ModRegistries.TIME_FREEZE        = TIME_FREEZE_EFFECT;
+
+        // ── Items ─────────────────────────────────────────────────────────────
+        ModRegistries.DIAMOND_APPLE                = DIAMOND_APPLE;
+        ModRegistries.LAPISLAZULI_APPLE            = LAPISLAZULI_APPLE;
+        ModRegistries.EMERALD_APPLE                = EMERALD_APPLE;
+        ModRegistries.REDSTONE_APPLE               = REDSTONE_APPLE;
+        ModRegistries.NETHERITE_APPLE              = NETHERITE_APPLE;
+        ModRegistries.IRON_APPLE                   = IRON_APPLE;
+        ModRegistries.ROTTEN_APPLE                 = ROTTEN_APPLE;
+        ModRegistries.ROASTED_APPLE                = ROASTED_APPLE;
+        ModRegistries.BAKED_APPLE                  = BAKED_APPLE;
+        ModRegistries.BURNT_APPLE                  = BURNT_APPLE;
+        ModRegistries.BLAZE_APPLE                  = BLAZE_APPLE;
+        ModRegistries.BIRNE                        = BIRNE;
+        ModRegistries.COPPER_APPLE                 = COPPER_APPLE;
+        ModRegistries.EXPOSED_COPPER_APPLE         = EXPOSED_COPPER_APPLE;
+        ModRegistries.WEATHERED_COPPER_APPLE       = WEATHERED_COPPER_APPLE;
+        ModRegistries.OXIDIZED_COPPER_APPLE        = OXIDIZED_COPPER_APPLE;
+        ModRegistries.WAXED_COPPER_APPLE           = WAXED_COPPER_APPLE;
+        ModRegistries.WAXED_EXPOSED_COPPER_APPLE   = WAXED_EXPOSED_COPPER_APPLE;
+        ModRegistries.WAXED_WEATHERED_COPPER_APPLE = WAXED_WEATHERED_COPPER_APPLE;
+        ModRegistries.WAXED_OXIDIZED_COPPER_APPLE  = WAXED_OXIDIZED_COPPER_APPLE;
+        ModRegistries.ENDER_PEARL_APPLE            = ENDER_PEARL_APPLE;
+        ModRegistries.MOON_APPLE                   = MOON_APPLE;
+        ModRegistries.ORCHARD_APPLE                = ORCHARD_APPLE;
+        ModRegistries.ECHO_APPLE                   = ECHO_APPLE;
+        ModRegistries.REWIND_APPLE                 = REWIND_APPLE;
+        ModRegistries.APPLE_BOMB                   = APPLE_BOMB;
+        ModRegistries.COAL_APPLE                   = COAL_APPLE;
+        ModRegistries.TNT_APPLE                    = TNT_APPLE;
+        ModRegistries.NUCLEAR_APPLE                = NUCLEAR_APPLE;
+        ModRegistries.WITHER_APPLE                 = WITHER_APPLE;
+        ModRegistries.HONEY_APPLE                  = HONEY_APPLE;
+        ModRegistries.DRAGON_APPLE                 = DRAGON_APPLE;
+        ModRegistries.NETHER_STAR_APPLE            = NETHER_STAR_APPLE;
+        ModRegistries.DIRT_APPLE                   = DIRT_APPLE;
+        ModRegistries.TOTEM_APPLE                  = TOTEM_APPLE;
+        ModRegistries.QUANTUM_APPLE                = QUANTUM_APPLE;
+        ModRegistries.VOID_APPLE                   = VOID_APPLE;
+        ModRegistries.TIME_FREEZE_APPLE            = TIME_FREEZE_APPLE;
+        ModRegistries.LONGEVITY_APPLE              = LONGEVITY_APPLE;
+        ModRegistries.PRISM_APPLE                  = PRISM_APPLE;
+        ModRegistries.BANANA                       = BANANA;
+        ModRegistries.CUP_ITEM                     = CUP_ITEM;
+        ModRegistries.SHAKE_ITEM                   = SHAKE_ITEM;
+
+        // ── Entity types ──────────────────────────────────────────────────────
+        ModRegistries.APPLE_BOMB_ENTITY    = APPLE_BOMB_ENTITY;
+        ModRegistries.SHAKE_BOMB_ENTITY    = SHAKE_BOMB_ENTITY;
+        ModRegistries.TNT_APPLE_ENTITY     = TNT_APPLE_ENTITY;
+        ModRegistries.NUCLEAR_APPLE_ENTITY = NUCLEAR_APPLE_ENTITY;
+
+        // ── Block + BlockEntity + Menu ────────────────────────────────────────
         ModRegistries.MIXER_BLOCK_ENTITY = beSupplier;
-        ModRegistries.MIXER_MENU_TYPE   = menuSupplier;
-        ModRegistries.MIXER             = ModBlocks.MIXER;
-        ModRegistries.MIXER_ITEM        = ModBlocks.MIXER_ITEM;
+        ModRegistries.MIXER_MENU_TYPE    = menuSupplier;
+        ModRegistries.MIXER              = ModBlocks.MIXER;
+        ModRegistries.MIXER_ITEM         = ModBlocks.MIXER_ITEM;
 
         ultimate_apple_mod.init();
         modEventBus.addListener(ultimate_apple_modForge::commonSetup);
