@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -35,12 +35,12 @@ public class NuclearAppleEntity extends ThrowableItemProjectile {
     }
 
     public NuclearAppleEntity(LivingEntity thrower, Level level) {
-        super(ultimate_apple_modForge.NUCLEAR_APPLE_ENTITY.get(), thrower, level);
+        super(ModRegistries.NUCLEAR_APPLE_ENTITY.get(), thrower, level);
     }
 
     @Override
     protected Item getDefaultItem() {
-        return ultimate_apple_modForge.NUCLEAR_APPLE.get();
+        return ModRegistries.NUCLEAR_APPLE.get();
     }
 
     /** Trigger on contact with water or lava (in addition to normal impact). */

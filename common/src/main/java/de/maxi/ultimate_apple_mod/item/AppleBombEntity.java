@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -22,12 +22,12 @@ public class AppleBombEntity extends ThrowableItemProjectile {
     }
 
     public AppleBombEntity(LivingEntity thrower, Level level) {
-        super(ultimate_apple_modForge.APPLE_BOMB_ENTITY.get(), thrower, level);
+        super(ModRegistries.APPLE_BOMB_ENTITY.get(), thrower, level);
     }
 
     @Override
     protected Item getDefaultItem() {
-        return ultimate_apple_modForge.APPLE_BOMB.get();
+        return ModRegistries.APPLE_BOMB.get();
     }
 
     @Override
