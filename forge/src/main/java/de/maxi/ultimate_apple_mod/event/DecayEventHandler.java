@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.TickEvent;
@@ -32,17 +31,16 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DecayEventHandler {
 
-    public static final String DECAY_TAG = "uam:decay_start";
+    // Constants delegated to the common DecayHelper
+    public static final String DECAY_TAG = DecayHelper.DECAY_TAG;
 
-    public static final long APPLE_DECAY_TICKS              = 20L * 60 * 30;  // 30 min
+    public static final long APPLE_DECAY_TICKS              = DecayHelper.APPLE_DECAY_TICKS;
     public static final long GOLDEN_APPLE_DECAY_TICKS       = 20L * 60 * 45;  // 45 min
     public static final long ENCHANTED_APPLE_DECAY_TICKS    = 20L * 60 * 60;  // 60 min
 
     /** Returns the decay threshold in ticks for the given item, or 0 if it does not decay. */
-    public static long getDecayThreshold(Item item) {
-        // Only the plain apple rots — golden & enchanted golden are preserved by magic.
-        if (item == Items.APPLE) return APPLE_DECAY_TICKS;
-        return 0;
+    public static long getDecayThreshold(net.minecraft.world.item.Item item) {
+        return DecayHelper.getDecayThreshold(item);
     }
 
     // ── Server-side tick: stamp new items and decay expired ones ──────────────
