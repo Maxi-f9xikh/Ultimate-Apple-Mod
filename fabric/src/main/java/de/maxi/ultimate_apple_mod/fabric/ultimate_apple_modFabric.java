@@ -264,7 +264,8 @@ public final class ultimate_apple_modFabric implements ModInitializer {
             rl("mixer"),
             new MenuType<>((id, inv) -> new MixerMenu(id, inv,
                 new net.minecraft.world.SimpleContainer(4),
-                new net.minecraft.world.inventory.SimpleContainerData(2))));
+                new net.minecraft.world.inventory.SimpleContainerData(2)),
+                net.minecraft.world.flag.FeatureFlags.VANILLA_SET));
 
         // ── 5. Fill ModRegistries ─────────────────────────────────────────────
         ModRegistries.DIAMOND_APPLE                = () -> diamondApple;
