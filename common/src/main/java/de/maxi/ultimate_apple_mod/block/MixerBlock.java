@@ -1,5 +1,6 @@
-package de.maxi.ultimate_apple_mod.forge.block;
+package de.maxi.ultimate_apple_mod.block;
 
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -24,11 +25,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
-
-public class MixerBlock extends BaseEntityBlock {
+public abstract class MixerBlock extends BaseEntityBlock {
 
     public static final BooleanProperty HAS_JAR   = BooleanProperty.create("has_jar");
     public static final BooleanProperty HAS_SHAKE  = BooleanProperty.create("has_shake");
@@ -79,18 +78,17 @@ public class MixerBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new MixerBlockEntity(pos, state);
-    }
+    public abstract BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
     @Nullable
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
             Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide) return null;
         return createTickerHelper(type,
-            ultimate_apple_modForge.MIXER_BLOCK_ENTITY.get(),
-            MixerBlockEntity::serverTick);
+            (BlockEntityType<MixerBlockEntityBase>) ModRegistries.MIXER_BLOCK_ENTITY.get(),
+            MixerBlockEntityBase::serverTick);
     }
 
     // ── Interaction: open GUI ──────────────────────────────────────────────
@@ -100,7 +98,7 @@ public class MixerBlock extends BaseEntityBlock {
                                  Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof MixerBlockEntity mixer) {
+        if (be instanceof MixerBlockEntityBase mixer) {
             player.openMenu(mixer);
         }
         return InteractionResult.CONSUME;
@@ -113,7 +111,7 @@ public class MixerBlock extends BaseEntityBlock {
                          BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof MixerBlockEntity mixer) {
+            if (be instanceof MixerBlockEntityBase mixer) {
                 Containers.dropContents(level, pos, mixer);
             }
         }

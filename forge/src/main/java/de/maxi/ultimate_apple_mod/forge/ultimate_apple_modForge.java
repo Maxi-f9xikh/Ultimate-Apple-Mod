@@ -10,8 +10,9 @@ import de.maxi.ultimate_apple_mod.item.PrismAppleItem;
 import de.maxi.ultimate_apple_mod.item.QuantumAppleItem;
 import de.maxi.ultimate_apple_mod.item.TotemAppleItem;
 import de.maxi.ultimate_apple_mod.item.VoidAppleItem;
+import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.block.MixerMenu;
 import de.maxi.ultimate_apple_mod.forge.block.MixerBlockEntity;
-import de.maxi.ultimate_apple_mod.forge.block.MixerMenu;
 import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
@@ -584,6 +585,21 @@ public final class ultimate_apple_modForge {
         ModBlocks.register(modEventBus);
         ModRecipes.register(modEventBus);
         NetworkHandler.register();
+
+        // ── Wire ModRegistries so common code can access platform registrations ──
+        @SuppressWarnings("unchecked")
+        java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<?>> beSupplier =
+            (java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<?>>) (java.util.function.Supplier<?>) MIXER_BLOCK_ENTITY;
+        @SuppressWarnings("unchecked")
+        java.util.function.Supplier<net.minecraft.world.inventory.MenuType<?>> menuSupplier =
+            (java.util.function.Supplier<net.minecraft.world.inventory.MenuType<?>>) (java.util.function.Supplier<?>) MIXER_MENU_TYPE;
+
+        ModRegistries.SHAKE_ITEM        = SHAKE_ITEM;
+        ModRegistries.MIXER_BLOCK_ENTITY = beSupplier;
+        ModRegistries.MIXER_MENU_TYPE   = menuSupplier;
+        ModRegistries.MIXER             = ModBlocks.MIXER;
+        ModRegistries.MIXER_ITEM        = ModBlocks.MIXER_ITEM;
+
         ultimate_apple_mod.init();
         modEventBus.addListener(ultimate_apple_modForge::commonSetup);
     }
