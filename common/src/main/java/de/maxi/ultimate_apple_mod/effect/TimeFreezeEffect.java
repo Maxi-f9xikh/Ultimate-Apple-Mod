@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.effect;
 
+import de.maxi.ultimate_apple_mod.FrozenMobCache;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,8 +33,7 @@ import java.util.List;
  */
 public class TimeFreezeEffect extends MobEffect {
 
-    private static final String FROZEN_KEY = "uam:time_frozen";
-    private static final double RADIUS     = 40.0;
+    private static final double RADIUS = 40.0;
 
     public TimeFreezeEffect() {
         super(MobEffectCategory.BENEFICIAL, 0x00CCFF); // electric blue
@@ -86,7 +86,7 @@ public class TimeFreezeEffect extends MobEffect {
                 // Disable AI — this stops all movement, pathfinding, attacks, etc.
                 mob.setNoAi(true);
                 // Mark so we can restore it when the effect expires
-                mob.getPersistentData().putBoolean(FROZEN_KEY, true);
+                FrozenMobCache.freeze(mob.getUUID());
             } else if (target instanceof Player) {
                 // Players cannot have their AI removed; use max Slowness instead
                 target.addEffect(new MobEffectInstance(
@@ -106,11 +106,11 @@ public class TimeFreezeEffect extends MobEffect {
             List<Mob> frozen = caster.level().getEntitiesOfClass(
                 Mob.class,
                 caster.getBoundingBox().inflate(RADIUS),
-                mob -> mob.getPersistentData().contains(FROZEN_KEY)
+                mob -> FrozenMobCache.isFrozen(mob.getUUID())
             );
             for (Mob mob : frozen) {
                 mob.setNoAi(false);
-                mob.getPersistentData().remove(FROZEN_KEY);
+                FrozenMobCache.unfreeze(mob.getUUID());
             }
         }
     }

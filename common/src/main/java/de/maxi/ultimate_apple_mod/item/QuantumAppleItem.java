@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import de.maxi.ultimate_apple_mod.block.MixerRecipes;
@@ -134,9 +135,7 @@ public class QuantumAppleItem extends Item {
 
         // ── Dragon breath charges ─────────────────────────────────────────
         if (chosen.dragonCharges() > 0) {
-            int existing = player.getPersistentData().getInt("dragonBreathCharges");
-            player.getPersistentData().putInt(
-                "dragonBreathCharges", existing + chosen.dragonCharges());
+            DragonChargesCache.addCharges(player.getUUID(), chosen.dragonCharges());
             player.displayClientMessage(
                 Component.translatable(
                     "message.ultimate_apple_mod.dragon_charges_added",

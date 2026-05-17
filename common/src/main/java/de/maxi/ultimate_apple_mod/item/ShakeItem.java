@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import net.minecraft.ChatFormatting;
@@ -61,8 +62,9 @@ public class ShakeItem extends Item {
     /**
      * A shake made with a Coal Apple can be used as furnace fuel.
      * Burn time: {@value CoalAppleItem#SHAKE_BURN_TIME} ticks (120 items; 20% bonus over raw coal apple).
+     * Note: Forge calls this hook via its own extension; the @Override annotation is omitted
+     * because vanilla Item does not declare this method.
      */
-    @Override
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.getBoolean("isCoalFuel")) {
@@ -156,8 +158,7 @@ public class ShakeItem extends Item {
         // Dragon breath charges
         int dragonCharges = tag.getInt("dragonCharges");
         if (dragonCharges > 0) {
-            int existing = player.getPersistentData().getInt("dragonBreathCharges");
-            player.getPersistentData().putInt("dragonBreathCharges", existing + dragonCharges);
+            DragonChargesCache.addCharges(player.getUUID(), dragonCharges);
             player.displayClientMessage(
                 Component.translatable("message.ultimate_apple_mod.dragon_charges_added", dragonCharges),
                 true);

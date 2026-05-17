@@ -36,7 +36,7 @@ public class EnderPearlAppleItem extends Item {
                         .nutrition(6)
                         .saturationMod(0.8f)
                         .alwaysEat()
-                        .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 30, 2), 1.0f)
+                        .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 30, 2), 1.0f)
                         .build()));
     }
 

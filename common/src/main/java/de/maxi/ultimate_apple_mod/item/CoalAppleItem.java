@@ -35,8 +35,9 @@ public class CoalAppleItem extends Item {
     }
 
     // ── Furnace fuel ─────────────────────────────────────────────────────────
+    // Note: Forge calls this hook via its own extension; the @Override annotation is omitted
+    // because vanilla Item does not declare this method.
 
-    @Override
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
         return BURN_TIME;
     }
