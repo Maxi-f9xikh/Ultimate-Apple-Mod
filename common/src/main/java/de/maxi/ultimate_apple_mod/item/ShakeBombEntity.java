@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import de.maxi.ultimate_apple_mod.item.OrchardCallerItem;
@@ -177,9 +178,7 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
         if (owner instanceof ServerPlayer thrower) {
             int dragonCharges = tag.getInt("dragonCharges");
             if (dragonCharges > 0) {
-                int existing = thrower.getPersistentData().getInt("dragonBreathCharges");
-                thrower.getPersistentData().putInt(
-                    "dragonBreathCharges", existing + dragonCharges);
+                DragonChargesCache.addCharges(thrower.getUUID(), dragonCharges);
             }
             if (tag.getBoolean("lifesteal")) {
                 thrower.addEffect(new MobEffectInstance(

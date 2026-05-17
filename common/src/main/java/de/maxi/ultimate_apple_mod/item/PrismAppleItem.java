@@ -30,9 +30,9 @@ public class PrismAppleItem extends Item {
                 .nutrition(6)
                 .saturationMod(0.8f)
                 .alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 20 * 300, 0), 1.0f) // 5 min
-                .effect(() -> new MobEffectInstance(MobEffects.DOLPHINS_GRACE,  20 * 300, 0), 1.0f) // 5 min
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED,  20 * 300, 1), 1.0f) // Speed II, 5 min
+                .effect(new MobEffectInstance(MobEffects.WATER_BREATHING, 20 * 300, 0), 1.0f) // 5 min
+                .effect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE,  20 * 300, 0), 1.0f) // 5 min
+                .effect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,  20 * 300, 1), 1.0f) // Speed II, 5 min
                 .build())
             .stacksTo(64));
     }

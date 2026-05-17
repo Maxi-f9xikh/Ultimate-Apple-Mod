@@ -36,8 +36,8 @@ public class LapislazuliAppleItem extends Item {
                 .nutrition(8)
                 .saturationMod(0.9f)
                 .alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 300, 0), 1.0f) // 5 min
-                .effect(() -> new MobEffectInstance(MobEffects.LUCK,         20 * 120, 0), 1.0f) // 2 min
+                .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 300, 0), 1.0f) // 5 min
+                .effect(new MobEffectInstance(MobEffects.LUCK,         20 * 120, 0), 1.0f) // 2 min
                 .build())
             .stacksTo(64));
     }

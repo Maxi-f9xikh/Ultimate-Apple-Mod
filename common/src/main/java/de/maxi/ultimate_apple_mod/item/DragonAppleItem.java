@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -29,8 +30,8 @@ public class DragonAppleItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack result = super.finishUsingItem(stack, level, entity);
         if (!level.isClientSide() && entity instanceof Player player) {
-            int charges = player.getPersistentData().getInt(CHARGES_KEY) + 1;
-            player.getPersistentData().putInt(CHARGES_KEY, charges);
+            DragonChargesCache.addCharges(player.getUUID(), 1);
+            int charges = DragonChargesCache.getCharges(player.getUUID());
             player.displayClientMessage(
                 Component.translatable("message.ultimate_apple_mod.dragon_breath_remaining", charges), true);
         }

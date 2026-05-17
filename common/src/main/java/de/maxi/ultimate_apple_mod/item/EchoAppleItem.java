@@ -1,7 +1,7 @@
 package de.maxi.ultimate_apple_mod.item;
 
+import de.maxi.ultimate_apple_mod.EchoPositionCache;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -14,6 +14,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class EchoAppleItem extends Item {
 
@@ -36,14 +37,12 @@ public class EchoAppleItem extends Item {
             return super.finishUsingItem(stack, level, livingEntity);
         }
 
-        CompoundTag data = player.getPersistentData();
+        UUID playerId = player.getUUID();
+        String currentDim = level.dimension().location().toString();
 
-        if (data.contains(POS_KEY)) {
-            CompoundTag posTag = data.getCompound(POS_KEY);
-            String savedDim = posTag.getString("dim");
-            String currentDim = level.dimension().location().toString();
-
-            if (!savedDim.equals(currentDim)) {
+        if (EchoPositionCache.hasPosition(playerId)) {
+            EchoPositionCache.SavedPosition saved = EchoPositionCache.getPosition(playerId);
+            if (!saved.dimension.equals(currentDim)) {
                 player.displayClientMessage(
                     Component.translatable("message.ultimate_apple_mod.echo_wrong_dim"), true);
                 return stack;
@@ -53,13 +52,9 @@ public class EchoAppleItem extends Item {
         ItemStack result = super.finishUsingItem(stack, level, livingEntity);
         ServerLevel serverLevel = (ServerLevel) level;
 
-        if (!data.contains(POS_KEY)) {
-            CompoundTag posTag = new CompoundTag();
-            posTag.putDouble("x", player.getX());
-            posTag.putDouble("y", player.getY());
-            posTag.putDouble("z", player.getZ());
-            posTag.putString("dim", level.dimension().location().toString());
-            data.put(POS_KEY, posTag);
+        if (!EchoPositionCache.hasPosition(playerId)) {
+            EchoPositionCache.savePosition(playerId,
+                player.getX(), player.getY(), player.getZ(), currentDim);
 
             player.displayClientMessage(
                 Component.translatable("message.ultimate_apple_mod.echo_set"), true);
@@ -67,10 +62,10 @@ public class EchoAppleItem extends Item {
                 player.getX(), player.getY() + 1.0, player.getZ(),
                 8, 0.3, 0.3, 0.3, 0.05);
         } else {
-            CompoundTag posTag = data.getCompound(POS_KEY);
-            double x = posTag.getDouble("x");
-            double y = posTag.getDouble("y");
-            double z = posTag.getDouble("z");
+            EchoPositionCache.SavedPosition saved = EchoPositionCache.getPosition(playerId);
+            double x = saved.x;
+            double y = saved.y;
+            double z = saved.z;
 
             serverLevel.sendParticles(ParticleTypes.PORTAL,
                 player.getX(), player.getY() + 1.0, player.getZ(),
@@ -83,7 +78,7 @@ public class EchoAppleItem extends Item {
             serverLevel.sendParticles(ParticleTypes.PORTAL,
                 x, y + 1.0, z, 20, 0.5, 1.0, 0.5, 0.1);
 
-            data.remove(POS_KEY);
+            EchoPositionCache.clearPosition(playerId);
             player.displayClientMessage(
                 Component.translatable("message.ultimate_apple_mod.echo_return"), true);
         }
