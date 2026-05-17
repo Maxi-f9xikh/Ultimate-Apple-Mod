@@ -15,11 +15,12 @@
       "de.maxi.ultimate_apple_mod.fabric.ultimate_apple_modFabric"
     ],
     "client": [
-      "de.maxi.ultimate_apple_mod.fabric.client.ultimate_apple_modFabricClient"
+      "de.maxi.ultimate_apple_mod.fabric.FabricModClient"
     ]
   },
   "mixins": [
-    "ultimate_apple_mod.mixins.json"
+    "ultimate_apple_mod.mixins.json",
+    "ultimate_apple_mod.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.13",
