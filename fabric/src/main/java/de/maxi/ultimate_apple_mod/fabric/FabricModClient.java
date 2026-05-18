@@ -39,6 +39,11 @@ public class FabricModClient implements ClientModInitializer {
             (MenuType<MixerMenu>) ModRegistries.MIXER_MENU_TYPE.get(),
             MixerScreen::new);
 
+        // ── Block render layers (transparency) ────────────────────────────────
+        net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
+            de.maxi.ultimate_apple_mod.fabric.block.ModBlocks.MIXER,
+            net.minecraft.client.renderer.RenderType.cutoutMipped());
+
         // ── Client events ─────────────────────────────────────────────────────
         FabricClientHandler.register();
     }
