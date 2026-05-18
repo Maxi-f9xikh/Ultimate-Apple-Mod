@@ -33,8 +33,6 @@ public final class ultimate_apple_modFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ultimate_apple_mod.init();
-
         // ── 1. Effects (must be before items that reference them) ─────────────
         MobEffect curseOfRotten = Registry.register(BuiltInRegistries.MOB_EFFECT,
             rl("curse_of_rotten"), new CurseOfRotten());
@@ -386,7 +384,10 @@ public final class ultimate_apple_modFabric implements ModInitializer {
                 })
                 .build());
 
-        // ── 8. Register events + network ─────────────────────────────────────
+        // ── 8. Common init (after all ModRegistries fields are set) ──────────
+        ultimate_apple_mod.init();
+
+        // ── 9. Register events + network ─────────────────────────────────────
         FabricEventRegistrar.register();
         FabricNetworkHandler.registerServer();
     }
