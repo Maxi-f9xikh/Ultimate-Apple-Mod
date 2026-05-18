@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.forge;
 
-import de.maxi.ultimate_apple_mod.forge.block.MixerScreen;
+import de.maxi.ultimate_apple_mod.block.MixerScreen;
 import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.NuclearAppleEntity;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;

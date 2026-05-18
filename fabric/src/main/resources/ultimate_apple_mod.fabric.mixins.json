@@ -1,12 +1,12 @@
 {
   "required": true,
-  "package": "de.maxi.ultimate_apple_mod.mixin",
+  "package": "de.maxi.ultimate_apple_mod.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
+    "PlayerRendererMixin"
   ],
   "mixins": [
-    "LivingEntitySizeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

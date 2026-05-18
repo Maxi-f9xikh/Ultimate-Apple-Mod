@@ -6,7 +6,8 @@
   "description": "",
   "authors": ["Maxi"],
   "contact": {
-    "homepage": ""  },
+    "homepage": ""
+  },
   "license": "ISC",
   "icon": "assets/ultimate_apple_mod/icon.png",
   "environment": "*",
@@ -15,20 +16,18 @@
       "de.maxi.ultimate_apple_mod.fabric.ultimate_apple_modFabric"
     ],
     "client": [
-      "de.maxi.ultimate_apple_mod.fabric.client.ultimate_apple_modFabricClient"
+      "de.maxi.ultimate_apple_mod.fabric.FabricModClient"
     ]
   },
   "mixins": [
-    "ultimate_apple_mod.mixins.json"
+    "ultimate_apple_mod.mixins.json",
+    "ultimate_apple_mod.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.13",
     "minecraft": "~1.20.1",
-    "java": ">=17"
-    ,"architectury": ">=9.2.14"
-    ,"fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
+    "java": ">=17",
+    "architectury": ">=9.2.14",
+    "fabric-api": "*"
   }
 }
