@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.event;
 
-import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -85,7 +85,7 @@ public class DecayEventHandler {
     private static ItemStack getDecayReplacement(ItemStack original) {
         int count = original.getCount();
         if (original.getItem() == Items.APPLE) {
-            return new ItemStack(ultimate_apple_modForge.ROTTEN_APPLE.get(), count);
+            return new ItemStack(ModRegistries.ROTTEN_APPLE.get(), count);
         }
         return ItemStack.EMPTY;
     }
