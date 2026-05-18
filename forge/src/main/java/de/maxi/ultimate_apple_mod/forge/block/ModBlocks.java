@@ -2,9 +2,13 @@ package de.maxi.ultimate_apple_mod.forge.block;
 
 import static de.maxi.ultimate_apple_mod.ultimate_apple_mod.MOD_ID;
 
+import de.maxi.ultimate_apple_mod.block.MixerBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -21,7 +25,12 @@ public class ModBlocks {
     // ── Mixer ──────────────────────────────────────────────────────────────
 
     public static final RegistryObject<Block> MIXER =
-        BLOCKS.register("mixer", MixerBlock::new);
+        BLOCKS.register("mixer", () -> new MixerBlock() {
+            @Override
+            public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+                return new MixerBlockEntity(pos, state);
+            }
+        });
 
     /** Block item that places the mixer — goes in all item registries. */
     public static final RegistryObject<Item> MIXER_ITEM =

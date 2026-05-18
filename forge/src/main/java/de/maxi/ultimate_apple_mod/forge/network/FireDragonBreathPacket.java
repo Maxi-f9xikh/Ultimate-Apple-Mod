@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.forge.network;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,8 +15,6 @@ import java.util.function.Supplier;
  * while holding a Dragon Apple with at least 1 charge.
  */
 public class FireDragonBreathPacket {
-
-    private static final String CHARGES_KEY = "dragonBreathCharges";
 
     public FireDragonBreathPacket() {}
 
@@ -32,7 +31,7 @@ public class FireDragonBreathPacket {
             ServerPlayer player = ctx.get().getSender();
             if (player == null) return;
 
-            int charges = player.getPersistentData().getInt(CHARGES_KEY);
+            int charges = DragonChargesCache.getCharges(player.getUUID());
             if (charges <= 0) return;
 
             // Fire the dragon fireball in the direction the player is looking
@@ -47,7 +46,7 @@ public class FireDragonBreathPacket {
             player.level().addFreshEntity(fireball);
 
             int remaining = charges - 1;
-            player.getPersistentData().putInt(CHARGES_KEY, remaining);
+            DragonChargesCache.setCharges(player.getUUID(), remaining);
             player.displayClientMessage(
                 Component.translatable("message.ultimate_apple_mod.dragon_breath_remaining", remaining),
                 true);
