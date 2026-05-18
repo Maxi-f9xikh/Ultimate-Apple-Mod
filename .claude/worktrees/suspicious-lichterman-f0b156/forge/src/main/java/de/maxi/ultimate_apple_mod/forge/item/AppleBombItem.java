@@ -1,4 +1,4 @@
-package de.maxi.ultimate_apple_mod.item;
+package de.maxi.ultimate_apple_mod.forge.item;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;

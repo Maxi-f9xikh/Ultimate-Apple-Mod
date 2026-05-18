@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.forge;
 
-import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
+import de.maxi.ultimate_apple_mod.forge.item.AppleBombEntity;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
