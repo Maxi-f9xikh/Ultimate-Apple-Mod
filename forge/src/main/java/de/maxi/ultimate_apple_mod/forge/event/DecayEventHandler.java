@@ -1,6 +1,7 @@
-package de.maxi.ultimate_apple_mod.event;
+package de.maxi.ultimate_apple_mod.forge.event;
 
 import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.event.DecayHelper;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;

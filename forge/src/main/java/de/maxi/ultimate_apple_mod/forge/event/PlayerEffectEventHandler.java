@@ -1,4 +1,4 @@
-package de.maxi.ultimate_apple_mod.event;
+package de.maxi.ultimate_apple_mod.forge.event;
 
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
