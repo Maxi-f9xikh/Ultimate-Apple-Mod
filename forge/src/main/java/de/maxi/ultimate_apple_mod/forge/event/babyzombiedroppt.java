@@ -1,4 +1,4 @@
-package de.maxi.ultimate_apple_mod.event;
+package de.maxi.ultimate_apple_mod.forge.event;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Zombie;
