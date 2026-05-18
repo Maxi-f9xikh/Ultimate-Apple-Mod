@@ -1,4 +1,4 @@
-package de.maxi.ultimate_apple_mod.item;
+package de.maxi.ultimate_apple_mod.forge.item;
 
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import net.minecraft.core.particles.ParticleTypes;

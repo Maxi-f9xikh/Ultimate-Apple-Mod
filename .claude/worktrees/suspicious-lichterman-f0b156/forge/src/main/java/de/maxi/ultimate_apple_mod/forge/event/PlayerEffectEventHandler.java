@@ -1,0 +1,227 @@
+package de.maxi.ultimate_apple_mod.forge.event;
+
+import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
+import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import java.util.WeakHashMap;
+
+@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class PlayerEffectEventHandler {
+
+    /**
+     * Tracks whether Curse of Rotten was active last tick for each server-side player.
+     * Used to trigger refreshDimensions() exactly when the state changes, mirroring
+     * what ClientPlayerRenderHandler does for the client player.
+     */
+    private static final WeakHashMap<Player, Boolean> serverRottenState = new WeakHashMap<>();
+
+    // ── Hitbox resize ─────────────────────────────────────────────────────────
+
+    /**
+     * Returns shrunken dimensions (0.25 × 0.6) whenever a player has Curse of Rotten.
+     * Fires whenever getDimensions(Pose) is called, so it covers both standing-height
+     * checks (for pose selection) and actual bounding-box updates.
+     */
+    /**
+     * Visual scale used for rendering (ClientPlayerRenderHandler) and physics (here).
+     * Keep in sync with the scale(0.35f) call in ClientPlayerRenderHandler.onRenderPlayerPre.
+     */
+    private static final float ROTTEN_SCALE = 0.35f;
+
+    @SubscribeEvent
+    public static void onEntitySize(EntityEvent.Size event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        try {
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
+                // Shrink the physics bounding box to 0.25 × 0.6
+                event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f));
+                // Lower the first-person camera to match the visual render scale.
+                // Entity.getEyeHeight() (no-arg, final) returns the cached eyeHeight
+                // field that refreshDimensions() writes from event.getNewEyeHeight(),
+                // so this correctly lowers the camera for the local player.
+                // Use a fixed standing-height-based value (1.62 * scale = 0.567)
+                // so the eye height never depends on the current pose (SWIMMING eye height
+                // is only 0.4, which would put the camera in the floor when scaled).
+                event.setNewEyeHeight(1.62f * ROTTEN_SCALE);
+            }
+        } catch (NullPointerException ignored) {
+            // EntityEvent.Size fires during entity construction before activeEffects is initialized
+        }
+    }
+
+    /**
+     * Server-side mirror of ClientPlayerRenderHandler.onClientTick.
+     * Calls refreshDimensions() on the server player entity whenever Curse of Rotten
+     * is applied or removed, so the server bounding box actually shrinks to 0.25×0.6
+     * and the player can walk (not crawl) through 1-block gaps.
+     */
+    @SubscribeEvent
+    public static void onServerPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) return;
+        Player player = event.player;
+        // Server side only
+        if (!(player.level() instanceof ServerLevel)) return;
+
+        boolean hasEffect;
+        try {
+            hasEffect = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get());
+        } catch (NullPointerException ignored) {
+            return;
+        }
+
+        Boolean prev = serverRottenState.get(player);
+        if (prev == null || prev != hasEffect) {
+            serverRottenState.put(player, hasEffect);
+            player.refreshDimensions();
+        }
+    }
+
+    /**
+     * After updatePlayerPose() runs (END phase), force the cursed player back to STANDING
+     * when they are on land so they walk through 1-block gaps normally instead of crawling.
+     * The entity dimensions are already 0.25×0.6, so the physics allow it — the only
+     * issue is that updatePlayerPose() checks static 1.8-tall standing dimensions for
+     * pose selection and forces SWIMMING (crawl) for any gap < 1.8 blocks.
+     */
+    @SubscribeEvent
+    public static void onServerPlayerTickEnd(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        Player player = event.player;
+        if (!(player.level() instanceof ServerLevel)) return;
+
+        // ── Rotten Apple: fix swimming pose ──────────────────────────────────
+        try {
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())
+                    && player.getPose() == Pose.SWIMMING
+                    && !player.isInWater()) {
+                player.setPose(Pose.STANDING);
+            }
+        } catch (NullPointerException ignored) {}
+
+    }
+
+    // ── Totem Apple — cancel death ────────────────────────────────────────────
+
+    /**
+     * If the dying player has the Totem Protection effect (from eating a Totem Apple),
+     * cancel the death, consume the effect, restore health, and play the vanilla totem
+     * animation + sound (entity event 35) so the player gets clear visual feedback.
+     *
+     * Priority HIGHEST ensures this runs before other death listeners.
+     */
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onPlayerTotemDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!(player.level() instanceof ServerLevel)) return;
+
+        try {
+            if (!player.hasEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get())) return;
+        } catch (NullPointerException ignored) { return; }
+
+        // Cancel the death
+        event.setCanceled(true);
+
+        // Remove the one-time protection
+        player.removeEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get());
+
+        // Restore health and apply the same buffs vanilla totem gives
+        player.setHealth(1.0f);
+        player.removeAllEffects();
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,     20 * 45, 1));
+        player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE,  20 * 40, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION,       20 * 15, 3));
+
+        // Entity event 35 → client plays totem-of-undying animation + sound
+        player.level().broadcastEntityEvent(player, (byte) 35);
+
+        player.displayClientMessage(
+            Component.translatable("message.ultimate_apple_mod.totem_apple_triggered"), true);
+    }
+
+    /**
+     * Lifesteal: heal 1 heart whenever a hostile mob dies near a player with the effect.
+     *
+     * Triggered by:
+     *  - Direct player kill (sword, bow, etc.)
+     *  - Wither/DoT kill — the mob may have gotten Wither II from the Wither Apple,
+     *    so DamageSource.getEntity() is null in that case. We scan nearby players instead.
+     */
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+        // Server-side only
+        if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) return;
+        // Skip other players — lifesteal works on any mob or animal, just not players
+        if (event.getEntity() instanceof Player) return;
+
+        LivingEntity dying = event.getEntity();
+
+        // 1. Prefer the direct killer if they carry Lifesteal
+        ServerPlayer recipient = null;
+        Entity attacker = event.getSource().getEntity();
+        if (attacker instanceof ServerPlayer sp
+                && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
+            recipient = sp;
+        }
+
+        // 2. Fallback: any nearby player with Lifesteal.
+        //    32-block radius — Wither-cursed mobs can wander before dying.
+        //    Also covers DoT / indirect damage sources where getEntity() is null.
+        if (recipient == null) {
+            double best = Double.MAX_VALUE;
+            for (ServerPlayer sp : serverLevel.players()) {
+                double dist = sp.distanceToSqr(dying);
+                if (dist <= 32.0 * 32.0
+                        && dist < best
+                        && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
+                    recipient = sp;
+                    best = dist;
+                }
+            }
+        }
+
+        if (recipient == null) return;
+
+        // Heal 1 heart
+        recipient.heal(2.0f);
+
+        // Action bar feedback
+        recipient.displayClientMessage(
+            Component.translatable("message.ultimate_apple_mod.lifesteal_heal"), true);
+
+        // Deep soul-drain sound
+        serverLevel.playSound(null,
+            recipient.getX(), recipient.getY(), recipient.getZ(),
+            SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS,
+            0.8f, 0.4f);
+
+        // Red crimson spore cloud
+        serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE,
+            recipient.getX(), recipient.getY() + 1.0, recipient.getZ(),
+            14, 0.5, 0.9, 0.5, 0.04);
+
+        // Hearts floating up
+        serverLevel.sendParticles(ParticleTypes.HEART,
+            recipient.getX(), recipient.getY() + 2.1, recipient.getZ(),
+            4, 0.4, 0.15, 0.4, 0.0);
+    }
+}
