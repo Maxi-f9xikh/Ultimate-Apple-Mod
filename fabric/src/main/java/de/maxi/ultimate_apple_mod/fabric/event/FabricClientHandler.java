@@ -28,7 +28,6 @@ import java.util.List;
 public class FabricClientHandler {
 
     private static boolean wasRottenActive = false;
-    private static boolean wasKeyDown       = false;
 
     public static void register() {
 
@@ -87,20 +86,19 @@ public class FabricClientHandler {
             if (client.player == null) return;
             Player player = client.player;
 
-            // Dragon breath keybind — use isDown() + leading-edge because
-            // consumeClick() is drained by vanilla's attack handler before END_CLIENT_TICK fires
-            boolean keyDown = FabricModClient.FIRE_DRAGON_BREATH_KEY.isDown();
-            if (keyDown && !wasKeyDown) {
+            // Dragon breath keybind — consumeClick() collects all clicks since last tick,
+            // matching how Forge's KeyInputHandler drains the key with a while loop.
+            // isDown() + leading-edge missed quick clicks where the button was released
+            // within the same tick before END_CLIENT_TICK fired.
+            while (FabricModClient.FIRE_DRAGON_BREATH_KEY.consumeClick()) {
                 boolean aimingAtEntity = client.hitResult instanceof net.minecraft.world.phys.EntityHitResult;
                 var mainHand = player.getMainHandItem();
                 boolean holdingMelee = mainHand.getItem() instanceof net.minecraft.world.item.SwordItem
                     || mainHand.getItem() instanceof net.minecraft.world.item.AxeItem;
-                if (!(aimingAtEntity && holdingMelee)) {
-                    // Fabric 1.20.1 channel-based packet send (no CustomPacketPayload)
-                    ClientPlayNetworking.send(FireDragonBreathPayload.CHANNEL, PacketByteBufs.empty());
-                }
+                if (aimingAtEntity && holdingMelee) continue; // let vanilla handle melee attack
+                // Fabric 1.20.1 channel-based packet send (no CustomPacketPayload)
+                ClientPlayNetworking.send(FireDragonBreathPayload.CHANNEL, PacketByteBufs.empty());
             }
-            wasKeyDown = keyDown;
 
             // CurseOfRotten client-side dimension refresh + pose fix
             boolean isRottenActive = false;

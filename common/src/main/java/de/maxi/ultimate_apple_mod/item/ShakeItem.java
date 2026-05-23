@@ -68,7 +68,10 @@ public class ShakeItem extends Item {
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.getBoolean("isCoalFuel")) {
-            return CoalAppleItem.SHAKE_BURN_TIME;
+            // coalFuelBurnTime is set by the Mixer (doubled when mixed with Longevity Apple)
+            return tag.contains("coalFuelBurnTime")
+                ? tag.getInt("coalFuelBurnTime")
+                : CoalAppleItem.SHAKE_BURN_TIME;
         }
         return 0;  // not a fuel by default
     }

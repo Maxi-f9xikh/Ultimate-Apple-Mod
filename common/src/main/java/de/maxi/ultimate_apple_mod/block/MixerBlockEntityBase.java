@@ -1,6 +1,7 @@
 package de.maxi.ultimate_apple_mod.block;
 
 import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.item.CoalAppleItem;
 import de.maxi.ultimate_apple_mod.item.CupItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -127,7 +128,14 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
                 }
 
                 CompoundTag shakeTag = buildShakeNbt(c1, c2);
-                if (coalMix && !coalTnt) shakeTag.putBoolean("isCoalFuel", true);
+                if (coalMix && !coalTnt) {
+                    shakeTag.putBoolean("isCoalFuel", true);
+                    // Coal + Longevity doubles the burn time
+                    int burnTime = (rawMultiplier >= 2.0)
+                        ? CoalAppleItem.SHAKE_BURN_TIME * 2
+                        : CoalAppleItem.SHAKE_BURN_TIME;
+                    shakeTag.putInt("coalFuelBurnTime", burnTime);
+                }
                 be.pendingShakeTag = shakeTag;
                 be.progress = 0;
                 be.stateDirty = true;
