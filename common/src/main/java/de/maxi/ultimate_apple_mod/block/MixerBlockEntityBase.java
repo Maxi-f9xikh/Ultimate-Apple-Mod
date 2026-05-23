@@ -182,6 +182,25 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
         else if (clearsEffects) { durationFactor = 0.80; }
         else { durationFactor = 1.20 * rawMultiplier; }
 
+        // ── Dragon + Longevity: double the charges ─────────────────────────────
+        if (!clearsEffects && rawMultiplier >= 2.0 && dragonCharges > 0) {
+            dragonCharges *= 2;
+        }
+
+        // ── TNT explosion power ────────────────────────────────────────────────
+        // Base: 4.0.  TNT + Longevity: ×2 = 8.0.  TNT + any other: ×1.2 = 4.8.
+        float tntExplosionPower = 0.0f;
+        if (isTntExplosion) {
+            tntExplosionPower = (rawMultiplier >= 2.0) ? 8.0f : 4.8f;
+        }
+
+        // ── Ender teleport range ──────────────────────────────────────────────
+        // Base: 256 blocks.  Ender Pearl + Longevity: ×2 = 512 blocks.
+        int enderTeleportRange = 256;
+        if (enderTeleport && rawMultiplier >= 2.0) {
+            enderTeleportRange = 512;
+        }
+
         CompoundTag tag = new CompoundTag();
         ListTag effectsList = new ListTag();
         for (MixerRecipes.EffectData e : merged.values()) {
@@ -202,6 +221,8 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
         tag.putBoolean("enderTeleport", enderTeleport);
         tag.putBoolean("isBomb", isBomb);
         tag.putBoolean("isTntExplosion", isTntExplosion);
+        tag.putFloat("tntExplosionPower", tntExplosionPower);
+        tag.putInt("enderTeleportRange", enderTeleportRange);
         return tag;
     }
 

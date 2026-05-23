@@ -199,9 +199,9 @@ public class ShakeItem extends Item {
                 player.getId(), player.getDeltaMovement()));
         }
 
-        // Rewind: teleport back 5 seconds in position history
+        // Rewind: teleport back 10 seconds in position history
         if (tag.getBoolean("rewindEffect")) {
-            Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
+            Vec3 oldPos = RewindPositionCache.getPositionTenSecondsAgo(player);
             if (oldPos != null) {
                 player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                 player.displayClientMessage(
@@ -220,10 +220,11 @@ public class ShakeItem extends Item {
             }
         }
 
-        // Ender teleport: look-direction teleport up to 256 blocks
+        // Ender teleport: look-direction teleport (range from NBT, default 256; 512 with Longevity)
         // + 0.3 % chance of an Endermite spawning at the new position (mixing dilutes the effect)
         if (tag.getBoolean("enderTeleport")) {
-            ShakeBombEntity.performEnderTeleport(player);
+            int range = tag.contains("enderTeleportRange") ? tag.getInt("enderTeleportRange") : 256;
+            ShakeBombEntity.performEnderTeleport(player, range);
             if (level instanceof net.minecraft.server.level.ServerLevel serverLevel
                     && level.getRandom().nextFloat() < 0.003f) {
                 Endermite endermite = new Endermite(EntityType.ENDERMITE, serverLevel);

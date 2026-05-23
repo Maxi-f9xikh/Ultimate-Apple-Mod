@@ -26,6 +26,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -181,7 +182,7 @@ public final class ultimate_apple_modFabric implements ModInitializer {
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*15, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.BLINDNESS, 20*5, 0), 1f).build())
             .stacksTo(64)));
-        Item tntApple = reg("tnt_apple", new TntAppleItem(new Item.Properties().stacksTo(16)));
+        Item tntApple = reg("tnt_apple", new TntAppleItem(new Item.Properties().stacksTo(64)));
         Item nuclearApple = reg("nuclear_apple",
             new NuclearAppleItem(new Item.Properties().stacksTo(1).fireResistant()));
         Item witherApple = reg("wither_apple", new WitherAppleItem(new Item.Properties()
@@ -358,7 +359,13 @@ public final class ultimate_apple_modFabric implements ModInitializer {
         ComposterBlock.COMPOSTABLES.put(totemApple,         0.65f);
         ComposterBlock.COMPOSTABLES.put(orchardApple,       0.85f);
 
-        // ── 7. Creative tab ───────────────────────────────────────────────────
+        // ── 7. Fuel values ────────────────────────────────────────────────────
+        // Coal Apple: registers as furnace fuel (Fabric doesn't call IForgeItem.getBurnTime).
+        FuelRegistry.INSTANCE.add(coalApple, CoalAppleItem.BURN_TIME);
+        // Coal-infused shakes (isCoalFuel NBT tag) are handled by FurnaceFuelMixin
+        // so that only coal-mixed shakes are accepted as fuel, not all shakes.
+
+        // ── 8. Creative tab ───────────────────────────────────────────────────
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, rl("ultimate_tab"),
             FabricItemGroup.builder()
                 .title(Component.literal("Ultimate Apple Mod"))

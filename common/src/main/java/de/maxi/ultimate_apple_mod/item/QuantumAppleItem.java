@@ -34,10 +34,9 @@ import java.util.Random;
  * including special flags (lifesteal, witherCurse, dragonCharges, clearsEffects,
  * voidLaunch, rewindEffect, orchardSpawn, enderTeleport).
  *
- * The picking is WEIGHTED so the mod's custom effects appear more often:
- *   weight 3 — CurseOfRotten, Lifesteal, VoidLaunch, TotemProtection, TimeFreeze
- *   weight 2 — Moon Gravity (notable but not overwhelming)
- *   weight 1 — everything else (still possible, just less frequent)
+ * The outcome pool is split 60 % positive / 40 % negative:
+ *   60 % — contributions whose primary effects benefit the player
+ *   40 % — contributions that hurt the player (Hunger, Nausea, Slowness, etc.)
  *
  * The pool excludes Apple Bomb (isBomb = true) — a throwable can't be "eaten".
  */
@@ -46,10 +45,11 @@ public class QuantumAppleItem extends Item {
     private static final Random RNG = new Random();
 
     /**
-     * Lazy-initialised weighted pool.
+     * Lazy-initialised 60 / 40 pools.
      * Built on first eat so MixerRecipes is guaranteed to be fully populated.
      */
-    private static volatile List<MixerRecipes.ShakeContribution> WEIGHTED_POOL = null;
+    private static volatile List<MixerRecipes.ShakeContribution> POSITIVE_POOL = null;
+    private static volatile List<MixerRecipes.ShakeContribution> NEGATIVE_POOL = null;
 
     public QuantumAppleItem() {
         super(new Item.Properties()
@@ -61,42 +61,38 @@ public class QuantumAppleItem extends Item {
             .stacksTo(64));
     }
 
-    // ── Weighted pool ────────────────────────────────────────────────────────
+    // ── 60 / 40 pool ─────────────────────────────────────────────────────────
 
-    private static List<MixerRecipes.ShakeContribution> getWeightedPool() {
-        if (WEIGHTED_POOL == null) {
-            List<MixerRecipes.ShakeContribution> pool = new ArrayList<>();
-            // getRandomizableContributions() excludes isBomb entries
-            for (MixerRecipes.ShakeContribution c : MixerRecipes.getRandomizableContributions()) {
-                int w = weight(c);
-                for (int i = 0; i < w; i++) pool.add(c);
-            }
-            WEIGHTED_POOL = List.copyOf(pool);
+    private static void ensurePools() {
+        if (POSITIVE_POOL != null) return;
+        List<MixerRecipes.ShakeContribution> pos = new ArrayList<>();
+        List<MixerRecipes.ShakeContribution> neg = new ArrayList<>();
+        for (MixerRecipes.ShakeContribution c : MixerRecipes.getRandomizableContributions()) {
+            if (isNegative(c)) neg.add(c); else pos.add(c);
         }
-        return WEIGHTED_POOL;
+        POSITIVE_POOL = List.copyOf(pos);
+        NEGATIVE_POOL = List.copyOf(neg);
     }
 
     /**
-     * Returns the weight for a contribution.
-     * Custom mod effects the user wants to see more often get weight 3,
-     * Moon Gravity gets weight 2 ("not too often"), everything else weight 1.
+     * Returns {@code true} when a contribution primarily harms the player.
+     * Criteria: the effects list contains at least one negative vanilla effect
+     * (hunger, nausea, slowness, weakness, blindness) or the custom
+     * curse_of_rotten effect.
      */
-    private static int weight(MixerRecipes.ShakeContribution c) {
-        // VoidLaunch → Void Apple
-        if (c.voidLaunch()) return 3;
-        // Lifesteal → Wither Apple (also has witherCurse)
-        if (c.lifesteal()) return 3;
-
+    private static boolean isNegative(MixerRecipes.ShakeContribution c) {
         for (MixerRecipes.EffectData e : c.effects()) {
             String path = e.id().getPath();
-            // Boosted custom effects
-            if (path.equals("curse_of_rotten"))  return 3;  // Rotten Apple
-            if (path.equals("totem_protection")) return 3;  // Totem Apple
-            if (path.equals("time_freeze"))      return 3;  // Time Freeze Apple
-            // Slightly boosted
-            if (path.equals("moon_gravity"))     return 2;  // Moon Apple
+            if (path.equals("hunger")
+                    || path.equals("nausea")
+                    || path.equals("slowness")
+                    || path.equals("weakness")
+                    || path.equals("blindness")
+                    || path.equals("curse_of_rotten")) {
+                return true;
+            }
         }
-        return 1;
+        return false;
     }
 
     // ── Eating ───────────────────────────────────────────────────────────────
@@ -106,8 +102,11 @@ public class QuantumAppleItem extends Item {
         ItemStack result = super.finishUsingItem(stack, level, entity);
 
         if (!level.isClientSide && entity instanceof ServerPlayer player) {
-            List<MixerRecipes.ShakeContribution> pool = getWeightedPool();
-            if (!pool.isEmpty()) {
+            ensurePools();
+            // 60 % positive, 40 % negative
+            List<MixerRecipes.ShakeContribution> pool =
+                RNG.nextDouble() < 0.6 ? POSITIVE_POOL : NEGATIVE_POOL;
+            if (pool != null && !pool.isEmpty()) {
                 MixerRecipes.ShakeContribution chosen = pool.get(RNG.nextInt(pool.size()));
                 applyContribution(chosen, player, level);
             }
@@ -178,9 +177,9 @@ public class QuantumAppleItem extends Item {
                 player.getId(), player.getDeltaMovement()));
         }
 
-        // ── Rewind — teleport back 5 seconds ─────────────────────────────
+        // ── Rewind — teleport back 10 seconds ────────────────────────────
         if (chosen.rewindEffect()) {
-            Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
+            Vec3 oldPos = RewindPositionCache.getPositionTenSecondsAgo(player);
             if (oldPos != null) {
                 player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                 player.fallDistance = 0;

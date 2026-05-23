@@ -22,7 +22,7 @@ public class RewindAppleItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer player) {
-            Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
+            Vec3 oldPos = RewindPositionCache.getPositionTenSecondsAgo(player);
             if (oldPos != null) {
                 player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                 // Reset fall state so the player doesn't take damage from the fall

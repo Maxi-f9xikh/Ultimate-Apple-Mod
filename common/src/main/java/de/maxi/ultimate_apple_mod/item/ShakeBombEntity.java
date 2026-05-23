@@ -154,9 +154,9 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
         // ── Player-only effects ──────────────────────────────────────────────
         if (target instanceof ServerPlayer player) {
 
-            // Rewind: teleport back 5 seconds
+            // Rewind: teleport back 10 seconds
             if (tag.getBoolean("rewindEffect")) {
-                Vec3 oldPos = RewindPositionCache.getPositionFiveSecondsAgo(player);
+                Vec3 oldPos = RewindPositionCache.getPositionTenSecondsAgo(player);
                 if (oldPos != null) {
                     player.teleportTo(oldPos.x, oldPos.y, oldPos.z);
                     player.displayClientMessage(
@@ -165,9 +165,10 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
                 }
             }
 
-            // Ender teleport: teleport in look direction
+            // Ender teleport: teleport in look direction (range from NBT, default 256)
             if (tag.getBoolean("enderTeleport")) {
-                performEnderTeleport(player);
+                int range = tag.contains("enderTeleportRange") ? tag.getInt("enderTeleportRange") : 256;
+                performEnderTeleport(player, range);
             }
 
             // Dragon charges go to the THROWER, not the hit player
@@ -188,14 +189,19 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
     }
 
     // ── Ender teleport helper ────────────────────────────────────────────────
-    // Mirrors EnderPearlAppleItem — teleports the player up to 256 blocks
+    // Mirrors EnderPearlAppleItem — teleports the player up to {@code range} blocks
     // in their current look direction to the nearest safe standing spot.
 
+    /** Convenience overload with default range of 256 blocks. */
     public static void performEnderTeleport(ServerPlayer player) {
+        performEnderTeleport(player, 256);
+    }
+
+    public static void performEnderTeleport(ServerPlayer player, int range) {
         Level level = player.level();
         Vec3 start = player.getEyePosition();
         Vec3 look  = player.getLookAngle();
-        Vec3 end   = start.add(look.scale(256));
+        Vec3 end   = start.add(look.scale(range));
 
         BlockHitResult hit = level.clip(new ClipContext(
             start, end,
@@ -243,9 +249,11 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
         boolean isTntExplosion = tag != null && tag.getBoolean("isTntExplosion");
 
         if (isTntExplosion) {
-            // Real TNT explosion — power 4.0, breaks blocks, damages entities.
+            // Real TNT explosion — power from NBT (4.8 standard, 8.0 with Longevity).
             // Effects from the other ingredient were already applied in applyToTarget().
-            level().explode(this, getX(), getY(), getZ(), 4.0f, Level.ExplosionInteraction.TNT);
+            float power = (tag != null && tag.contains("tntExplosionPower"))
+                ? tag.getFloat("tntExplosionPower") : 4.8f;
+            level().explode(this, getX(), getY(), getZ(), power, Level.ExplosionInteraction.TNT);
         } else {
             // Normal shake bomb splash VFX
             sl.sendParticles(ParticleTypes.SPLASH,

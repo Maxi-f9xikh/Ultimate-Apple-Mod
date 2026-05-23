@@ -7,6 +7,7 @@
     "PlayerRendererMixin"
   ],
   "mixins": [
+    "FurnaceFuelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

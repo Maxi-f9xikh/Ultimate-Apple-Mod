@@ -20,15 +20,15 @@ public class CoalAppleItem extends Item {
 
     /**
      * Burn time in ticks when used directly as furnace fuel.
-     * 20 000 t = 100 items smelted (same as vanilla lava bucket).
+     * 6 400 t = 32 items smelted (same as a block of coal).
      */
-    public static final int BURN_TIME = 20_000;
+    public static final int BURN_TIME = 6_400;
 
     /**
      * Burn time of a coal-infused shake in ticks.
-     * The mixing bonus grants +20 %, so 24 000 t = 120 items.
+     * The mixing bonus grants +20 %, so 7 680 t = 38.4 items.
      */
-    public static final int SHAKE_BURN_TIME = 24_000;
+    public static final int SHAKE_BURN_TIME = 7_680;
 
     public CoalAppleItem(Properties properties) {
         super(properties);

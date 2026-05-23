@@ -18,9 +18,10 @@ public class FabricMobDropHandler {
                     spawnAt(entity, new ItemStack(ModRegistries.NETHER_STAR_APPLE.get()));
                 }
             } else if (entity instanceof Evoker) {
-                ItemStack reward = entity.getRandom().nextDouble() < 0.5
-                    ? new ItemStack(Items.TOTEM_OF_UNDYING)
-                    : new ItemStack(ModRegistries.TOTEM_APPLE.get());
+                // 30 % chance Totem Apple, 70 % chance vanilla Totem of Undying
+                ItemStack reward = entity.getRandom().nextDouble() < 0.3
+                    ? new ItemStack(ModRegistries.TOTEM_APPLE.get())
+                    : new ItemStack(Items.TOTEM_OF_UNDYING);
                 spawnAt(entity, reward);
             }
         });

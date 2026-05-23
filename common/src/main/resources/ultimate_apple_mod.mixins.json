@@ -6,7 +6,8 @@
   "client": [
   ],
   "mixins": [
-    "LivingEntitySizeMixin"
+    "LivingEntitySizeMixin",
+    "PlayerEyeHeightMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -51,13 +51,13 @@ public class MobDropEventHandler {
             }
         }
 
-        // ── Evoker: 50 % Totem of Undying, 50 % Totem Apple ──────────────────
-        // Remove the vanilla guaranteed Totem of Undying, then flip a coin.
+        // ── Evoker: 70 % Totem of Undying, 30 % Totem Apple ──────────────────
+        // Remove the vanilla guaranteed Totem of Undying, then roll: 30 % Totem Apple.
         else if (entity instanceof Evoker) {
             event.getDrops().removeIf(drop -> drop.getItem().getItem() == Items.TOTEM_OF_UNDYING);
-            ItemStack reward = RNG.nextDouble() < 0.5
-                ? new ItemStack(Items.TOTEM_OF_UNDYING)
-                : new ItemStack(ultimate_apple_modForge.TOTEM_APPLE.get());
+            ItemStack reward = RNG.nextDouble() < 0.3
+                ? new ItemStack(ultimate_apple_modForge.TOTEM_APPLE.get())
+                : new ItemStack(Items.TOTEM_OF_UNDYING);
             event.getDrops().add(new ItemEntity(
                 entity.level(),
                 entity.getX(), entity.getY(), entity.getZ(),

@@ -1,6 +1,7 @@
 package de.maxi.ultimate_apple_mod.fabric.event;
 
 import de.maxi.ultimate_apple_mod.ModRegistries;
+import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -79,6 +80,15 @@ public class FabricPlayerEffectHandler {
             serverLevel.sendParticles(ParticleTypes.HEART,
                 recipient.getX(), recipient.getY() + 2.1, recipient.getZ(),
                 4, 0.4, 0.15, 0.4, 0.0);
+        });
+
+        // ── Rewind position tracking: record player positions every second ─────
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if (server.overworld().getGameTime() % 20 == 0) {
+                for (ServerLevel level : server.getAllLevels()) {
+                    RewindPositionCache.recordAll(level.players());
+                }
+            }
         });
 
         // ── CurseOfRotten: refreshDimensions + pose fix (server-side) ─────────

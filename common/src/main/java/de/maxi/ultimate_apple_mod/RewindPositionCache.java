@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Platform-neutral position history store.
  * Each platform ticks this via its own server-tick event.
- * ShakeBombEntity reads it via getPositionFiveSecondsAgo().
+ * ShakeBombEntity reads it via getPositionTenSecondsAgo().
  */
 public class RewindPositionCache {
 
@@ -23,12 +23,12 @@ public class RewindPositionCache {
         for (Player player : players) {
             ArrayDeque<Vec3> q = history.computeIfAbsent(player.getUUID(), k -> new ArrayDeque<>());
             q.addLast(player.position());
-            while (q.size() > 5) q.removeFirst();
+            while (q.size() > 10) q.removeFirst();
         }
     }
 
-    /** Returns the position ~5 seconds ago, or null if no history yet. */
-    public static Vec3 getPositionFiveSecondsAgo(Player player) {
+    /** Returns the position ~10 seconds ago, or null if no history yet. */
+    public static Vec3 getPositionTenSecondsAgo(Player player) {
         ArrayDeque<Vec3> q = history.get(player.getUUID());
         if (q == null || q.isEmpty()) return null;
         return q.peekFirst();

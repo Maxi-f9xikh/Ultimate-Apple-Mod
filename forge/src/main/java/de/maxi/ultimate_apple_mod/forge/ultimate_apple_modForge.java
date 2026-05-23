@@ -391,7 +391,7 @@ public final class ultimate_apple_modForge {
 
     public static final RegistryObject<Item> TNT_APPLE =
         ITEMS.register("tnt_apple", () ->
-            new TntAppleItem(new Item.Properties().stacksTo(16)));
+            new TntAppleItem(new Item.Properties().stacksTo(64)));
 
     public static final RegistryObject<Item> NUCLEAR_APPLE =
         ITEMS.register("nuclear_apple", () ->
