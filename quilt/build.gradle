@@ -61,3 +61,16 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
 }
+
+// Quilt 0.26+ uses its own launcher class, not the net.fabricmc.* shim.
+// Override the DLI main class so IntelliJ launches via Quilt's KnotClient.
+loom {
+    runs {
+        client {
+            vmArgs "-Dfabric.dli.main=org.quiltmc.loader.impl.launch.knot.KnotClient"
+        }
+        server {
+            vmArgs "-Dfabric.dli.main=org.quiltmc.loader.impl.launch.knot.KnotServer"
+        }
+    }
+}
