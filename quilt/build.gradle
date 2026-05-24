@@ -8,6 +8,10 @@ plugins {
 // but with different signing certificates.
 configurations.all {
     exclude group: 'net.fabricmc', module: 'fabric-loader'
+    // quilted-fabric-api provides all Fabric API modules under the same mod IDs.
+    // Having the original fabric-api alongside it causes Quilt Loader to abort
+    // with "Duplicate mandatory mod ids" for every Fabric API module.
+    exclude group: 'net.fabricmc.fabric-api'
 }
 
 architectury {
