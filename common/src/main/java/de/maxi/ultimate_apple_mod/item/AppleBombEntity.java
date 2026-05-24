@@ -3,6 +3,7 @@ package de.maxi.ultimate_apple_mod.item;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,6 +34,11 @@ public class AppleBombEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
+        // Grant advancement when the bomb hits any living entity (mob or player)
+        if (!level().isClientSide() && result.getEntity() instanceof LivingEntity
+                && getOwner() instanceof ServerPlayer thrower) {
+            TntAppleItem.grantAdvancement(thrower, "apple_bomb");
+        }
         applyExplosion();
     }
 

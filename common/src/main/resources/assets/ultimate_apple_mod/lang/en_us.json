@@ -252,5 +252,11 @@
   "effect.ultimate_apple_mod.totem_protection.description": "When a fatal blow is received, this effect absorbs it and grants a brief window of invincibility, keeping you alive with a small amount of health.",
   "effect.ultimate_apple_mod.moon_gravity.description": "Reduces gravitational pull to about one-sixth of normal, letting you jump roughly three times higher and float slowly back down.",
   "effect.ultimate_apple_mod.time_freeze.description": "Freezes all nearby mobs in place. Frozen mobs cannot move, attack, or deal damage until the effect expires.",
-  "effect.ultimate_apple_mod.curse_of_rotten.description": "A curse from rotten apples. Shrinks your hitbox, raises movement speed unnaturally, and makes you uncontrollable for its duration."
+  "effect.ultimate_apple_mod.curse_of_rotten.description": "A curse from rotten apples. Shrinks your hitbox, raises movement speed unnaturally, and makes you uncontrollable for its duration.",
+
+  "advancements.ultimate_apple_mod.apple_bomb.title": "Buff Bomber",
+  "advancements.ultimate_apple_mod.apple_bomb.description": "Hit a mob or yourself with an Apple Bomb.",
+
+  "advancements.ultimate_apple_mod.nuclear_apple.title": "Chunk Destroyer",
+  "advancements.ultimate_apple_mod.nuclear_apple.description": "Throw a Nuclear Apple and wipe out an entire chunk."
 }

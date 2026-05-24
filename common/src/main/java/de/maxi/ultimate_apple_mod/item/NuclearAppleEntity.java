@@ -2,6 +2,7 @@ package de.maxi.ultimate_apple_mod.item;
 
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -95,6 +96,11 @@ public class NuclearAppleEntity extends ThrowableItemProjectile {
         // Loud explosion sound at impact for feedback (no block damage — we already cleared)
         world.playSound(null, getX(), getY(), getZ(),
                 SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 5.0f, 0.6f);
+
+        // Grant advancement to the thrower
+        if (getOwner() instanceof ServerPlayer thrower) {
+            TntAppleItem.grantAdvancement(thrower, "nuclear_apple");
+        }
 
         discard();
     }

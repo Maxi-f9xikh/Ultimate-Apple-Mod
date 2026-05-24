@@ -215,5 +215,11 @@
   "effect.ultimate_apple_mod.totem_protection.description": "Wenn ein toedlicher Schlag erhalten wird, absorbiert dieser Effekt ihn und gewaehrt ein kurzes Fenster der Unverwundbarkeit.",
   "effect.ultimate_apple_mod.moon_gravity.description": "Reduziert die Schwerkraft auf etwa ein Sechstel des Normalen, sodass du etwa dreimal so hoch springen und langsam sinken kannst.",
   "effect.ultimate_apple_mod.time_freeze.description": "Friert alle nahen Mobs ein. Eingefrorene Mobs koennen sich nicht bewegen, angreifen oder Schaden anrichten, bis der Effekt ablaeuft.",
-  "effect.ultimate_apple_mod.curse_of_rotten.description": "Ein Fluch fauler Aepfel. Verkleinert deine Hitbox, erhoeht die Bewegungsgeschwindigkeit unnatuerlich und macht dich fuer seine Dauer unkontrollierbar."
+  "effect.ultimate_apple_mod.curse_of_rotten.description": "Ein Fluch fauler Aepfel. Verkleinert deine Hitbox, erhoeht die Bewegungsgeschwindigkeit unnatuerlich und macht dich fuer seine Dauer unkontrollierbar.",
+
+  "advancements.ultimate_apple_mod.apple_bomb.title": "Buff-Bombe",
+  "advancements.ultimate_apple_mod.apple_bomb.description": "Triff einen Mob oder dich selbst mit einer Apfelbombe.",
+
+  "advancements.ultimate_apple_mod.nuclear_apple.title": "Chunk-Vernichter",
+  "advancements.ultimate_apple_mod.nuclear_apple.description": "Wirf einen Nuklearapfel und vernichte einen ganzen Chunk."
 }
