@@ -103,6 +103,13 @@ $RECYCLE.BIN/
 .gradle
 build/
 
+# Claude Code worktrees and local settings
+.claude/worktrees/
+.claude/**/settings.local.json
+
+# Texture generation helper scripts
+gen_textures*.py
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
