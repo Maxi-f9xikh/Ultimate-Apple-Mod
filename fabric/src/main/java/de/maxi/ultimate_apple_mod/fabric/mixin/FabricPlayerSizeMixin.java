@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Lowers the first-person camera (eyeHeight) to match the shrunken player
  * model when Curse of Rotten is active.
  *
- * <p>Without this mixin, {@code Player.getEyeHeight(Pose, EntityDimensions)}
+ * <p>Without this mixin, {@code Player.getStandingEyeHeight(Pose, EntityDimensions)}
  * always returns the hardcoded standing value 1.62 f regardless of the entity
  * dimensions that {@code LivingEntitySizeMixin} reports (0.25 × 0.6).
  * {@code LivingEntity.refreshDimensions()} stores the result of this method
@@ -34,7 +34,7 @@ public class FabricPlayerSizeMixin {
     private static final float ROTTEN_SCALE = 0.35f;
 
     @Inject(
-        method = "getEyeHeight(Lnet/minecraft/world/entity/Pose;Lnet/minecraft/world/entity/EntityDimensions;)F",
+        method = "getStandingEyeHeight(Lnet/minecraft/world/entity/Pose;Lnet/minecraft/world/entity/EntityDimensions;)F",
         at = @At("RETURN"),
         cancellable = true
     )

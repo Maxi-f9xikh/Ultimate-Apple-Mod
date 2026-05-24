@@ -301,7 +301,12 @@ public class ShakeItem extends Item {
             components.add(Component.literal("§5⚡ Ender-teleports you on drink"));
         }
         if (tag.getBoolean("isCoalFuel")) {
-            components.add(Component.literal("§6🔥 Usable as furnace fuel (120 items)").withStyle(ChatFormatting.GOLD));
+            int burnTime = tag.contains("coalFuelBurnTime")
+                ? tag.getInt("coalFuelBurnTime")
+                : CoalAppleItem.SHAKE_BURN_TIME;
+            int items = burnTime / 200; // furnace: 200 ticks per item
+            components.add(Component.literal("§6🔥 Usable as furnace fuel (" + items + " items)")
+                .withStyle(ChatFormatting.GOLD));
         }
         if (tag.getBoolean("isTntExplosion")) {
             components.add(Component.literal("§c💥 TNT explosion on impact!").withStyle(ChatFormatting.RED));

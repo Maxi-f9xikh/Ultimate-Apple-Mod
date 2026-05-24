@@ -16,25 +16,48 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * is not available.
  *
  * <p>Fabric's {@code FuelRegistry} only supports item-level registration (no
- * per-stack NBT check), so we intercept {@code getBurnDuration} directly and
- * return the correct per-stack burn time for shake items:
+ * per-stack NBT check), so we intercept both {@code isFuel} and
+ * {@code getBurnDuration} directly:
  * <ul>
- *   <li>{@code isCoalFuel=true} → reads {@code coalFuelBurnTime} from NBT
- *       (doubled when mixed with Longevity Apple) or falls back to the base
- *       shake burn time.</li>
- *   <li>All other shakes → 0 (not usable as fuel).</li>
+ *   <li>{@code isFuel} — lets the coal-shake pass the slot-acceptance check.
+ *       Fabric's {@code FuelRegistryImpl} overrides {@code isFuel} and checks
+ *       its registry <em>without</em> delegating to {@code getBurnDuration},
+ *       so hooking only {@code getBurnDuration} is insufficient.</li>
+ *   <li>{@code getBurnDuration} — returns the correct per-stack burn time once
+ *       the item is in the fuel slot.</li>
  * </ul>
  */
 @Mixin(AbstractFurnaceBlockEntity.class)
 public class FurnaceFuelMixin {
 
+    /**
+     * Let coal-infused shakes pass the fuel-slot acceptance check.
+     * Fires after Fabric's FuelRegistry has already had its say; if the item
+     * is not already accepted we check our NBT tag.
+     */
+    @Inject(method = "isFuel", at = @At("RETURN"), cancellable = true)
+    private static void uam_isCoalShakeFuel(ItemStack stack,
+                                             CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) return; // already accepted — leave it alone
+        if (!(stack.getItem() instanceof ShakeItem)) return;
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.getBoolean("isCoalFuel")) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    /**
+     * Return the correct per-stack burn time for coal-infused shakes.
+     * Reads {@code coalFuelBurnTime} from NBT (written by the Mixer;
+     * doubled when mixed with Longevity Apple).
+     */
     @Inject(method = "getBurnDuration", at = @At("RETURN"), cancellable = true)
-    private static void uam_coalShakeFuel(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    private static void uam_coalShakeFuel(ItemStack stack,
+                                          CallbackInfoReturnable<Integer> cir) {
         // Only intercept shake items — everything else uses its own registration path
         if (!(stack.getItem() instanceof ShakeItem)) return;
         CompoundTag tag = stack.getTag();
         if (tag != null && tag.getBoolean("isCoalFuel")) {
-            // Read the per-stack burn time written by the Mixer (supports Coal+Longevity doubling)
             int burnTime = tag.contains("coalFuelBurnTime")
                 ? tag.getInt("coalFuelBurnTime")
                 : CoalAppleItem.SHAKE_BURN_TIME;

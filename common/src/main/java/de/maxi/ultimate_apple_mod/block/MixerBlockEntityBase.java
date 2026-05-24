@@ -127,6 +127,7 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
                     else                     c2 = withDoubledDuration(c2);
                 }
 
+                double rawMultiplier = Math.max(c1.durationMultiplier(), c2.durationMultiplier());
                 CompoundTag shakeTag = buildShakeNbt(c1, c2);
                 if (coalMix && !coalTnt) {
                     shakeTag.putBoolean("isCoalFuel", true);

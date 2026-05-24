@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import org.lwjgl.glfw.GLFW;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,9 @@ import java.util.List;
 
 public class FabricClientHandler {
 
-    private static boolean wasRottenActive = false;
+    private static boolean wasRottenActive    = false;
+    /** Tracks the previous tick's key-down state for left-click edge detection. */
+    private static boolean prevFireBreathDown = false;
 
     public static void register() {
 
@@ -86,19 +89,44 @@ public class FabricClientHandler {
             if (client.player == null) return;
             Player player = client.player;
 
-            // Dragon breath keybind — consumeClick() collects all clicks since last tick,
-            // matching how Forge's KeyInputHandler drains the key with a while loop.
-            // isDown() + leading-edge missed quick clicks where the button was released
-            // within the same tick before END_CLIENT_TICK fired.
-            while (FabricModClient.FIRE_DRAGON_BREATH_KEY.consumeClick()) {
+            // Dragon breath keybind — GLFW direct polling, bypassing KeyMapping.MAP.
+            // Both consumeClick() and isDown() rely on KeyMapping.set()/click(), which
+            // route through MAP.get(key) and update only the ONE keybind that wins the
+            // MAP slot for that physical key.  Left-click is also claimed by vanilla
+            // key.attack, so one of the two bindings is always starved.
+            // GLFW.glfwGetMouseButton / InputConstants.isKeyDown read the raw hardware
+            // state and are immune to this conflict.
+            // For mouse-button bindings: read GLFW state directly to bypass
+            // KeyMapping.MAP (both consumeClick and isDown only update the single
+            // MAP-winner for a given physical button; left-click conflicts with vanilla
+            // key.attack). matchesMouse(btn) checks the CURRENT user binding, so
+            // rebinding to a different mouse button is also handled correctly.
+            // Keyboard bindings have no MAP conflict → isDown() works fine there.
+            long window = Minecraft.getInstance().getWindow().getWindow();
+            boolean isFireDown = false;
+            boolean isBoundToMouse = false;
+            for (int btn = 0; btn <= 7; btn++) {
+                if (FabricModClient.FIRE_DRAGON_BREATH_KEY.matchesMouse(btn)) {
+                    isFireDown = GLFW.glfwGetMouseButton(window, btn) == GLFW.GLFW_PRESS;
+                    isBoundToMouse = true;
+                    break;
+                }
+            }
+            if (!isBoundToMouse) {
+                isFireDown = FabricModClient.FIRE_DRAGON_BREATH_KEY.isDown();
+            }
+            if (isFireDown && !prevFireBreathDown) {
+                // Rising edge: key was just pressed this tick
                 boolean aimingAtEntity = client.hitResult instanceof net.minecraft.world.phys.EntityHitResult;
                 var mainHand = player.getMainHandItem();
                 boolean holdingMelee = mainHand.getItem() instanceof net.minecraft.world.item.SwordItem
                     || mainHand.getItem() instanceof net.minecraft.world.item.AxeItem;
-                if (aimingAtEntity && holdingMelee) continue; // let vanilla handle melee attack
-                // Fabric 1.20.1 channel-based packet send (no CustomPacketPayload)
-                ClientPlayNetworking.send(FireDragonBreathPayload.CHANNEL, PacketByteBufs.empty());
+                if (!(aimingAtEntity && holdingMelee)) {
+                    // Fabric 1.20.1 channel-based packet send (no CustomPacketPayload)
+                    ClientPlayNetworking.send(FireDragonBreathPayload.CHANNEL, PacketByteBufs.empty());
+                }
             }
+            prevFireBreathDown = isFireDown;
 
             // CurseOfRotten client-side dimension refresh + pose fix
             boolean isRottenActive = false;
