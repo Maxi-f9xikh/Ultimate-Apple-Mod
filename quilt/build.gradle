@@ -1,0 +1,55 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()  // Quilt runs Fabric API through quilted-fabric-api; use fabric() target
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    modImplementation "org.quiltmc:quilt-loader:$rootProject.quilt_loader_version"
+    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:$rootProject.quilted_fabric_api_version"
+    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+
+    // Common module (source of truth for all game logic)
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+
+    // Fabric module: needed at compile time so QuiltModInit can call FabricModInit,
+    // and included in the shadow jar so the delegation actually runs at runtime.
+    modCompileOnly(project(path: ':fabric', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':fabric', configuration: 'namedElements')
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('quilt.mod.json') {
+        expand version: project.version
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+}
