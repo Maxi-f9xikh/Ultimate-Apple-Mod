@@ -2,6 +2,14 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
+// Quilt Loader re-bundles all net.fabricmc.* classes as compatibility shims.
+// Having fabric-loader alongside quilt-loader causes SecurityException (checkCerts)
+// because both JARs contain classes in net.fabricmc.loader.impl.launch.knot.*
+// but with different signing certificates.
+configurations.all {
+    exclude group: 'net.fabricmc', module: 'fabric-loader'
+}
+
 architectury {
     platformSetupLoomIde()
     fabric()  // Quilt runs Fabric API through quilted-fabric-api; use fabric() target
@@ -14,7 +22,7 @@ configurations {
     }
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentFabric.extendsFrom common
+    developmentQuilt.extendsFrom common
 
     shadowBundle {
         canBeResolved = true
