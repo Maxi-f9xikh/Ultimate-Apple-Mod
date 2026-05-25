@@ -48,13 +48,14 @@ dependencies {
     modCompileOnly(project(path: ':fabric', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric', configuration: 'namedElements')
 
-    // Dev-only: add fabric compiled classes to the runtime classpath so that
-    // fabric-specific mixins listed in ultimate_apple_mod.fabric.mixins.json
-    // (FabricPlayerSizeMixin, FurnaceFuelMixin, PlayerRendererMixin) are present.
-    // In the production shadow JAR these classes arrive via shadowBundle above.
-    // We use classesDirs only - NOT the fabric resources - to prevent Quilt Loader
-    // from seeing fabric.mod.json and loading the fabric module as a duplicate mod.
-    runtimeOnly(files(project(':fabric').sourceSets.main.output.classesDirs))
+    // Dev-only: fabric compiled classes (no fabric.mod.json) on Knot's classpath.
+    // runtimeOnly → runtimeClasspath → IntelliJ module's JVM classpath.
+    // Knot scans JAR files on the JVM classpath and loads them through its own
+    // ClassLoader; unlike raw class directories which fall back to the parent CL.
+    // Using a proper project dependency (not files()) guarantees IntelliJ sees it.
+    // No fabric.mod.json in the JAR → Quilt Loader won't detect a duplicate mod.
+    // Fabric-Mapping-Namespace: named (in the JAR manifest) → Knot skips remapping.
+    runtimeOnly(project(path: ':fabric', configuration: 'classesOnly')) { transitive false }
 }
 
 processResources {
