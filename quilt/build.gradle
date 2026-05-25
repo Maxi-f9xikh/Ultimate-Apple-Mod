@@ -48,14 +48,12 @@ dependencies {
     modCompileOnly(project(path: ':fabric', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric', configuration: 'namedElements')
 
-    // Dev-only: fabric compiled classes (no fabric.mod.json) on Knot's classpath.
-    // runtimeOnly → runtimeClasspath → IntelliJ module's JVM classpath.
-    // Knot scans JAR files on the JVM classpath and loads them through its own
-    // ClassLoader; unlike raw class directories which fall back to the parent CL.
-    // Using a proper project dependency (not files()) guarantees IntelliJ sees it.
-    // No fabric.mod.json in the JAR → Quilt Loader won't detect a duplicate mod.
-    // Fabric-Mapping-Namespace: named (in the JAR manifest) → Knot skips remapping.
-    runtimeOnly(project(path: ':fabric', configuration: 'classesOnly')) { transitive false }
+    // NOTE: fabric-classes-only JAR must be loaded by Knot's ClassLoader, not the
+    // parent/system ClassLoader. If it lands on the JVM classpath (via runtimeOnly),
+    // the parent CL loads it in a context where Bootstrap.bootstrapped is never set
+    // true, so the first BuiltInRegistries access throws ExceptionInInitializerError.
+    // Solution: append the JAR to remapClasspath.txt (see appendFabricJarToRemapClasspath
+    // task below) so Knot loads it through its own CL where Bootstrap ran correctly.
 }
 
 processResources {
@@ -96,6 +94,55 @@ loom {
         }
         server {
             vmArgs "-Dfabric.dli.main=org.quiltmc.loader.impl.launch.knot.KnotServer"
+        }
+    }
+}
+
+// Append the fabric classes-only JAR to remapClasspath.txt so that Knot's own
+// ClassLoader (not the parent/system CL) loads the fabric implementation classes.
+//
+// Why this is necessary:
+//   - runtimeOnly → JVM classpath → parent CL.  Parent CL never runs Bootstrap,
+//     so Bootstrap.bootstrapped stays false.  First access to BuiltInRegistries
+//     in that CL context throws ExceptionInInitializerError: Not bootstrapped.
+//   - remapClasspath.txt → Knot CL.  Bootstrap ran there; registries work fine.
+//
+// Why we can't use developmentQuilt(project(':fabric', 'classesOnly')):
+//   Loom's configureLaunch iterates resolvedConfiguration.resolvedArtifacts.
+//   Custom configurations and files() deps are silently ignored — the JAR never
+//   appears in architectury.classpath or remapClasspath.txt automatically.
+//
+// The fabric-classes-only JAR carries Fabric-Mapping-Namespace: named in its
+// MANIFEST.MF, so Loom/Knot skips intermediary→named remapping for it.
+// It contains no fabric.mod.json, so Quilt Loader won't detect a duplicate mod.
+def appendFabricJarToRemapClasspath = tasks.register('appendFabricJarToRemapClasspath') {
+    dependsOn ':fabric:fabricClassesOnlyJar'
+    doLast {
+        def remapCpFile = file("${projectDir}/.gradle/loom-cache/remapClasspath.txt")
+        if (!remapCpFile.exists()) {
+            logger.warn('appendFabricJarToRemapClasspath: remapClasspath.txt not found — skipping')
+            return
+        }
+        def fabricJarPath = project(':fabric').tasks.named('fabricClassesOnlyJar').get()
+                .archiveFile.get().asFile.absolutePath
+        def content = remapCpFile.text
+        if (!content.contains(fabricJarPath)) {
+            remapCpFile.text = content.endsWith(';') ? content + fabricJarPath
+                                                     : content + ';' + fabricJarPath
+            logger.lifecycle("appendFabricJarToRemapClasspath: added ${fabricJarPath}")
+        } else {
+            logger.lifecycle("appendFabricJarToRemapClasspath: already present, skipped")
+        }
+    }
+}
+
+// Wire the append after every task that (re-)writes remapClasspath.txt.
+// configureLaunch / configureClientLaunch are the Loom tasks that produce the file.
+afterEvaluate {
+    ['configureLaunch', 'configureClientLaunch'].each { taskName ->
+        def t = tasks.findByName(taskName)
+        if (t != null) {
+            t.finalizedBy appendFabricJarToRemapClasspath
         }
     }
 }
