@@ -55,6 +55,18 @@ processResources {
     filesMatching('quilt.mod.json') {
         expand version: project.version
     }
+
+    // Quilt Loader resolves mixin config files relative to the mod root directory
+    // (quilt/build/resources/main/) rather than searching the full classpath like
+    // Fabric Loader does. In the dev environment, common/fabric resources sit in
+    // separate output directories, so Quilt Loader cannot find them unless we
+    // copy the mixin JSONs into the quilt build output explicitly.
+    from(project(':common').sourceSets.main.resources) {
+        include '*.mixins.json'
+    }
+    from(project(':fabric').sourceSets.main.resources) {
+        include '*.mixins.json'
+    }
 }
 
 shadowJar {
