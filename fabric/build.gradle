@@ -22,34 +22,6 @@ configurations {
         canBeResolved = true
         canBeConsumed = false
     }
-
-    // Outbound: compiled classes only (no fabric.mod.json) for the Quilt dev classpath.
-    // Consumed by :quilt as runtimeOnly so it lands on runtimeClasspath → IntelliJ
-    // module classpath → Knot's JVM classpath at dev-run time.
-    classesOnly {
-        canBeResolved = false
-        canBeConsumed = true
-    }
-}
-
-// Produce the classes-only JAR that :quilt's Quilt dev run needs.
-// No resources → no fabric.mod.json → Quilt Loader won't see a duplicate mod.
-// Fabric-Mapping-Namespace: named → Knot/Loom skips intermediary remapping.
-def fabricClassesOnlyJar = tasks.register('fabricClassesOnlyJar', Jar) {
-    group = 'build'
-    description = 'Fabric compiled classes (no resources) for the Quilt dev classpath'
-    archiveBaseName = 'fabric-classes-only'
-    archiveVersion = ''
-    archiveClassifier = 'dev-classes'
-    manifest {
-        attributes('Fabric-Mapping-Namespace': 'named')
-    }
-    from(sourceSets.main.output.classesDirs)
-    dependsOn compileJava
-}
-
-artifacts {
-    classesOnly(fabricClassesOnlyJar)
 }
 
 dependencies {

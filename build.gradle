@@ -29,11 +29,6 @@ subprojects {
             name = "NeoForged"
             url = "https://maven.neoforged.net/releases/"
         }
-        // Quilt
-        maven {
-            name = "QuiltMC"
-            url = "https://maven.quiltmc.org/repository/release/"
-        }
         // JEI (Just Enough Items)
         maven {
             name = "BlameJared"
