@@ -47,6 +47,14 @@ dependencies {
     // and included in the shadow jar so the delegation actually runs at runtime.
     modCompileOnly(project(path: ':fabric', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':fabric', configuration: 'namedElements')
+
+    // Dev-only: add fabric compiled classes to the runtime classpath so that
+    // fabric-specific mixins listed in ultimate_apple_mod.fabric.mixins.json
+    // (FabricPlayerSizeMixin, FurnaceFuelMixin, PlayerRendererMixin) are present.
+    // In the production shadow JAR these classes arrive via shadowBundle above.
+    // We use classesDirs only - NOT the fabric resources - to prevent Quilt Loader
+    // from seeing fabric.mod.json and loading the fabric module as a duplicate mod.
+    runtimeOnly(files(project(':fabric').sourceSets.main.output.classesDirs))
 }
 
 processResources {
