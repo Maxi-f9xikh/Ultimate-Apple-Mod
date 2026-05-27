@@ -38,10 +38,10 @@ dependencies {
     implementation project(":common")
 
     // JEI (Just Enough Items) — compile-only: mod works without it, integrates when present
-    compileOnly "mezz.jei:jei-1.20.1-common-api:15.3.0.4"
-    compileOnly "mezz.jei:jei-1.20.1-forge-api:15.3.0.4"
+    compileOnly "mezz.jei:jei-1.20.4-common-api:17.3.0.52"
+    compileOnly "mezz.jei:jei-1.20.4-forge-api:17.3.0.52"
     // Uncomment to test JEI features in the dev environment:
-    // runtimeOnly "mezz.jei:jei-1.20.1-forge:15.3.0.4"
+    // runtimeOnly "mezz.jei:jei-1.20.4-forge:17.3.0.52"
 }
 
 processResources {
