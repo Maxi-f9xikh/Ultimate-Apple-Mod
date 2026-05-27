@@ -141,11 +141,11 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> DIAMOND_APPLE = ITEMS.register("diamond_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 60, 2), 1.0f) // Health Boost III, 60s
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,      20 * 20, 1), 1.0f) // Regen II, 20s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 30, 1), 1.0f) // Resistance II, 30s
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION,        20 * 60, 0), 1.0f) // Absorption I, 60s
+                .nutrition(8).saturationModifier(0.9f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 60, 2), 1.0f) // Health Boost III, 60s
+                .effect(new MobEffectInstance(MobEffects.REGENERATION,      20 * 20, 1), 1.0f) // Regen II, 20s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 30, 1), 1.0f) // Resistance II, 30s
+                .effect(new MobEffectInstance(MobEffects.ABSORPTION,        20 * 60, 0), 1.0f) // Absorption I, 60s
                 .build())
             .stacksTo(64)));
 
@@ -155,20 +155,20 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> EMERALD_APPLE = ITEMS.register("emerald_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.LUCK, 20 * 60, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 30, 0), 1.0f)
+                .nutrition(8).saturationModifier(0.9f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.LUCK, 20 * 60, 1), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 30, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> REDSTONE_APPLE = ITEMS.register("redstone_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(8).saturationMod(0.9f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 20, 2), 1.0f) // Speed III, 20s
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,      20 * 20, 2), 1.0f) // Haste III, 20s
-                .effect(() -> new MobEffectInstance(MobEffects.GLOWING,        20 * 20, 0), 1.0f) // Glowing, 20s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,   20 * 15, 0), 1.0f) // Strength I, 15s
+                .nutrition(8).saturationModifier(0.9f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 20, 2), 1.0f) // Speed III, 20s
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED,      20 * 20, 2), 1.0f) // Haste III, 20s
+                .effect(new MobEffectInstance(MobEffects.GLOWING,        20 * 20, 0), 1.0f) // Glowing, 20s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,   20 * 15, 0), 1.0f) // Strength I, 15s
                 .build())
             .stacksTo(64)));
 
@@ -176,82 +176,82 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .fireResistant()   // does not burn in lava, like netherite tools
             .food(new FoodProperties.Builder()
-                .nutrition(10).saturationMod(1.0f).alwaysEat()
+                .nutrition(10).saturationModifier(1.0f).alwaysEdible()
                 // Near-godlike defensive stats befitting the cost of 1 Netherite Ingot
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 120, 2), 1.0f) // Resistance III, 2 min
-                .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE,   20 * 120, 0), 1.0f) // Fire Resistance, 2 min
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 120, 3), 1.0f) // Health Boost IV, 2 min
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,      20 *  30, 2), 1.0f) // Regen III, 30s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,      20 *  30, 1), 1.0f) // Strength II, 30s
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION,        20 * 120, 2), 1.0f) // Absorption III, 2 min
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 120, 2), 1.0f) // Resistance III, 2 min
+                .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE,   20 * 120, 0), 1.0f) // Fire Resistance, 2 min
+                .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 120, 3), 1.0f) // Health Boost IV, 2 min
+                .effect(new MobEffectInstance(MobEffects.REGENERATION,      20 *  30, 2), 1.0f) // Regen III, 30s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,      20 *  30, 1), 1.0f) // Strength II, 30s
+                .effect(new MobEffectInstance(MobEffects.ABSORPTION,        20 * 120, 2), 1.0f) // Absorption III, 2 min
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> IRON_APPLE = ITEMS.register("iron_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(6).saturationMod(0.7f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 30, 0), 1.0f) // Health Boost I, 30s
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,      20 * 10, 0), 1.0f) // Regen I, 10s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 15, 0), 1.0f) // Resistance I, 15s
+                .nutrition(6).saturationModifier(0.7f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST,      20 * 30, 0), 1.0f) // Health Boost I, 30s
+                .effect(new MobEffectInstance(MobEffects.REGENERATION,      20 * 10, 0), 1.0f) // Regen I, 10s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 15, 0), 1.0f) // Resistance I, 15s
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> ROTTEN_APPLE = ITEMS.register("rotten_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(2).saturationMod(0.1f).alwaysEat()
+                .nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 // CurseOfRotten handles speed boost + hitbox shrink.
                 // Nausea is applied separately so it shows up as its own effect icon.
-                .effect(() -> new MobEffectInstance(CURSE_OF_ROTTEN.get(), 400, 0, false, true), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1.0f)
+                .effect(new MobEffectInstance(CURSE_OF_ROTTEN.get(), 400, 0, false, true), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> ROASTED_APPLE = ITEMS.register("roasted_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(2).saturationMod(0.1f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 20, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.SATURATION, 20 * 10, 0), 1.0f)
+                .nutrition(2).saturationModifier(0.1f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 20, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.SATURATION, 20 * 10, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> BAKED_APPLE = ITEMS.register("baked_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(2).saturationMod(0.1f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 0), 1.0f)
+                .nutrition(2).saturationModifier(0.1f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> BURNT_APPLE = ITEMS.register("burnt_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(1).saturationMod(0.1f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 15, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 5, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20 * 15, 0), 1.0f)
+                .nutrition(1).saturationModifier(0.1f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.HUNGER, 20 * 15, 1), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 5, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20 * 15, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> BLAZE_APPLE = ITEMS.register("blaze_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(6).saturationMod(0.5f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 5, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20 * 15, 0), 1.0f)
+                .nutrition(6).saturationModifier(0.5f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 5, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20 * 15, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     public static final RegistryObject<Item> BIRNE = ITEMS.register("pear_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(1).saturationMod(0.1f)
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 15, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.SATURATION, 20 * 5, 0), 1.0f)
+                .nutrition(1).saturationModifier(0.1f)
+                .effect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 15, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.SATURATION, 20 * 5, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
@@ -260,72 +260,72 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> COPPER_APPLE = ITEMS.register("copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(5).saturationMod(0.6f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f) // Haste II, 25s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f) // Strength I, 25s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f) // Resistance I, 25s
+                .nutrition(5).saturationModifier(0.6f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f) // Haste II, 25s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f) // Strength I, 25s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f) // Resistance I, 25s
                 .build())
             .stacksTo(64), 0, false));
 
     public static final RegistryObject<Item> EXPOSED_COPPER_APPLE = ITEMS.register("exposed_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(4).saturationMod(0.5f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,    20 * 20, 0), 1.0f) // Haste I, 20s
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f) // Strength I, 15s
+                .nutrition(4).saturationModifier(0.5f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED,    20 * 20, 0), 1.0f) // Haste I, 20s
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f) // Strength I, 15s
                 .build())
             .stacksTo(64), 1, false));
 
     public static final RegistryObject<Item> WEATHERED_COPPER_APPLE = ITEMS.register("weathered_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(3).saturationMod(0.3f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 10, 0), 1.0f) // Haste I, 10s
+                .nutrition(3).saturationModifier(0.3f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 10, 0), 1.0f) // Haste I, 10s
                 .build())
             .stacksTo(64), 2, false));
 
     public static final RegistryObject<Item> OXIDIZED_COPPER_APPLE = ITEMS.register("oxidized_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(2).saturationMod(0.1f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f) // Slowness I, 5s
-                .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS,          20 * 5, 0), 1.0f) // Weakness I, 5s
+                .nutrition(2).saturationModifier(0.1f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f) // Slowness I, 5s
+                .effect(new MobEffectInstance(MobEffects.WEAKNESS,          20 * 5, 0), 1.0f) // Weakness I, 5s
                 .build())
             .stacksTo(64), 3, false));
 
     public static final RegistryObject<Item> WAXED_COPPER_APPLE = ITEMS.register("waxed_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(5).saturationMod(0.6f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f)
+                .nutrition(5).saturationModifier(0.6f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED,         20 * 25, 1), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,       20 * 25, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,  20 * 25, 0), 1.0f)
                 .build())
             .stacksTo(64), 0, true));
 
     public static final RegistryObject<Item> WAXED_EXPOSED_COPPER_APPLE = ITEMS.register("waxed_exposed_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(4).saturationMod(0.5f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED,    20 * 20, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f)
+                .nutrition(4).saturationModifier(0.5f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED,    20 * 20, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 15, 0), 1.0f)
                 .build())
             .stacksTo(64), 1, true));
 
     public static final RegistryObject<Item> WAXED_WEATHERED_COPPER_APPLE = ITEMS.register("waxed_weathered_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(3).saturationMod(0.3f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 10, 0), 1.0f)
+                .nutrition(3).saturationModifier(0.3f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20 * 10, 0), 1.0f)
                 .build())
             .stacksTo(64), 2, true));
 
     public static final RegistryObject<Item> WAXED_OXIDIZED_COPPER_APPLE = ITEMS.register("waxed_oxidized_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(2).saturationMod(0.1f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS,          20 * 5, 0), 1.0f)
+                .nutrition(2).saturationModifier(0.1f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.WEAKNESS,          20 * 5, 0), 1.0f)
                 .build())
             .stacksTo(64), 3, true));
 
@@ -337,10 +337,10 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> MOON_APPLE = ITEMS.register("moon_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(6).saturationMod(0.6f).alwaysEat()
+                .nutrition(6).saturationModifier(0.6f).alwaysEdible()
                 // Moon Gravity alone produces a ~4–5 block symmetric arc (≈ 3× normal height).
                 // No Jump Boost — the gravity reduction IS the height bonus.
-                .effect(() -> new MobEffectInstance(MOON_GRAVITY_EFFECT.get(), 20 * 30, 0), 1.0f) // Moon Gravity, 30s
+                .effect(new MobEffectInstance(MOON_GRAVITY_EFFECT.get(), 20 * 30, 0), 1.0f) // Moon Gravity, 30s
                 .build())
             .stacksTo(64)));
 
@@ -348,7 +348,7 @@ public final class ultimate_apple_modForge {
         ITEMS.register("orchard_apple", () ->
             new OrchardCallerItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
-                    .nutrition(4).saturationMod(0.4f).alwaysEat()
+                    .nutrition(4).saturationModifier(0.4f).alwaysEdible()
                     .build())
                 .stacksTo(64)));
 
@@ -356,7 +356,7 @@ public final class ultimate_apple_modForge {
         ITEMS.register("echo_apple", () ->
             new EchoAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
-                    .nutrition(5).saturationMod(0.5f).alwaysEat()
+                    .nutrition(5).saturationModifier(0.5f).alwaysEdible()
                     .build())
                 .stacksTo(64)));
 
@@ -364,7 +364,7 @@ public final class ultimate_apple_modForge {
         ITEMS.register("rewind_apple", () ->
             new RewindAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
-                    .nutrition(4).saturationMod(0.3f).alwaysEat()
+                    .nutrition(4).saturationModifier(0.3f).alwaysEdible()
                     .build())
                 .stacksTo(64)));
 
@@ -376,14 +376,14 @@ public final class ultimate_apple_modForge {
         ITEMS.register("coal_apple", () ->
             new CoalAppleItem(new Item.Properties()
                 .food(new net.minecraft.world.food.FoodProperties.Builder()
-                    .nutrition(2).saturationMod(0.0f).alwaysEat()
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                    .nutrition(2).saturationModifier(0.0f).alwaysEdible()
+                    .effect(new net.minecraft.world.effect.MobEffectInstance(
                         MobEffects.HUNGER,    20 * 30, 2), 1.0f) // Hunger III, 30s
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                    .effect(new net.minecraft.world.effect.MobEffectInstance(
                         MobEffects.CONFUSION, 20 * 10, 0), 1.0f) // Nausea, 10s
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                    .effect(new net.minecraft.world.effect.MobEffectInstance(
                         MobEffects.MOVEMENT_SLOWDOWN, 20 * 15, 1), 1.0f) // Slowness II, 15s
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                    .effect(new net.minecraft.world.effect.MobEffectInstance(
                         MobEffects.BLINDNESS, 20 * 5, 0), 1.0f) // Blindness, 5s
                     .build())
                 .stacksTo(64)));
@@ -404,10 +404,10 @@ public final class ultimate_apple_modForge {
         ITEMS.register("wither_apple", () ->
             new WitherAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
-                    .nutrition(6).saturationMod(0.6f).alwaysEat()
-                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 30, 2), 1.0f)
-                    .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 10, 1), 1.0f)
-                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 1), 1.0f)
+                    .nutrition(6).saturationModifier(0.6f).alwaysEdible()
+                    .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20 * 30, 2), 1.0f)
+                    .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20 * 10, 1), 1.0f)
+                    .effect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 1), 1.0f)
                     .build())
                 .stacksTo(64)));
 
@@ -415,8 +415,8 @@ public final class ultimate_apple_modForge {
         ITEMS.register("honey_apple", () ->
             new HoneyAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
-                    .nutrition(4).saturationMod(0.6f).alwaysEat()
-                    .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f)
+                    .nutrition(4).saturationModifier(0.6f).alwaysEdible()
+                    .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 5, 0), 1.0f)
                     .build())
                 .stacksTo(64)));
 
@@ -424,21 +424,21 @@ public final class ultimate_apple_modForge {
         ITEMS.register("dragon_apple", () ->
             new DragonAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
-                    .nutrition(8).saturationMod(0.8f).alwaysEat()
-                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 10, 3), 1.0f)
-                    .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 1), 1.0f)
-                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 2), 1.0f)
+                    .nutrition(8).saturationModifier(0.8f).alwaysEdible()
+                    .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20 * 10, 3), 1.0f)
+                    .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 1), 1.0f)
+                    .effect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 2), 1.0f)
                     .build())
                 .stacksTo(64)));
 
     public static final RegistryObject<Item> NETHER_STAR_APPLE = ITEMS.register("nether_star_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(10).saturationMod(1.0f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 4), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 30, 3), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 2), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 3), 1.0f)
+                .nutrition(10).saturationModifier(1.0f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 4), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20 * 30, 3), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 10, 2), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 3), 1.0f)
                 .build())
             .stacksTo(1)) {
             @Override
@@ -456,9 +456,9 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> DIRT_APPLE = ITEMS.register("dirt_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(1).saturationMod(0.0f).alwaysEat()
-                .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 2), 1.0f)
-                .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 20 * 10, 0), 1.0f)
+                .nutrition(1).saturationModifier(0.0f).alwaysEdible()
+                .effect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 2), 1.0f)
+                .effect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 10, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
@@ -476,8 +476,8 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> TIME_FREEZE_APPLE = ITEMS.register("time_freeze_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(4).saturationMod(0.4f).alwaysEat()
-                .effect(() -> new MobEffectInstance(TIME_FREEZE_EFFECT.get(), 20 * 30, 0), 1.0f)
+                .nutrition(4).saturationModifier(0.4f).alwaysEdible()
+                .effect(new MobEffectInstance(TIME_FREEZE_EFFECT.get(), 20 * 30, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
@@ -486,11 +486,11 @@ public final class ultimate_apple_modForge {
     public static final RegistryObject<Item> LONGEVITY_APPLE = ITEMS.register("longevity_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
-                .nutrition(6).saturationMod(0.6f).alwaysEat()
+                .nutrition(6).saturationModifier(0.6f).alwaysEdible()
                 // When eaten on its own: generous survival buffs
-                .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION,    20 * 120, 3), 1.0f) // Absorption IV, 2 min
-                .effect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST,  20 *  60, 0), 1.0f) // Health Boost I, 1 min
-                .effect(() -> new MobEffectInstance(MobEffects.REGENERATION,  20 *  15, 0), 1.0f) // Regen I, 15 s
+                .effect(new MobEffectInstance(MobEffects.ABSORPTION,    20 * 120, 3), 1.0f) // Absorption IV, 2 min
+                .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST,  20 *  60, 0), 1.0f) // Health Boost I, 1 min
+                .effect(new MobEffectInstance(MobEffects.REGENERATION,  20 *  15, 0), 1.0f) // Regen I, 15 s
                 .build())
             .stacksTo(64)));
 
@@ -505,7 +505,7 @@ public final class ultimate_apple_modForge {
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4)
-                .saturationMod(0.5f)
+                .saturationModifier(0.5f)
                 .build())
             .stacksTo(64)));
 
