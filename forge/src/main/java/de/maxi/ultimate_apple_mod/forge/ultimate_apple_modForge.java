@@ -47,15 +47,14 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.RegistryObject;
 
 @Mod(ultimate_apple_mod.MOD_ID)
 public final class ultimate_apple_modForge {
@@ -98,7 +97,7 @@ public final class ultimate_apple_modForge {
     // ── Menu Types ────────────────────────────────────────────────────────────
 
     public static final RegistryObject<MenuType<MixerMenu>> MIXER_MENU_TYPE =
-        MENUS.register("mixer", () -> IForgeMenuType.create(MixerMenu::new));
+        MENUS.register("mixer", () -> IMenuTypeExtension.create(MixerMenu::new));
 
     // ── Block Entity Types ────────────────────────────────────────────────────
 
