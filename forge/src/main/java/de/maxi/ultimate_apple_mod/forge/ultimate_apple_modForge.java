@@ -573,8 +573,7 @@ public final class ultimate_apple_modForge {
 
     // ── Constructor ──────────────────────────────────────────────────────────
 
-    public ultimate_apple_modForge() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public ultimate_apple_modForge(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
         TABS.register(modEventBus);
         EFFECTS.register(modEventBus);
