@@ -6,9 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /**
  * Sent client → server when the player presses the "Fire Dragon Breath" keybind
@@ -26,9 +24,9 @@ public class FireDragonBreathPacket {
         return new FireDragonBreathPacket();
     }
 
-    public static void handle(FireDragonBreathPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
+    public static void handle(FireDragonBreathPacket msg, CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
+            ServerPlayer player = ctx.getSender();
             if (player == null) return;
 
             int charges = DragonChargesCache.getCharges(player.getUUID());
@@ -51,6 +49,6 @@ public class FireDragonBreathPacket {
                 Component.translatable("message.ultimate_apple_mod.dragon_breath_remaining", remaining),
                 true);
         });
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 }

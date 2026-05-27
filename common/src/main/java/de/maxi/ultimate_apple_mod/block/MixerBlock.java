@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -102,6 +103,13 @@ public abstract class MixerBlock extends BaseEntityBlock {
             player.openMenu(mixer);
         }
         return InteractionResult.CONSUME;
+    }
+
+    // ── Codec (required by BaseEntityBlock in MC 1.20.4) ──────────────────
+
+    @Override
+    public MapCodec<? extends BaseEntityBlock> codec() {
+        throw new UnsupportedOperationException("MixerBlock is not serializable via codec");
     }
 
     // ── Drop inventory on block break ──────────────────────────────────────

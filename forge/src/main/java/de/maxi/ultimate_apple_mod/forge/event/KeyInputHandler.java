@@ -12,6 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -59,7 +60,7 @@ public class KeyInputHandler {
                 || mainHand.getItem() instanceof AxeItem;
 
             if (!(aimingAtEntity && holdingMeleeWeapon)) {
-                NetworkHandler.CHANNEL.sendToServer(new FireDragonBreathPacket());
+                NetworkHandler.CHANNEL.send(new FireDragonBreathPacket(), PacketDistributor.SERVER.noArg());
             }
         }
         prevFireBreathDown = isFireDown;

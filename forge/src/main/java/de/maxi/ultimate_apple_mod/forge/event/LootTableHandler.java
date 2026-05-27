@@ -173,7 +173,7 @@ public class LootTableHandler {
                 .when(LootItemEntityPropertyCondition.hasProperties(
                     LootContext.EntityTarget.THIS,
                     EntityPredicate.Builder.entity()
-                        .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())
+                        .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))
                 ))
                 .add(LootItem.lootTableItem(ultimate_apple_modForge.ROTTEN_APPLE.get())
                     .setWeight(1).apply(count(1, 1)))

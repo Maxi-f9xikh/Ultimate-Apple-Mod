@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -57,7 +57,7 @@ public class TntAppleItem extends Item {
 
     public static void grantAdvancement(ServerPlayer player, String name) {
         ResourceLocation id = new ResourceLocation("ultimate_apple_mod", name);
-        Advancement adv = player.getServer().getAdvancements().getAdvancement(id);
+        AdvancementHolder adv = player.getServer().getAdvancements().get(id);
         if (adv == null) return;
         AdvancementProgress progress = player.getAdvancements().getOrStartProgress(adv);
         for (String criterion : progress.getRemainingCriteria()) {

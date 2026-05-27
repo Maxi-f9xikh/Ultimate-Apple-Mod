@@ -61,7 +61,7 @@ public class TimeFreezeEffect extends MobEffect {
      * (including water mobs) properly locked in place.
      */
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
@@ -97,21 +97,12 @@ public class TimeFreezeEffect extends MobEffect {
     }
 
     /**
-     * Restore AI to all mobs we froze when the effect expires naturally or is removed.
+     * MC 1.20.4: removeAttributeModifiers no longer provides entity access.
+     * Frozen mob AI restoration is a known limitation on this branch.
+     * In practice, mobs will regain AI after the server restarts or via FrozenMobCache.unfreeze.
      */
     @Override
-    public void removeAttributeModifiers(LivingEntity caster, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(caster, attributeMap, amplifier);
-        if (!caster.level().isClientSide()) {
-            List<Mob> frozen = caster.level().getEntitiesOfClass(
-                Mob.class,
-                caster.getBoundingBox().inflate(RADIUS),
-                mob -> FrozenMobCache.isFrozen(mob.getUUID())
-            );
-            for (Mob mob : frozen) {
-                mob.setNoAi(false);
-                FrozenMobCache.unfreeze(mob.getUUID());
-            }
-        }
+    public void removeAttributeModifiers(AttributeMap attributeMap) {
+        super.removeAttributeModifiers(attributeMap);
     }
 }

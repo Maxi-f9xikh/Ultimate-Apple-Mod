@@ -53,7 +53,7 @@ public class FabricLootTableHandler {
                     .when(LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS,
                         EntityPredicate.Builder.entity()
-                            .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())))
+                            .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))))
                     .add(LootItem.lootTableItem(ModRegistries.ROTTEN_APPLE.get()).setWeight(1).apply(count(1, 1)))
                     .add(EmptyLootItem.emptyItem().setWeight(9))
                     .build());

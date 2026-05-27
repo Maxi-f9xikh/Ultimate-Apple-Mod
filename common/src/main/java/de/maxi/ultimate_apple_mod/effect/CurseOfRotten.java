@@ -1,12 +1,9 @@
 package de.maxi.ultimate_apple_mod.effect;
 
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
@@ -15,7 +12,7 @@ public class CurseOfRotten extends MobEffect {
 
     /** Check sun-burn once per second — same cadence Minecraft uses for zombie sunburn. */
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration % 20 == 0;
     }
 
@@ -60,21 +57,4 @@ public class CurseOfRotten extends MobEffect {
         );
     }
 
-    @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
-        entity.refreshDimensions();
-        // Witch particles on application
-        if (!entity.level().isClientSide() && entity.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.WITCH,
-                entity.getX(), entity.getY() + 1.0, entity.getZ(),
-                6, 0.3, 0.5, 0.3, 0.1);
-        }
-    }
-
-    @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
-        entity.refreshDimensions();
-    }
 }

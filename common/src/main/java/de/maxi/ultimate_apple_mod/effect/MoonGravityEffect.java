@@ -43,7 +43,7 @@ public class MoonGravityEffect extends MobEffect {
 
     /** Fire every tick for a smooth, continuous counteraction. */
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
