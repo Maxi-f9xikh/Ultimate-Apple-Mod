@@ -3,8 +3,10 @@ package de.maxi.ultimate_apple_mod.item;
 import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -51,8 +53,8 @@ public class ShakeItem extends Item {
         super(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4)
-                .saturationMod(0.5f)
-                .alwaysEat()
+                .saturationModifier(0.5f)
+                .alwaysEdible()
                 .build())
             .stacksTo(1));   // shakes never stack — each has unique NBT
     }
@@ -66,7 +68,7 @@ public class ShakeItem extends Item {
      * because vanilla Item does not declare this method.
      */
     public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = NbtCompat.getTag(stack);
         if (tag != null && tag.getBoolean("isCoalFuel")) {
             // coalFuelBurnTime is set by the Mixer (doubled when mixed with Longevity Apple)
             return tag.contains("coalFuelBurnTime")
@@ -93,7 +95,7 @@ public class ShakeItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = NbtCompat.getTag(stack);
 
         if (tag != null && tag.getBoolean("isBomb")) {
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -123,7 +125,8 @@ public class ShakeItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         // Save NBT before super() decrements / empties the stack
-        CompoundTag savedTag = stack.hasTag() ? stack.getTag().copy() : null;
+        CompoundTag savedTag = NbtCompat.getTag(stack);
+        if (savedTag != null) savedTag = savedTag.copy();
 
         // Super handles: hunger/saturation restore, eat sound, stack decrement
         super.finishUsingItem(stack, level, entity);
@@ -151,10 +154,10 @@ public class ShakeItem extends Item {
             CompoundTag et = effectsList.getCompound(i);
             ResourceLocation id = ResourceLocation.tryParse(et.getString("id"));
             if (id == null) continue;
-            MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(id);
-            if (effect != null) {
+            Holder<MobEffect> effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(id).orElse(null);
+            if (effectHolder != null) {
                 player.addEffect(new MobEffectInstance(
-                    effect, et.getInt("duration"), et.getInt("amplifier")));
+                    effectHolder, et.getInt("duration"), et.getInt("amplifier")));
             }
         }
 
@@ -241,9 +244,9 @@ public class ShakeItem extends Item {
     // ── Tooltip ─────────────────────────────────────────────────────────────
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                 List<Component> components, TooltipFlag flag) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = NbtCompat.getTag(stack);
         if (tag == null || tag.isEmpty()) {
             components.add(Component.translatable("tooltip.ultimate_apple_mod.shake.no_effects")
                 .withStyle(ChatFormatting.GRAY));

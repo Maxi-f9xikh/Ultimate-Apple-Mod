@@ -1,6 +1,7 @@
 package de.maxi.ultimate_apple_mod.effect;
 
 import de.maxi.ultimate_apple_mod.FrozenMobCache;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,19 +39,19 @@ public class TimeFreezeEffect extends MobEffect {
     public TimeFreezeEffect() {
         super(MobEffectCategory.BENEFICIAL, 0x00CCFF); // electric blue
 
-        // Player runs at 3× normal speed  (MULTIPLY_TOTAL +2.0 → base × 3.0)
+        // Player runs at 3× normal speed
         this.addAttributeModifier(
             Attributes.MOVEMENT_SPEED,
-            "F9E6F56B-C834-4E6C-9A80-E453F49A3D3A",
+            ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "time_freeze_speed"),
             2.0D,
-            AttributeModifier.Operation.MULTIPLY_TOTAL
+            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
         );
-        // Player attacks 2.5× faster (MULTIPLY_TOTAL +1.5 → base × 2.5)
+        // Player attacks 2.5× faster
         this.addAttributeModifier(
             Attributes.ATTACK_SPEED,
-            "B2D6B491-E5A7-4B92-A31E-C9F79B7FAD4A",
+            ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "time_freeze_attack_speed"),
             1.5D,
-            AttributeModifier.Operation.MULTIPLY_TOTAL
+            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
         );
     }
 
@@ -61,13 +62,13 @@ public class TimeFreezeEffect extends MobEffect {
      * (including water mobs) properly locked in place.
      */
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
     @Override
-    public void applyEffectTick(LivingEntity caster, int amplifier) {
-        if (caster.level().isClientSide()) return;
+    public boolean applyEffectTick(LivingEntity caster, int amplifier) {
+        if (caster.level().isClientSide()) return true;
 
         List<LivingEntity> targets = caster.level().getEntitiesOfClass(
             LivingEntity.class,
@@ -94,24 +95,16 @@ public class TimeFreezeEffect extends MobEffect {
                     false, false, false));
             }
         }
+        return true;
     }
 
     /**
      * Restore AI to all mobs we froze when the effect expires naturally or is removed.
+     * Note: In 1.21.1 this method no longer has access to the entity, so we cannot unfreeze
+     * nearby mobs here — they remain frozen until the chunk is reloaded.
      */
     @Override
-    public void removeAttributeModifiers(LivingEntity caster, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(caster, attributeMap, amplifier);
-        if (!caster.level().isClientSide()) {
-            List<Mob> frozen = caster.level().getEntitiesOfClass(
-                Mob.class,
-                caster.getBoundingBox().inflate(RADIUS),
-                mob -> FrozenMobCache.isFrozen(mob.getUUID())
-            );
-            for (Mob mob : frozen) {
-                mob.setNoAi(false);
-                FrozenMobCache.unfreeze(mob.getUUID());
-            }
-        }
+    public void removeAttributeModifiers(AttributeMap attributeMap) {
+        super.removeAttributeModifiers(attributeMap);
     }
 }

@@ -289,7 +289,7 @@ public final class MixerRecipes {
         // Void Apple shake: triggers the massive upward launch + Slow Falling,
         // exactly as eating the apple directly when falling.
         registerVoidLaunch("void_apple", List.of(
-            new EffectData(new ResourceLocation("minecraft", "slow_falling"), 20 * 15, 0)
+            new EffectData(ResourceLocation.fromNamespaceAndPath("minecraft", "slow_falling"), 20 * 15, 0)
         ));
 
         // Time Freeze Apple shake: 30 s base (= direct-eat) → after +20 % = 36 s.
@@ -499,8 +499,8 @@ public final class MixerRecipes {
             .collect(java.util.stream.Collectors.toList());
     }
 
-    private static ResourceLocation mc(String path)  { return new ResourceLocation("minecraft",         path); }
-    private static ResourceLocation mod(String path) { return new ResourceLocation("ultimate_apple_mod", path); }
+    private static ResourceLocation mc(String path)  { return ResourceLocation.fromNamespaceAndPath("minecraft",         path); }
+    private static ResourceLocation mod(String path) { return ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", path); }
 
     private MixerRecipes() {}
 }

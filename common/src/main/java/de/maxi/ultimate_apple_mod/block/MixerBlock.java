@@ -3,7 +3,6 @@ package de.maxi.ultimate_apple_mod.block;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -94,8 +93,8 @@ public abstract class MixerBlock extends BaseEntityBlock {
     // ── Interaction: open GUI ──────────────────────────────────────────────
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
-                                 Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+                                            Player player, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof MixerBlockEntityBase mixer) {

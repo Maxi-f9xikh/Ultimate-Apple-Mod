@@ -2,12 +2,6 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
-loom {
-    neoForge {
-        mixinConfig "ultimate_apple_mod.mixins.json"
-    }
-}
-
 architectury {
     platformSetupLoomIde()
     neoForge()

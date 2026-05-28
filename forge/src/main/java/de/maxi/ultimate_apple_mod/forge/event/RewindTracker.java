@@ -4,19 +4,19 @@ import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class RewindTracker {
 
     private static int tickCounter = 0;
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onServerTick(ServerTickEvent.Post event) {
         if (++tickCounter % 20 != 0) return;
 
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();

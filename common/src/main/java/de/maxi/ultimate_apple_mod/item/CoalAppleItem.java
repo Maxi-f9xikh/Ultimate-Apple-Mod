@@ -47,7 +47,7 @@ public class CoalAppleItem extends Item {
     // ── Tooltip ──────────────────────────────────────────────────────────────
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                 List<Component> components, TooltipFlag flag) {
         components.add(Component.translatable("tooltip.ultimate_apple_mod.coal_apple.line1"));
         components.add(Component.translatable("tooltip.ultimate_apple_mod.coal_apple.line2"));

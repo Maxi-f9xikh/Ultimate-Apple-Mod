@@ -34,8 +34,8 @@ public class EnderPearlAppleItem extends Item {
                 .stacksTo(16)
                 .food(new FoodProperties.Builder()
                         .nutrition(6)
-                        .saturationMod(0.8f)
-                        .alwaysEat()
+                        .saturationModifier(0.8f)
+                        .alwaysEdible()
                         .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * 30, 2), 1.0f)
                         .build()));
     }
@@ -146,7 +146,7 @@ public class EnderPearlAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.ultimate_apple_mod.ender_pearl_apple.line1"));
         tooltip.add(Component.translatable("tooltip.ultimate_apple_mod.ender_pearl_apple.line2"));
     }

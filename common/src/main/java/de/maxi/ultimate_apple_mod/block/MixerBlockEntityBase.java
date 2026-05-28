@@ -3,7 +3,9 @@ package de.maxi.ultimate_apple_mod.block;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.item.CoalAppleItem;
 import de.maxi.ultimate_apple_mod.item.CupItem;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -85,7 +87,7 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
                 be.consumeSlot(SLOT_ING2);
 
                 ItemStack shake = new ItemStack(ModRegistries.SHAKE_ITEM.get());
-                shake.setTag(be.pendingShakeTag.copy());
+                NbtCompat.setTag(shake, be.pendingShakeTag.copy());
                 be.items.set(SLOT_OUTPUT, shake);
                 be.pendingShakeTag = null;
                 be.progress = 0;
@@ -99,7 +101,7 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
                 MixerRecipes.ShakeContribution c2 =
                         MixerRecipes.getContribution(be.items.get(SLOT_ING2)).get();
 
-                ResourceLocation quantumId = new ResourceLocation("ultimate_apple_mod", "quantum_apple");
+                ResourceLocation quantumId = ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "quantum_apple");
                 var rng = level.getRandom();
                 List<MixerRecipes.ShakeContribution> pool = MixerRecipes.getRandomizableContributions();
                 if (!pool.isEmpty()) {
@@ -109,9 +111,9 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
                         c2 = pool.get(rng.nextInt(pool.size()));
                 }
 
-                ResourceLocation COAL_ID = new ResourceLocation("ultimate_apple_mod", "coal_apple");
-                ResourceLocation TNT_ID  = new ResourceLocation("ultimate_apple_mod", "tnt_apple");
-                ResourceLocation BOMB_ID = new ResourceLocation("ultimate_apple_mod", "apple_bomb");
+                ResourceLocation COAL_ID = ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "coal_apple");
+                ResourceLocation TNT_ID  = ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "tnt_apple");
+                ResourceLocation BOMB_ID = ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "apple_bomb");
                 ResourceLocation id1 = BuiltInRegistries.ITEM.getKey(be.items.get(SLOT_ING1).getItem());
                 ResourceLocation id2 = BuiltInRegistries.ITEM.getKey(be.items.get(SLOT_ING2).getItem());
 
@@ -316,15 +318,15 @@ public abstract class MixerBlockEntityBase extends BlockEntity implements Contai
         };
     }
 
-    @Override public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, items);
+    @Override public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        ContainerHelper.saveAllItems(tag, items, registries);
         tag.putInt("Progress", progress);
         if (pendingShakeTag != null) tag.put("PendingShake", pendingShakeTag.copy());
     }
-    @Override public void load(CompoundTag tag) {
-        super.load(tag);
-        ContainerHelper.loadAllItems(tag, items);
+    @Override public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        ContainerHelper.loadAllItems(tag, items, registries);
         progress = tag.getInt("Progress");
         pendingShakeTag = tag.contains("PendingShake", Tag.TAG_COMPOUND)
                 ? tag.getCompound("PendingShake").copy() : null;

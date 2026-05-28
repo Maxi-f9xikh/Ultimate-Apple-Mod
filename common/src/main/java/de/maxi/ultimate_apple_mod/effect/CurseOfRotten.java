@@ -1,6 +1,7 @@
 package de.maxi.ultimate_apple_mod.effect;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -15,26 +16,25 @@ public class CurseOfRotten extends MobEffect {
 
     /** Check sun-burn once per second — same cadence Minecraft uses for zombie sunburn. */
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration % 20 == 0;
     }
 
     /**
      * While the curse is active and the sun is shining directly on the entity,
      * ignite them for 8 seconds — exactly like a zombie in daylight.
-     * Checks: daytime, clear sky above, not in water, no helmet equipped.
      */
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         Level level = entity.level();
-        if (level.isClientSide()) return;
-        // Replicate isSunBurnTick(): daytime, sky visible, not in water, no helmet
+        if (level.isClientSide()) return true;
         if (level.isDay()
                 && level.canSeeSky(entity.blockPosition())
                 && !entity.isInWater()
                 && entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-            entity.setSecondsOnFire(8);
+            entity.igniteForSeconds(8.0f);
         }
+        return true;
     }
 
     public CurseOfRotten() {
@@ -42,39 +42,31 @@ public class CurseOfRotten extends MobEffect {
 
         this.addAttributeModifier(
             Attributes.MOVEMENT_SPEED,
-            "7107DE5E-7CE8-4030-940E-514C1F160890",
+            ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "curse_of_rotten_speed"),
             1.5D,
-            AttributeModifier.Operation.MULTIPLY_TOTAL
+            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
         );
         this.addAttributeModifier(
             Attributes.MAX_HEALTH,
-            "5D6F0BA2-1186-46AC-B896-C61C5CEE99CC",
+            ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "curse_of_rotten_health"),
             20.0D,
-            AttributeModifier.Operation.ADDITION
+            AttributeModifier.Operation.ADD_VALUE
         );
         this.addAttributeModifier(
             Attributes.ATTACK_SPEED,
-            "3FA243A0-4953-4B13-801F-79B0F5D6A093",
+            ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", "curse_of_rotten_attack_speed"),
             2.0D,
-            AttributeModifier.Operation.ADDITION
+            AttributeModifier.Operation.ADD_VALUE
         );
     }
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
-        entity.refreshDimensions();
-        // Witch particles on application
-        if (!entity.level().isClientSide() && entity.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.WITCH,
-                entity.getX(), entity.getY() + 1.0, entity.getZ(),
-                6, 0.3, 0.5, 0.3, 0.1);
-        }
+    public void addAttributeModifiers(AttributeMap attributeMap, int amplifier) {
+        super.addAttributeModifiers(attributeMap, amplifier);
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
-        entity.refreshDimensions();
+    public void removeAttributeModifiers(AttributeMap attributeMap) {
+        super.removeAttributeModifiers(attributeMap);
     }
 }

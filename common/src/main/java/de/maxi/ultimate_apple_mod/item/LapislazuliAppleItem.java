@@ -34,8 +34,8 @@ public class LapislazuliAppleItem extends Item {
         super(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(8)
-                .saturationMod(0.9f)
-                .alwaysEat()
+                .saturationModifier(0.9f)
+                .alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 300, 0), 1.0f) // 5 min
                 .effect(new MobEffectInstance(MobEffects.LUCK,         20 * 120, 0), 1.0f) // 2 min
                 .build())
@@ -53,7 +53,7 @@ public class LapislazuliAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§9Grants +" + XP_LEVELS + " experience levels on eat.")
             .withStyle(ChatFormatting.BLUE));

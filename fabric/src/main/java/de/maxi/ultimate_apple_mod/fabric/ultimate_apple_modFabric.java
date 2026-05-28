@@ -404,6 +404,6 @@ public final class ultimate_apple_modFabric implements ModInitializer {
     }
 
     private static ResourceLocation rl(String path) {
-        return new ResourceLocation(ultimate_apple_mod.MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(ultimate_apple_mod.MOD_ID, path);
     }
 }

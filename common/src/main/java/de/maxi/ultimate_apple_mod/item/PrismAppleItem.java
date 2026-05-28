@@ -28,8 +28,8 @@ public class PrismAppleItem extends Item {
         super(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6)
-                .saturationMod(0.8f)
-                .alwaysEat()
+                .saturationModifier(0.8f)
+                .alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.WATER_BREATHING, 20 * 300, 0), 1.0f) // 5 min
                 .effect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE,  20 * 300, 0), 1.0f) // 5 min
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,  20 * 300, 1), 1.0f) // Speed II, 5 min
@@ -38,7 +38,7 @@ public class PrismAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§bBreath and speed of the deep sea.")
             .withStyle(ChatFormatting.AQUA));

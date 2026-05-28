@@ -32,8 +32,8 @@ public class TotemAppleItem extends Item {
         super(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4)
-                .saturationMod(0.5f)
-                .alwaysEat()
+                .saturationModifier(0.5f)
+                .alwaysEdible()
                 .build())
             .stacksTo(1));   // like Totem of Undying — one at a time
     }
@@ -56,7 +56,7 @@ public class TotemAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§6Prevents your next death.")
             .withStyle(ChatFormatting.GOLD));

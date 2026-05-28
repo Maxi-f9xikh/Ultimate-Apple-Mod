@@ -19,7 +19,7 @@ public class ModBlocks {
 
     public static void register() {
         MIXER = Registry.register(BuiltInRegistries.BLOCK,
-            new ResourceLocation(ultimate_apple_mod.MOD_ID, "mixer"),
+            ResourceLocation.fromNamespaceAndPath(ultimate_apple_mod.MOD_ID, "mixer"),
             new MixerBlock() {
                 @Override
                 public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -27,7 +27,7 @@ public class ModBlocks {
                 }
             });
         MIXER_ITEM = Registry.register(BuiltInRegistries.ITEM,
-            new ResourceLocation(ultimate_apple_mod.MOD_ID, "mixer"),
+            ResourceLocation.fromNamespaceAndPath(ultimate_apple_mod.MOD_ID, "mixer"),
             new BlockItem(MIXER, new Item.Properties()));
     }
 }

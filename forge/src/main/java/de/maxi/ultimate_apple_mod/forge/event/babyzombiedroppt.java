@@ -7,10 +7,11 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID)
 public class babyzombiedroppt {
 
     @SubscribeEvent

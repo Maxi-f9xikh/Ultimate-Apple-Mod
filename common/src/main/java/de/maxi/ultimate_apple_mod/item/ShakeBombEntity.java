@@ -4,6 +4,7 @@ import de.maxi.ultimate_apple_mod.DragonChargesCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import de.maxi.ultimate_apple_mod.item.OrchardCallerItem;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -120,7 +121,7 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
             MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(id);
             if (effect != null) {
                 target.addEffect(new MobEffectInstance(
-                    effect, et.getInt("duration"), et.getInt("amplifier")));
+                    BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect), et.getInt("duration"), et.getInt("amplifier")));
             }
         }
 
@@ -271,6 +272,6 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
     @Nullable
     private CompoundTag getShakeTag() {
         ItemStack stack = getItem();
-        return stack.hasTag() ? stack.getTag() : null;
+        return NbtCompat.getTag(stack);
     }
 }

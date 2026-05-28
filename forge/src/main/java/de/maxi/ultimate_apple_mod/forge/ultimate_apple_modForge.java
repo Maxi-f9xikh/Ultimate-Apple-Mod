@@ -1,4 +1,5 @@
 package de.maxi.ultimate_apple_mod.forge;
+import java.util.function.Supplier;
 
 import de.maxi.ultimate_apple_mod.effect.CurseOfRotten;
 import de.maxi.ultimate_apple_mod.effect.LifestealEffect;
@@ -50,86 +51,87 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.core.Holder;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 
 @Mod(ultimate_apple_mod.MOD_ID)
 public final class ultimate_apple_modForge {
 
     public static final DeferredRegister<Item> ITEMS =
-        DeferredRegister.create(ForgeRegistries.ITEMS, ultimate_apple_mod.MOD_ID);
+        DeferredRegister.create(Registries.ITEM, ultimate_apple_mod.MOD_ID);
 
     public static final DeferredRegister<MobEffect> EFFECTS =
-        DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, ultimate_apple_mod.MOD_ID);
+        DeferredRegister.create(Registries.MOB_EFFECT, ultimate_apple_mod.MOD_ID);
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-        DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ultimate_apple_mod.MOD_ID);
+        DeferredRegister.create(Registries.ENTITY_TYPE, ultimate_apple_mod.MOD_ID);
 
     public static final DeferredRegister<CreativeModeTab> TABS =
         DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ultimate_apple_mod.MOD_ID);
 
     public static final DeferredRegister<MenuType<?>> MENUS =
-        DeferredRegister.create(ForgeRegistries.MENU_TYPES, ultimate_apple_mod.MOD_ID);
+        DeferredRegister.create(Registries.MENU, ultimate_apple_mod.MOD_ID);
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-        DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ultimate_apple_mod.MOD_ID);
+        DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ultimate_apple_mod.MOD_ID);
 
     // ── Effects ──────────────────────────────────────────────────────────────
 
-    public static final RegistryObject<MobEffect> CURSE_OF_ROTTEN =
+    public static final DeferredHolder<MobEffect, MobEffect> CURSE_OF_ROTTEN =
         EFFECTS.register("curse_of_rotten", CurseOfRotten::new);
 
-    public static final RegistryObject<MobEffect> MOON_GRAVITY_EFFECT =
+    public static final DeferredHolder<MobEffect, MobEffect> MOON_GRAVITY_EFFECT =
         EFFECTS.register("moon_gravity", MoonGravityEffect::new);
 
-    public static final RegistryObject<MobEffect> LIFESTEAL_EFFECT =
+    public static final DeferredHolder<MobEffect, MobEffect> LIFESTEAL_EFFECT =
         EFFECTS.register("lifesteal", LifestealEffect::new);
 
-    public static final RegistryObject<MobEffect> TOTEM_PROTECTION_EFFECT =
+    public static final DeferredHolder<MobEffect, MobEffect> TOTEM_PROTECTION_EFFECT =
         EFFECTS.register("totem_protection", TotemProtectionEffect::new);
 
-    public static final RegistryObject<MobEffect> TIME_FREEZE_EFFECT =
+    public static final DeferredHolder<MobEffect, MobEffect> TIME_FREEZE_EFFECT =
         EFFECTS.register("time_freeze", TimeFreezeEffect::new);
 
     // ── Menu Types ────────────────────────────────────────────────────────────
 
-    public static final RegistryObject<MenuType<MixerMenu>> MIXER_MENU_TYPE =
+    public static final Supplier<MenuType<MixerMenu>> MIXER_MENU_TYPE =
         MENUS.register("mixer", () -> IMenuTypeExtension.create(MixerMenu::new));
 
     // ── Block Entity Types ────────────────────────────────────────────────────
 
-    public static final RegistryObject<BlockEntityType<MixerBlockEntity>> MIXER_BLOCK_ENTITY =
+    public static final Supplier<BlockEntityType<MixerBlockEntity>> MIXER_BLOCK_ENTITY =
         BLOCK_ENTITIES.register("mixer", () -> BlockEntityType.Builder
             .of(MixerBlockEntity::new, ModBlocks.MIXER.get())
             .build(null));
 
     // ── Entity Types ─────────────────────────────────────────────────────────
 
-    public static final RegistryObject<EntityType<AppleBombEntity>> APPLE_BOMB_ENTITY =
+    public static final Supplier<EntityType<AppleBombEntity>> APPLE_BOMB_ENTITY =
         ENTITY_TYPES.register("apple_bomb",
             () -> EntityType.Builder.<AppleBombEntity>of(AppleBombEntity::new, MobCategory.MISC)
                 .sized(0.25f, 0.25f)
                 .clientTrackingRange(4)
                 .build("apple_bomb"));
 
-    public static final RegistryObject<EntityType<ShakeBombEntity>> SHAKE_BOMB_ENTITY =
+    public static final Supplier<EntityType<ShakeBombEntity>> SHAKE_BOMB_ENTITY =
         ENTITY_TYPES.register("shake_bomb",
             () -> EntityType.Builder.<ShakeBombEntity>of(ShakeBombEntity::new, MobCategory.MISC)
                 .sized(0.25f, 0.25f)
                 .clientTrackingRange(4)
                 .build("shake_bomb"));
 
-    public static final RegistryObject<EntityType<TntAppleEntity>> TNT_APPLE_ENTITY =
+    public static final Supplier<EntityType<TntAppleEntity>> TNT_APPLE_ENTITY =
         ENTITY_TYPES.register("tnt_apple",
             () -> EntityType.Builder.<TntAppleEntity>of(TntAppleEntity::new, MobCategory.MISC)
                 .sized(0.25f, 0.25f)
                 .clientTrackingRange(4)
                 .build("tnt_apple"));
 
-    public static final RegistryObject<EntityType<NuclearAppleEntity>> NUCLEAR_APPLE_ENTITY =
+    public static final Supplier<EntityType<NuclearAppleEntity>> NUCLEAR_APPLE_ENTITY =
         ENTITY_TYPES.register("nuclear_apple",
             () -> EntityType.Builder.<NuclearAppleEntity>of(NuclearAppleEntity::new, MobCategory.MISC)
                 .sized(0.25f, 0.25f)
@@ -138,7 +140,7 @@ public final class ultimate_apple_modForge {
 
     // ── Existing Items (with effects added) ──────────────────────────────────
 
-    public static final RegistryObject<Item> DIAMOND_APPLE = ITEMS.register("diamond_apple", () ->
+    public static final Supplier<Item> DIAMOND_APPLE = ITEMS.register("diamond_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(8).saturationModifier(0.9f).alwaysEdible()
@@ -149,10 +151,10 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> LAPISLAZULI_APPLE =
+    public static final Supplier<Item> LAPISLAZULI_APPLE =
         ITEMS.register("lapislazuli_apple", LapislazuliAppleItem::new);
 
-    public static final RegistryObject<Item> EMERALD_APPLE = ITEMS.register("emerald_apple", () ->
+    public static final Supplier<Item> EMERALD_APPLE = ITEMS.register("emerald_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(8).saturationModifier(0.9f).alwaysEdible()
@@ -161,7 +163,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> REDSTONE_APPLE = ITEMS.register("redstone_apple", () ->
+    public static final Supplier<Item> REDSTONE_APPLE = ITEMS.register("redstone_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(8).saturationModifier(0.9f).alwaysEdible()
@@ -172,7 +174,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> NETHERITE_APPLE = ITEMS.register("netherite_apple", () ->
+    public static final Supplier<Item> NETHERITE_APPLE = ITEMS.register("netherite_apple", () ->
         new Item(new Item.Properties()
             .fireResistant()   // does not burn in lava, like netherite tools
             .food(new FoodProperties.Builder()
@@ -187,7 +189,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> IRON_APPLE = ITEMS.register("iron_apple", () ->
+    public static final Supplier<Item> IRON_APPLE = ITEMS.register("iron_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationModifier(0.7f).alwaysEdible()
@@ -197,18 +199,18 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> ROTTEN_APPLE = ITEMS.register("rotten_apple", () ->
+    public static final Supplier<Item> ROTTEN_APPLE = ITEMS.register("rotten_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 // CurseOfRotten handles speed boost + hitbox shrink.
                 // Nausea is applied separately so it shows up as its own effect icon.
-                .effect(new MobEffectInstance(CURSE_OF_ROTTEN.get(), 400, 0, false, true), 1.0f)
+                .effect(new MobEffectInstance(CURSE_OF_ROTTEN, 400, 0, false, true), 1.0f)
                 .effect(new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> ROASTED_APPLE = ITEMS.register("roasted_apple", () ->
+    public static final Supplier<Item> ROASTED_APPLE = ITEMS.register("roasted_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationModifier(0.1f).alwaysEdible()
@@ -217,7 +219,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> BAKED_APPLE = ITEMS.register("baked_apple", () ->
+    public static final Supplier<Item> BAKED_APPLE = ITEMS.register("baked_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationModifier(0.1f).alwaysEdible()
@@ -225,7 +227,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> BURNT_APPLE = ITEMS.register("burnt_apple", () ->
+    public static final Supplier<Item> BURNT_APPLE = ITEMS.register("burnt_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(1).saturationModifier(0.1f).alwaysEdible()
@@ -236,7 +238,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> BLAZE_APPLE = ITEMS.register("blaze_apple", () ->
+    public static final Supplier<Item> BLAZE_APPLE = ITEMS.register("blaze_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationModifier(0.5f).alwaysEdible()
@@ -246,7 +248,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> BIRNE = ITEMS.register("pear_apple", () ->
+    public static final Supplier<Item> BIRNE = ITEMS.register("pear_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(1).saturationModifier(0.1f)
@@ -257,7 +259,7 @@ public final class ultimate_apple_modForge {
 
     // ── Copper Apple — 4 oxidation stages + 4 waxed variants ─────────────────
 
-    public static final RegistryObject<Item> COPPER_APPLE = ITEMS.register("copper_apple", () ->
+    public static final Supplier<Item> COPPER_APPLE = ITEMS.register("copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(5).saturationModifier(0.6f).alwaysEdible()
@@ -267,7 +269,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 0, false));
 
-    public static final RegistryObject<Item> EXPOSED_COPPER_APPLE = ITEMS.register("exposed_copper_apple", () ->
+    public static final Supplier<Item> EXPOSED_COPPER_APPLE = ITEMS.register("exposed_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4).saturationModifier(0.5f).alwaysEdible()
@@ -276,7 +278,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 1, false));
 
-    public static final RegistryObject<Item> WEATHERED_COPPER_APPLE = ITEMS.register("weathered_copper_apple", () ->
+    public static final Supplier<Item> WEATHERED_COPPER_APPLE = ITEMS.register("weathered_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(3).saturationModifier(0.3f).alwaysEdible()
@@ -284,7 +286,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 2, false));
 
-    public static final RegistryObject<Item> OXIDIZED_COPPER_APPLE = ITEMS.register("oxidized_copper_apple", () ->
+    public static final Supplier<Item> OXIDIZED_COPPER_APPLE = ITEMS.register("oxidized_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationModifier(0.1f).alwaysEdible()
@@ -293,7 +295,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 3, false));
 
-    public static final RegistryObject<Item> WAXED_COPPER_APPLE = ITEMS.register("waxed_copper_apple", () ->
+    public static final Supplier<Item> WAXED_COPPER_APPLE = ITEMS.register("waxed_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(5).saturationModifier(0.6f).alwaysEdible()
@@ -303,7 +305,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 0, true));
 
-    public static final RegistryObject<Item> WAXED_EXPOSED_COPPER_APPLE = ITEMS.register("waxed_exposed_copper_apple", () ->
+    public static final Supplier<Item> WAXED_EXPOSED_COPPER_APPLE = ITEMS.register("waxed_exposed_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4).saturationModifier(0.5f).alwaysEdible()
@@ -312,7 +314,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 1, true));
 
-    public static final RegistryObject<Item> WAXED_WEATHERED_COPPER_APPLE = ITEMS.register("waxed_weathered_copper_apple", () ->
+    public static final Supplier<Item> WAXED_WEATHERED_COPPER_APPLE = ITEMS.register("waxed_weathered_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(3).saturationModifier(0.3f).alwaysEdible()
@@ -320,7 +322,7 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 2, true));
 
-    public static final RegistryObject<Item> WAXED_OXIDIZED_COPPER_APPLE = ITEMS.register("waxed_oxidized_copper_apple", () ->
+    public static final Supplier<Item> WAXED_OXIDIZED_COPPER_APPLE = ITEMS.register("waxed_oxidized_copper_apple", () ->
         new CopperAppleItem(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(2).saturationModifier(0.1f).alwaysEdible()
@@ -329,22 +331,22 @@ public final class ultimate_apple_modForge {
                 .build())
             .stacksTo(64), 3, true));
 
-    public static final RegistryObject<Item> ENDER_PEARL_APPLE =
+    public static final Supplier<Item> ENDER_PEARL_APPLE =
         ITEMS.register("ender_pearl_apple", EnderPearlAppleItem::new);
 
     // ── New Items ────────────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> MOON_APPLE = ITEMS.register("moon_apple", () ->
+    public static final Supplier<Item> MOON_APPLE = ITEMS.register("moon_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationModifier(0.6f).alwaysEdible()
                 // Moon Gravity alone produces a ~4–5 block symmetric arc (≈ 3× normal height).
                 // No Jump Boost — the gravity reduction IS the height bonus.
-                .effect(new MobEffectInstance(MOON_GRAVITY_EFFECT.get(), 20 * 30, 0), 1.0f) // Moon Gravity, 30s
+                .effect(new MobEffectInstance(MOON_GRAVITY_EFFECT, 20 * 30, 0), 1.0f) // Moon Gravity, 30s
                 .build())
             .stacksTo(64)));
 
-    public static final RegistryObject<Item> ORCHARD_APPLE =
+    public static final Supplier<Item> ORCHARD_APPLE =
         ITEMS.register("orchard_apple", () ->
             new OrchardCallerItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -352,7 +354,7 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> ECHO_APPLE =
+    public static final Supplier<Item> ECHO_APPLE =
         ITEMS.register("echo_apple", () ->
             new EchoAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -360,7 +362,7 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> REWIND_APPLE =
+    public static final Supplier<Item> REWIND_APPLE =
         ITEMS.register("rewind_apple", () ->
             new RewindAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -368,11 +370,11 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> APPLE_BOMB =
+    public static final Supplier<Item> APPLE_BOMB =
         ITEMS.register("apple_bomb", () ->
             new AppleBombItem(new Item.Properties().stacksTo(16)));
 
-    public static final RegistryObject<Item> COAL_APPLE =
+    public static final Supplier<Item> COAL_APPLE =
         ITEMS.register("coal_apple", () ->
             new CoalAppleItem(new Item.Properties()
                 .food(new net.minecraft.world.food.FoodProperties.Builder()
@@ -388,11 +390,11 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> TNT_APPLE =
+    public static final Supplier<Item> TNT_APPLE =
         ITEMS.register("tnt_apple", () ->
             new TntAppleItem(new Item.Properties().stacksTo(64)));
 
-    public static final RegistryObject<Item> NUCLEAR_APPLE =
+    public static final Supplier<Item> NUCLEAR_APPLE =
         ITEMS.register("nuclear_apple", () ->
             new NuclearAppleItem(new Item.Properties()
                 .stacksTo(1)
@@ -400,7 +402,7 @@ public final class ultimate_apple_modForge {
 
     // ── Second-Wave Items ────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> WITHER_APPLE =
+    public static final Supplier<Item> WITHER_APPLE =
         ITEMS.register("wither_apple", () ->
             new WitherAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -411,7 +413,7 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> HONEY_APPLE =
+    public static final Supplier<Item> HONEY_APPLE =
         ITEMS.register("honey_apple", () ->
             new HoneyAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -420,7 +422,7 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> DRAGON_APPLE =
+    public static final Supplier<Item> DRAGON_APPLE =
         ITEMS.register("dragon_apple", () ->
             new DragonAppleItem(new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -431,7 +433,7 @@ public final class ultimate_apple_modForge {
                     .build())
                 .stacksTo(64)));
 
-    public static final RegistryObject<Item> NETHER_STAR_APPLE = ITEMS.register("nether_star_apple", () ->
+    public static final Supplier<Item> NETHER_STAR_APPLE = ITEMS.register("nether_star_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(10).saturationModifier(1.0f).alwaysEdible()
@@ -443,7 +445,7 @@ public final class ultimate_apple_modForge {
             .stacksTo(1)) {
             @Override
             public void appendHoverText(ItemStack stack,
-                    @javax.annotation.Nullable net.minecraft.world.level.Level level,
+                    net.minecraft.world.item.Item.TooltipContext context,
                     java.util.List<net.minecraft.network.chat.Component> components,
                     net.minecraft.world.item.TooltipFlag flag) {
                 components.add(net.minecraft.network.chat.Component.translatable(
@@ -453,7 +455,7 @@ public final class ultimate_apple_modForge {
             }
         });
 
-    public static final RegistryObject<Item> DIRT_APPLE = ITEMS.register("dirt_apple", () ->
+    public static final Supplier<Item> DIRT_APPLE = ITEMS.register("dirt_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(1).saturationModifier(0.0f).alwaysEdible()
@@ -464,26 +466,26 @@ public final class ultimate_apple_modForge {
 
     // ── Special Apples ────────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> TOTEM_APPLE =
+    public static final Supplier<Item> TOTEM_APPLE =
         ITEMS.register("totem_apple", TotemAppleItem::new);
 
-    public static final RegistryObject<Item> QUANTUM_APPLE =
+    public static final Supplier<Item> QUANTUM_APPLE =
         ITEMS.register("quantum_apple", QuantumAppleItem::new);
 
-    public static final RegistryObject<Item> VOID_APPLE =
+    public static final Supplier<Item> VOID_APPLE =
         ITEMS.register("void_apple", VoidAppleItem::new);
 
-    public static final RegistryObject<Item> TIME_FREEZE_APPLE = ITEMS.register("time_freeze_apple", () ->
+    public static final Supplier<Item> TIME_FREEZE_APPLE = ITEMS.register("time_freeze_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4).saturationModifier(0.4f).alwaysEdible()
-                .effect(new MobEffectInstance(TIME_FREEZE_EFFECT.get(), 20 * 30, 0), 1.0f)
+                .effect(new MobEffectInstance(TIME_FREEZE_EFFECT, 20 * 30, 0), 1.0f)
                 .build())
             .stacksTo(64)));
 
     // ── Longevity Apple ───────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> LONGEVITY_APPLE = ITEMS.register("longevity_apple", () ->
+    public static final Supplier<Item> LONGEVITY_APPLE = ITEMS.register("longevity_apple", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6).saturationModifier(0.6f).alwaysEdible()
@@ -496,12 +498,12 @@ public final class ultimate_apple_modForge {
 
     // ── Prism Apple ──────────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> PRISM_APPLE =
+    public static final Supplier<Item> PRISM_APPLE =
         ITEMS.register("prism_apple", PrismAppleItem::new);
 
     // ── Banana ───────────────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> BANANA = ITEMS.register("banana", () ->
+    public static final Supplier<Item> BANANA = ITEMS.register("banana", () ->
         new Item(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(4)
@@ -511,15 +513,15 @@ public final class ultimate_apple_modForge {
 
     // ── Mixer Items ───────────────────────────────────────────────────────────
 
-    public static final RegistryObject<Item> CUP_ITEM =
+    public static final Supplier<Item> CUP_ITEM =
         ITEMS.register("cup", CupItem::new);
 
-    public static final RegistryObject<Item> SHAKE_ITEM =
+    public static final Supplier<Item> SHAKE_ITEM =
         ITEMS.register("shake", ShakeItem::new);
 
     // ── Creative Tab ─────────────────────────────────────────────────────────
 
-    public static final RegistryObject<CreativeModeTab> ULTIMATE_TAB = TABS.register("ultimate_tab", () ->
+    public static final Supplier<CreativeModeTab> ULTIMATE_TAB = TABS.register("ultimate_tab", () ->
         CreativeModeTab.builder()
             .title(Component.literal("Ultimate Apple Mod"))
             .icon(() -> new ItemStack(DIAMOND_APPLE.get()))
@@ -582,7 +584,7 @@ public final class ultimate_apple_modForge {
         BLOCK_ENTITIES.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModRecipes.register(modEventBus);
-        NetworkHandler.register();
+        modEventBus.addListener(NetworkHandler::onRegisterPayloads);
 
         // ── Wire ModRegistries so common code can access platform registrations ──
         @SuppressWarnings("unchecked")
@@ -593,11 +595,11 @@ public final class ultimate_apple_modForge {
             (java.util.function.Supplier<net.minecraft.world.inventory.MenuType<?>>) (java.util.function.Supplier<?>) MIXER_MENU_TYPE;
 
         // ── Effects ──────────────────────────────────────────────────────────
-        ModRegistries.CURSE_OF_ROTTEN    = CURSE_OF_ROTTEN;
-        ModRegistries.MOON_GRAVITY       = MOON_GRAVITY_EFFECT;
-        ModRegistries.LIFESTEAL          = LIFESTEAL_EFFECT;
-        ModRegistries.TOTEM_PROTECTION   = TOTEM_PROTECTION_EFFECT;
-        ModRegistries.TIME_FREEZE        = TIME_FREEZE_EFFECT;
+        ModRegistries.CURSE_OF_ROTTEN    = () -> CURSE_OF_ROTTEN;
+        ModRegistries.MOON_GRAVITY       = () -> MOON_GRAVITY_EFFECT;
+        ModRegistries.LIFESTEAL          = () -> LIFESTEAL_EFFECT;
+        ModRegistries.TOTEM_PROTECTION   = () -> TOTEM_PROTECTION_EFFECT;
+        ModRegistries.TIME_FREEZE        = () -> TIME_FREEZE_EFFECT;
 
         // ── Items ─────────────────────────────────────────────────────────────
         ModRegistries.DIAMOND_APPLE                = DIAMOND_APPLE;

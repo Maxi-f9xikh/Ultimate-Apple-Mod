@@ -39,7 +39,7 @@ public class DragonAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                 List<Component> components, TooltipFlag flag) {
         components.add(Component.translatable("tooltip.ultimate_apple_mod.dragon_apple.line1"));
         components.add(Component.translatable("tooltip.ultimate_apple_mod.dragon_apple.line2"));

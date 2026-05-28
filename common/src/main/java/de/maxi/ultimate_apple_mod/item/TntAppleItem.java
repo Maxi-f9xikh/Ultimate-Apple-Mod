@@ -1,6 +1,6 @@
 package de.maxi.ultimate_apple_mod.item;
 
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class TntAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
             List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.tnt_apple.line1"));
     }
@@ -56,8 +56,8 @@ public class TntAppleItem extends Item {
     }
 
     public static void grantAdvancement(ServerPlayer player, String name) {
-        ResourceLocation id = new ResourceLocation("ultimate_apple_mod", name);
-        Advancement adv = player.getServer().getAdvancements().getAdvancement(id);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath("ultimate_apple_mod", name);
+        AdvancementHolder adv = player.getServer().getAdvancements().get(id);
         if (adv == null) return;
         AdvancementProgress progress = player.getAdvancements().getOrStartProgress(adv);
         for (String criterion : progress.getRemainingCriteria()) {

@@ -1,9 +1,12 @@
 package de.maxi.ultimate_apple_mod.forge.event;
 
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,8 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 
@@ -29,8 +31,8 @@ import java.util.List;
  *       – Shift NOT held → item name + "Hold Shift for more info"
  *       – Shift held     → custom appendHoverText content + formatted food effects (if any)
  */
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID,
-                        bus   = Mod.EventBusSubscriber.Bus.FORGE,
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID,
+                        bus   = EventBusSubscriber.Bus.GAME,
                         value = Dist.CLIENT)
 public class ClientEventHandler {
 
@@ -40,7 +42,7 @@ public class ClientEventHandler {
         List<Component> tips = event.getToolTip();
 
         // ── 1. Decay countdown (vanilla apples) ──────────────────────────────
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = NbtCompat.getTag(stack);
         if (tag != null && tag.contains(DecayEventHandler.DECAY_TAG)) {
             long threshold = DecayEventHandler.getDecayThreshold(stack.getItem());
             if (threshold > 0) {
@@ -69,7 +71,7 @@ public class ClientEventHandler {
 
         // ── 2. Shift tooltip for Ultimate Apple Mod items ─────────────────────
         Item item = stack.getItem();
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
+        ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
         if (id == null || !id.getNamespace().equals(ultimate_apple_mod.MOD_ID)) return;
 
         // Exclude shake (complex NBT tooltip handled by ShakeItem) and cup (no info needed).
@@ -98,11 +100,11 @@ public class ClientEventHandler {
             }
 
             // ── Food items: show formatted effect list ──────────────────────
-            FoodProperties food = item.getFoodProperties(stack, null);
-            if (food != null && !food.getEffects().isEmpty()) {
+            FoodProperties food = stack.get(DataComponents.FOOD);
+            if (food != null && !food.effects().isEmpty()) {
                 tips.add(Component.literal("Effects:").withStyle(ChatFormatting.GOLD));
-                for (var pair : food.getEffects()) {
-                    tips.add(formatEffect(pair.getFirst()));
+                for (var possible : food.effects()) {
+                    tips.add(formatEffect(possible.effect()));
                 }
             }
         }
@@ -114,7 +116,7 @@ public class ClientEventHandler {
         int amp = eff.getAmplifier();
         int dur = eff.getDuration();
         MutableComponent line = Component.literal("  ")
-            .append(eff.getEffect().getDisplayName().copy().withStyle(ChatFormatting.GRAY));
+            .append(eff.getEffect().value().getDisplayName().copy().withStyle(ChatFormatting.GRAY));
         if (amp > 0) {
             line.append(Component.literal(" " + toRoman(amp + 1))
                 .withStyle(ChatFormatting.GRAY));

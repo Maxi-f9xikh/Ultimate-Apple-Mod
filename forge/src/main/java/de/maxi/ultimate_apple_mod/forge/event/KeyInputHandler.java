@@ -1,28 +1,28 @@
 package de.maxi.ultimate_apple_mod.forge.event;
 
 import de.maxi.ultimate_apple_mod.forge.ModClient;
-import de.maxi.ultimate_apple_mod.forge.network.FireDragonBreathPacket;
-import de.maxi.ultimate_apple_mod.forge.network.NetworkHandler;
+import de.maxi.ultimate_apple_mod.forge.network.FireDragonBreathPayload;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.lwjgl.glfw.GLFW;
 
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class KeyInputHandler {
 
     /** Tracks the previous tick's key-down state for left-click edge detection. */
     private static boolean prevFireBreathDown = false;
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
@@ -59,7 +59,7 @@ public class KeyInputHandler {
                 || mainHand.getItem() instanceof AxeItem;
 
             if (!(aimingAtEntity && holdingMeleeWeapon)) {
-                NetworkHandler.CHANNEL.sendToServer(new FireDragonBreathPacket());
+                PacketDistributor.sendToServer(new FireDragonBreathPayload());
             }
         }
         prevFireBreathDown = isFireDown;

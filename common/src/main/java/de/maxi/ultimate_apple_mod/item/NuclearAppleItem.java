@@ -28,7 +28,7 @@ public class NuclearAppleItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack,
-            @Nullable Level level,
+            Item.TooltipContext context,
             List<Component> tooltip,
             TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.ultimate_apple_mod.nuclear_apple.line1"));

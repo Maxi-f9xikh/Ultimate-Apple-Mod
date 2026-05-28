@@ -179,7 +179,7 @@ public class FabricLootTableHandler {
         });
     }
 
-    private static ResourceLocation rl(String path) { return new ResourceLocation("minecraft", path); }
+    private static ResourceLocation rl(String path) { return ResourceLocation.fromNamespaceAndPath("minecraft", path); }
 
     private static SetItemCountFunction.Builder count(int min, int max) {
         return SetItemCountFunction.setCount(UniformGenerator.between(min, max));

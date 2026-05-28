@@ -25,7 +25,7 @@ public class EchoAppleItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
             List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line1"));
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line2"));

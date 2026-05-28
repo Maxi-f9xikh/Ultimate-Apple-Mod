@@ -43,14 +43,14 @@ public class MoonGravityEffect extends MobEffect {
 
     /** Fire every tick for a smooth, continuous counteraction. */
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity.level().isClientSide()) return;
-        if (entity.onGround()) return;
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        if (entity.level().isClientSide()) return true;
+        if (entity.onGround()) return true;
 
         Vec3 v = entity.getDeltaMovement();
         entity.setDeltaMovement(
@@ -64,5 +64,6 @@ public class MoonGravityEffect extends MobEffect {
             sp.connection.send(new ClientboundSetEntityMotionPacket(
                 sp.getId(), entity.getDeltaMovement()));
         }
+        return true;
     }
 }

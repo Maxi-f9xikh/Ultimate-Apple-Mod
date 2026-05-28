@@ -6,25 +6,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Pose;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientPlayerRenderHandler {
 
     private static boolean wasRottenActive = false;
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.START) return;
+    public static void onClientTick(ClientTickEvent.Pre event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             wasRottenActive = false;
             return;
         }
-        boolean isRottenActive = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get());
+        boolean isRottenActive = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN);
         if (isRottenActive != wasRottenActive) {
             player.refreshDimensions();
             wasRottenActive = isRottenActive;
@@ -37,12 +37,11 @@ public class ClientPlayerRenderHandler {
      * Both client and server converge to STANDING every tick, so no rubber-banding occurs.
      */
     @SubscribeEvent
-    public static void onClientTickEnd(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onClientTickEnd(ClientTickEvent.Post event) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
         try {
-            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN)
                     && player.getPose() == Pose.SWIMMING
                     && !player.isInWater()) {
                 player.setPose(Pose.STANDING);
@@ -52,7 +51,7 @@ public class ClientPlayerRenderHandler {
 
     @SubscribeEvent
     public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
-        if (event.getEntity().hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
+        if (event.getEntity().hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN)) {
             event.getPoseStack().scale(0.35f, 0.35f, 0.35f);
         }
     }

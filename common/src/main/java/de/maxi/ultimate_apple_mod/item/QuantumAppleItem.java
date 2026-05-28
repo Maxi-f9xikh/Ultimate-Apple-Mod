@@ -55,8 +55,8 @@ public class QuantumAppleItem extends Item {
         super(new Item.Properties()
             .food(new FoodProperties.Builder()
                 .nutrition(6)
-                .saturationMod(0.6f)
-                .alwaysEat()
+                .saturationModifier(0.6f)
+                .alwaysEdible()
                 .build())
             .stacksTo(64));
     }
@@ -128,7 +128,7 @@ public class QuantumAppleItem extends Item {
             MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(
                 ResourceLocation.tryParse(e.id().toString()));
             if (effect != null) {
-                player.addEffect(new MobEffectInstance(effect, e.duration(), e.amplifier()));
+                player.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect), e.duration(), e.amplifier()));
             }
         }
 
@@ -209,7 +209,7 @@ public class QuantumAppleItem extends Item {
     // ── Tooltip ───────────────────────────────────────────────────────────────
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§6Random apple effect on eat.")
             .withStyle(ChatFormatting.GOLD));

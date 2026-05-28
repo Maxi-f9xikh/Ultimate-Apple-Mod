@@ -14,9 +14,10 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.neoforged.neoforge.event.level.LootTableLoadEvent;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * Adds custom apple drops to:
@@ -69,7 +70,7 @@ import net.neoforged.fml.common.Mod;
  *  End City            Void Apple, Dragon Apple, Quantum Apple (60 %)
  * ─────────────────────────────────────────────────────────────────────────
  */
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class LootTableHandler {
 
     @SubscribeEvent
@@ -173,7 +174,7 @@ public class LootTableHandler {
                 .when(LootItemEntityPropertyCondition.hasProperties(
                     LootContext.EntityTarget.THIS,
                     EntityPredicate.Builder.entity()
-                        .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())
+                        .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))
                 ))
                 .add(LootItem.lootTableItem(ultimate_apple_modForge.ROTTEN_APPLE.get())
                     .setWeight(1).apply(count(1, 1)))
@@ -421,7 +422,7 @@ public class LootTableHandler {
 
     /** Minecraft-namespace ResourceLocation for a loot-table path. */
     private static ResourceLocation rl(String path) {
-        return new ResourceLocation("minecraft", path);
+        return ResourceLocation.fromNamespaceAndPath("minecraft", path);
     }
 
     /** Shorthand: SetItemCountFunction with a uniform random count. */

@@ -6,15 +6,14 @@ import de.maxi.ultimate_apple_mod.item.NuclearAppleEntity;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
 import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import de.maxi.ultimate_apple_mod.forge.block.ModBlocks;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -23,7 +22,7 @@ import org.lwjgl.glfw.GLFW;
 import static de.maxi.ultimate_apple_mod.ultimate_apple_mod.MOD_ID;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 
-@Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModClient {
 
     /**
@@ -60,9 +59,13 @@ public class ModClient {
     }
 
     @SubscribeEvent
+    public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(ultimate_apple_modForge.MIXER_MENU_TYPE.get(), MixerScreen::new);
+    }
+
+    @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            MenuScreens.register(ultimate_apple_modForge.MIXER_MENU_TYPE.get(), MixerScreen::new);
             // Mixer uses custom transparent glass textures → needs cutout render type
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.MIXER.get(), RenderType.cutoutMipped());
         });

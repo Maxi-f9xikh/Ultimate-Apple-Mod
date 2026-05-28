@@ -91,7 +91,7 @@ public class CopperAppleItem extends Item {
         double pAny = 1.0 - Math.pow(1.0 - p, count);
 
         if (level.getRandom().nextDouble() < pAny) {
-            ResourceLocation nextId = new ResourceLocation(
+            ResourceLocation nextId = ResourceLocation.fromNamespaceAndPath(
                 "ultimate_apple_mod", NEXT_STAGE_IDS[stage]);
             Item nextItem = BuiltInRegistries.ITEM.get(nextId);
             if (nextItem != null && nextItem != net.minecraft.world.item.Items.AIR) {
@@ -111,7 +111,7 @@ public class CopperAppleItem extends Item {
     // ── Tooltip ─────────────────────────────────────────────────────────────
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                 List<Component> components, TooltipFlag flag) {
         if (waxed) {
             components.add(Component.translatable(

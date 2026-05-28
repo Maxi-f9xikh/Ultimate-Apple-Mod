@@ -5,6 +5,7 @@ import de.maxi.ultimate_apple_mod.item.AppleBombEntity;
 import de.maxi.ultimate_apple_mod.item.NuclearAppleEntity;
 import de.maxi.ultimate_apple_mod.item.ShakeBombEntity;
 import de.maxi.ultimate_apple_mod.item.TntAppleEntity;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
@@ -17,11 +18,11 @@ import java.util.function.Supplier;
 public class ModRegistries {
 
     // ── Effects ───────────────────────────────────────────────────────────────
-    public static Supplier<MobEffect> CURSE_OF_ROTTEN;
-    public static Supplier<MobEffect> MOON_GRAVITY;
-    public static Supplier<MobEffect> LIFESTEAL;
-    public static Supplier<MobEffect> TOTEM_PROTECTION;
-    public static Supplier<MobEffect> TIME_FREEZE;
+    public static Supplier<Holder<MobEffect>> CURSE_OF_ROTTEN;
+    public static Supplier<Holder<MobEffect>> MOON_GRAVITY;
+    public static Supplier<Holder<MobEffect>> LIFESTEAL;
+    public static Supplier<Holder<MobEffect>> TOTEM_PROTECTION;
+    public static Supplier<Holder<MobEffect>> TIME_FREEZE;
 
     // ── Items ─────────────────────────────────────────────────────────────────
     public static Supplier<Item> DIAMOND_APPLE;

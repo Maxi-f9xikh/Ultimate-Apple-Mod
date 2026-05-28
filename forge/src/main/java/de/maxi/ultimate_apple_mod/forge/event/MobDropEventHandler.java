@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Random;
 
@@ -27,7 +28,7 @@ import java.util.Random;
  *   Wither      → Wither Apple + Nether Star Apple  50 % (both together or neither)
  *                 (vanilla always drops 1 Nether Star regardless)
  */
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MobDropEventHandler {
 
     private static final Random RNG = new Random();

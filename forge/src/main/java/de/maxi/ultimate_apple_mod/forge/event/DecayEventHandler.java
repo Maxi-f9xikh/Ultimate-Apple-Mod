@@ -3,15 +3,17 @@ package de.maxi.ultimate_apple_mod.forge.event;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.event.DecayHelper;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * Decay System — vanilla apples in a player's inventory rot over time.
@@ -29,7 +31,7 @@ import net.neoforged.fml.common.Mod;
  * The decay tag is synced to the client via normal inventory sync,
  * so ClientEventHandler can show a live countdown in the item tooltip.
  */
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class DecayEventHandler {
 
     // Constants delegated to the common DecayHelper
@@ -47,14 +49,13 @@ public class DecayEventHandler {
     // ── Server-side tick: stamp new items and decay expired ones ──────────────
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        if (!(event.player.level() instanceof ServerLevel serverLevel)) return;
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) return;
 
         // Check once per second to keep overhead negligible
         if (serverLevel.getGameTime() % 20 != 0) return;
 
-        Player player = event.player;
+        Player player = event.getEntity();
         long now = serverLevel.getGameTime();
         Inventory inv = player.getInventory();
 
@@ -65,11 +66,12 @@ public class DecayEventHandler {
             long threshold = getDecayThreshold(stack.getItem());
             if (threshold == 0) continue;
 
-            CompoundTag tag = stack.getOrCreateTag();
+            CompoundTag tag = NbtCompat.getOrCreateTag(stack);
 
             if (!tag.contains(DECAY_TAG)) {
                 // First time we see this apple — stamp it
                 tag.putLong(DECAY_TAG, now);
+                NbtCompat.setTag(stack, tag);
                 continue;
             }
 

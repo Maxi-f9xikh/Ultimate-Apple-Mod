@@ -16,16 +16,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.EntityEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.WeakHashMap;
 
-@Mod.EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ultimate_apple_mod.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class PlayerEffectEventHandler {
 
     /**
@@ -52,17 +53,12 @@ public class PlayerEffectEventHandler {
     public static void onEntitySize(EntityEvent.Size event) {
         if (!(event.getEntity() instanceof Player player)) return;
         try {
-            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
-                // Shrink the physics bounding box to 0.25 × 0.6
-                event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f));
-                // Lower the first-person camera to match the visual render scale.
-                // Entity.getEyeHeight() (no-arg, final) returns the cached eyeHeight
-                // field that refreshDimensions() writes from event.getNewEyeHeight(),
-                // so this correctly lowers the camera for the local player.
-                // Use a fixed standing-height-based value (1.62 * scale = 0.567)
-                // so the eye height never depends on the current pose (SWIMMING eye height
-                // is only 0.4, which would put the camera in the floor when scaled).
-                event.setNewEyeHeight(1.62f * ROTTEN_SCALE);
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN)) {
+                // Shrink the physics bounding box to 0.25 × 0.6 and lower the camera.
+                // Use a fixed standing-height-based eye height (1.62 * scale = 0.567)
+                // so the eye height never depends on the current pose.
+                event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f)
+                    .withEyeHeight(1.62f * ROTTEN_SCALE));
             }
         } catch (NullPointerException ignored) {
             // EntityEvent.Size fires during entity construction before activeEffects is initialized
@@ -76,15 +72,14 @@ public class PlayerEffectEventHandler {
      * and the player can walk (not crawl) through 1-block gaps.
      */
     @SubscribeEvent
-    public static void onServerPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.START) return;
-        Player player = event.player;
+    public static void onServerPlayerTick(PlayerTickEvent.Pre event) {
+        Player player = event.getEntity();
         // Server side only
         if (!(player.level() instanceof ServerLevel)) return;
 
         boolean hasEffect;
         try {
-            hasEffect = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get());
+            hasEffect = player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN);
         } catch (NullPointerException ignored) {
             return;
         }
@@ -104,14 +99,13 @@ public class PlayerEffectEventHandler {
      * pose selection and forces SWIMMING (crawl) for any gap < 1.8 blocks.
      */
     @SubscribeEvent
-    public static void onServerPlayerTickEnd(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        Player player = event.player;
+    public static void onServerPlayerTickEnd(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
         if (!(player.level() instanceof ServerLevel)) return;
 
         // ── Rotten Apple: fix swimming pose ──────────────────────────────────
         try {
-            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())
+            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN)
                     && player.getPose() == Pose.SWIMMING
                     && !player.isInWater()) {
                 player.setPose(Pose.STANDING);
@@ -135,14 +129,14 @@ public class PlayerEffectEventHandler {
         if (!(player.level() instanceof ServerLevel)) return;
 
         try {
-            if (!player.hasEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get())) return;
+            if (!player.hasEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT)) return;
         } catch (NullPointerException ignored) { return; }
 
         // Cancel the death
         event.setCanceled(true);
 
         // Remove the one-time protection
-        player.removeEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT.get());
+        player.removeEffect(ultimate_apple_modForge.TOTEM_PROTECTION_EFFECT);
 
         // Restore health and apply the same buffs vanilla totem gives
         player.setHealth(1.0f);
@@ -179,7 +173,7 @@ public class PlayerEffectEventHandler {
         ServerPlayer recipient = null;
         Entity attacker = event.getSource().getEntity();
         if (attacker instanceof ServerPlayer sp
-                && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
+                && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT)) {
             recipient = sp;
         }
 
@@ -192,7 +186,7 @@ public class PlayerEffectEventHandler {
                 double dist = sp.distanceToSqr(dying);
                 if (dist <= 32.0 * 32.0
                         && dist < best
-                        && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT.get())) {
+                        && sp.hasEffect(ultimate_apple_modForge.LIFESTEAL_EFFECT)) {
                     recipient = sp;
                     best = dist;
                 }
