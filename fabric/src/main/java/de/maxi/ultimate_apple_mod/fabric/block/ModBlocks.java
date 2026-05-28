@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.fabric.block;
 
+import com.mojang.serialization.MapCodec;
 import de.maxi.ultimate_apple_mod.block.MixerBlock;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.BlockPos;
@@ -8,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +26,11 @@ public class ModBlocks {
                 @Override
                 public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
                     return new de.maxi.ultimate_apple_mod.fabric.block.MixerBlockEntity(pos, state);
+                }
+
+                @Override
+                protected MapCodec<? extends BaseEntityBlock> codec() {
+                    throw new UnsupportedOperationException("MixerBlock codec not supported");
                 }
             });
         MIXER_ITEM = Registry.register(BuiltInRegistries.ITEM,

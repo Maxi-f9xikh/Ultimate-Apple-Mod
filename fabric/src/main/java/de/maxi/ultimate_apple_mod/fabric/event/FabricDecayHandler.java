@@ -2,6 +2,7 @@ package de.maxi.ultimate_apple_mod.fabric.event;
 
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.event.DecayHelper;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -26,9 +27,10 @@ public class FabricDecayHandler {
                         long threshold = DecayHelper.getDecayThreshold(stack.getItem());
                         if (threshold == 0) continue;
 
-                        CompoundTag tag = stack.getOrCreateTag();
+                        CompoundTag tag = NbtCompat.getOrCreateTag(stack);
                         if (!tag.contains(DecayHelper.DECAY_TAG)) {
                             tag.putLong(DecayHelper.DECAY_TAG, now);
+                            NbtCompat.setTag(stack, tag);
                             continue;
                         }
                         long elapsed = now - tag.getLong(DecayHelper.DECAY_TAG);

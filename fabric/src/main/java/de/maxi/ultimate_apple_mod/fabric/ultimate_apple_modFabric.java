@@ -14,6 +14,7 @@ import de.maxi.ultimate_apple_mod.item.*;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -35,15 +36,17 @@ public final class ultimate_apple_modFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         // ── 1. Effects (must be before items that reference them) ─────────────
-        MobEffect curseOfRotten = Registry.register(BuiltInRegistries.MOB_EFFECT,
+        // registerForHolder returns Holder<MobEffect>, required by MobEffectInstance
+        // constructors and ModRegistries (Supplier<Holder<MobEffect>>) in MC 1.21.1.
+        Holder<MobEffect> curseOfRotten = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,
             rl("curse_of_rotten"), new CurseOfRotten());
-        MobEffect moonGravity = Registry.register(BuiltInRegistries.MOB_EFFECT,
+        Holder<MobEffect> moonGravity = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,
             rl("moon_gravity"), new MoonGravityEffect());
-        MobEffect lifesteal = Registry.register(BuiltInRegistries.MOB_EFFECT,
+        Holder<MobEffect> lifesteal = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,
             rl("lifesteal"), new LifestealEffect());
-        MobEffect totemProtection = Registry.register(BuiltInRegistries.MOB_EFFECT,
+        Holder<MobEffect> totemProtection = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,
             rl("totem_protection"), new TotemProtectionEffect());
-        MobEffect timeFreeze = Registry.register(BuiltInRegistries.MOB_EFFECT,
+        Holder<MobEffect> timeFreeze = Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,
             rl("time_freeze"), new TimeFreezeEffect());
 
         ModRegistries.CURSE_OF_ROTTEN  = () -> curseOfRotten;
@@ -54,7 +57,7 @@ public final class ultimate_apple_modFabric implements ModInitializer {
 
         // ── 2. Items ──────────────────────────────────────────────────────────
         Item diamondApple = reg("diamond_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(8).saturationMod(0.9f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.9f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20*60, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*20, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*30, 1), 1f)
@@ -62,19 +65,19 @@ public final class ultimate_apple_modFabric implements ModInitializer {
             .stacksTo(64)));
         Item lapislazuliApple = reg("lapislazuli_apple", new LapislazuliAppleItem());
         Item emeraldApple = reg("emerald_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(8).saturationMod(0.9f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.9f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.LUCK, 20*60, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20*30, 0), 1f).build())
             .stacksTo(64)));
         Item redstoneApple = reg("redstone_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(8).saturationMod(0.9f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.9f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20*20, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*20, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.GLOWING, 20*20, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*15, 0), 1f).build())
             .stacksTo(64)));
         Item netheriteApple = reg("netherite_apple", new Item(new Item.Properties().fireResistant()
-            .food(new FoodProperties.Builder().nutrition(10).saturationMod(1.0f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(10).saturationModifier(1.0f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*120, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*120, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20*120, 3), 1f)
@@ -83,100 +86,100 @@ public final class ultimate_apple_modFabric implements ModInitializer {
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20*120, 2), 1f).build())
             .stacksTo(64)));
         Item ironApple = reg("iron_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(0.7f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.7f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20*30, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*10, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*15, 0), 1f).build())
             .stacksTo(64)));
         Item rottenApple = reg("rotten_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 .effect(new MobEffectInstance(curseOfRotten, 400, 0, false, true), 1f)
                 .effect(new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1f).build())
             .stacksTo(64)));
         Item roastedApple = reg("roasted_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20*20, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.SATURATION, 20*10, 0), 1f).build())
             .stacksTo(64)));
         Item bakedApple = reg("baked_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*5, 0), 1f).build())
             .stacksTo(64)));
         Item burntApple = reg("burnt_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.1f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.1f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.HUNGER, 20*15, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.CONFUSION, 20*5, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*5, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*15, 0), 1f).build())
             .stacksTo(64)));
         Item blazeApple = reg("blaze_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(0.5f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.5f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*5, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*5, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*15, 0), 1f).build())
             .stacksTo(64)));
         Item birne = reg("pear_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.1f)
+            .food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*15, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.SATURATION, 20*5, 0), 1f).build())
             .stacksTo(64)));
         Item copperApple = reg("copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(5).saturationMod(0.6f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.6f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*25, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*25, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*25, 0), 1f).build())
             .stacksTo(64), 0, false));
         Item exposedCopperApple = reg("exposed_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.5f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*20, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*15, 0), 1f).build())
             .stacksTo(64), 1, false));
         Item weatheredCopperApple = reg("weathered_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*10, 0), 1f).build())
             .stacksTo(64), 2, false));
         Item oxidizedCopperApple = reg("oxidized_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*5, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.WEAKNESS, 20*5, 0), 1f).build())
             .stacksTo(64), 3, false));
         Item waxedCopperApple = reg("waxed_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(5).saturationMod(0.6f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.6f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*25, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*25, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*25, 0), 1f).build())
             .stacksTo(64), 0, true));
         Item waxedExposedCopperApple = reg("waxed_exposed_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.5f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*20, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*15, 0), 1f).build())
             .stacksTo(64), 1, true));
         Item waxedWeatheredCopperApple = reg("waxed_weathered_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DIG_SPEED, 20*10, 0), 1f).build())
             .stacksTo(64), 2, true));
         Item waxedOxidizedCopperApple = reg("waxed_oxidized_copper_apple", new CopperAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*5, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.WEAKNESS, 20*5, 0), 1f).build())
             .stacksTo(64), 3, true));
         Item enderPearlApple = reg("ender_pearl_apple", new EnderPearlAppleItem());
         Item moonApple = reg("moon_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(0.6f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).alwaysEdible()
                 .effect(new MobEffectInstance(moonGravity, 20*30, 0), 1f).build())
             .stacksTo(64)));
         Item orchardApple = reg("orchard_apple", new OrchardCallerItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.4f).alwaysEat().build())
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().build())
             .stacksTo(64)));
         Item echoApple = reg("echo_apple", new EchoAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(5).saturationMod(0.5f).alwaysEat().build())
+            .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.5f).alwaysEdible().build())
             .stacksTo(64)));
         Item rewindApple = reg("rewind_apple", new RewindAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.3f).alwaysEat().build())
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3f).alwaysEdible().build())
             .stacksTo(64)));
         Item appleBomb = reg("apple_bomb", new AppleBombItem(new Item.Properties().stacksTo(16)));
         Item coalApple = reg("coal_apple", new CoalAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(2).saturationMod(0.0f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.0f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.HUNGER, 20*30, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.CONFUSION, 20*10, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*15, 1), 1f)
@@ -186,30 +189,30 @@ public final class ultimate_apple_modFabric implements ModInitializer {
         Item nuclearApple = reg("nuclear_apple",
             new NuclearAppleItem(new Item.Properties().stacksTo(1).fireResistant()));
         Item witherApple = reg("wither_apple", new WitherAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(0.6f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20*30, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*10, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*5, 1), 1f).build())
             .stacksTo(64)));
         Item honeyApple = reg("honey_apple", new HoneyAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.6f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*5, 0), 1f).build())
             .stacksTo(64)));
         Item dragonApple = reg("dragon_apple", new DragonAppleItem(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(8).saturationMod(0.8f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20*10, 3), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*10, 1), 1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*10, 2), 1f).build())
             .stacksTo(64)));
         Item netherStarApple = reg("nether_star_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(10).saturationMod(1.0f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(10).saturationModifier(1.0f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 4), 1f)
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20*30, 3), 1f)
                 .effect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20*10, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*5, 3), 1f).build())
             .stacksTo(1)));
         Item dirtApple = reg("dirt_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.0f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.HUNGER, 20*30, 2), 1f)
                 .effect(new MobEffectInstance(MobEffects.CONFUSION, 20*10, 0), 1f).build())
             .stacksTo(64)));
@@ -217,18 +220,18 @@ public final class ultimate_apple_modFabric implements ModInitializer {
         Item quantumApple = reg("quantum_apple", new QuantumAppleItem());
         Item voidApple   = reg("void_apple",   new VoidAppleItem());
         Item timeFreezeApple = reg("time_freeze_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.4f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible()
                 .effect(new MobEffectInstance(timeFreeze, 20*30, 0), 1f).build())
             .stacksTo(64)));
         Item longevityApple = reg("longevity_apple", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(6).saturationMod(0.6f).alwaysEat()
+            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).alwaysEdible()
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 20*120, 3), 1f)
                 .effect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20*60, 0), 1f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 20*15, 0), 1f).build())
             .stacksTo(64)));
         Item prismApple  = reg("prism_apple",  new PrismAppleItem());
         Item banana = reg("banana", new Item(new Item.Properties()
-            .food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).build())
+            .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.5f).build())
             .stacksTo(64)));
         Item cupItem   = reg("cup",   new CupItem());
         Item shakeItem = reg("shake", new ShakeItem());

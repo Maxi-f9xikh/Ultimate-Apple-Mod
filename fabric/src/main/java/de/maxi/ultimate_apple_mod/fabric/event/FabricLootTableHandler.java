@@ -17,7 +17,8 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 public class FabricLootTableHandler {
 
     public static void register() {
-        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
+        LootTableEvents.MODIFY.register((key, tableBuilder, source) -> {
+            ResourceLocation id = key.location();
 
             // ── Entity drops ───────────────────────────────────────────────────
             if (id.equals(rl("entities/blaze")))
@@ -53,7 +54,7 @@ public class FabricLootTableHandler {
                     .when(LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS,
                         EntityPredicate.Builder.entity()
-                            .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())))
+                            .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))))
                     .add(LootItem.lootTableItem(ModRegistries.ROTTEN_APPLE.get()).setWeight(1).apply(count(1, 1)))
                     .add(EmptyLootItem.emptyItem().setWeight(9))
                     .build());

@@ -2,6 +2,7 @@ package de.maxi.ultimate_apple_mod.fabric.mixin;
 
 import de.maxi.ultimate_apple_mod.item.CoalAppleItem;
 import de.maxi.ultimate_apple_mod.item.ShakeItem;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -40,7 +41,7 @@ public class FurnaceFuelMixin {
                                              CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) return; // already accepted — leave it alone
         if (!(stack.getItem() instanceof ShakeItem)) return;
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = NbtCompat.getTag(stack);
         if (tag != null && tag.getBoolean("isCoalFuel")) {
             cir.setReturnValue(true);
         }
@@ -56,7 +57,7 @@ public class FurnaceFuelMixin {
                                           CallbackInfoReturnable<Integer> cir) {
         // Only intercept shake items — everything else uses its own registration path
         if (!(stack.getItem() instanceof ShakeItem)) return;
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = NbtCompat.getTag(stack);
         if (tag != null && tag.getBoolean("isCoalFuel")) {
             int burnTime = tag.contains("coalFuelBurnTime")
                 ? tag.getInt("coalFuelBurnTime")

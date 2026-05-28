@@ -3,16 +3,17 @@ package de.maxi.ultimate_apple_mod.fabric.event;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.event.DecayHelper;
 import de.maxi.ultimate_apple_mod.fabric.FabricModClient;
-import de.maxi.ultimate_apple_mod.network.FireDragonBreathPayload;
+import de.maxi.ultimate_apple_mod.fabric.network.FabricFireDragonBreathPayload;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
+import de.maxi.ultimate_apple_mod.util.NbtCompat;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import org.lwjgl.glfw.GLFW;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -35,9 +36,9 @@ public class FabricClientHandler {
     public static void register() {
 
         // ── Tooltip event ─────────────────────────────────────────────────────
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
+        ItemTooltipCallback.EVENT.register((stack, context, flags, lines) -> {
             // 1. Decay countdown for vanilla apples
-            CompoundTag tag = stack.getTag();
+            CompoundTag tag = NbtCompat.getTag(stack);
             if (tag != null && tag.contains(DecayHelper.DECAY_TAG)) {
                 long threshold = DecayHelper.getDecayThreshold(stack.getItem());
                 if (threshold > 0) {
@@ -76,10 +77,10 @@ public class FabricClientHandler {
                     lines.add(Component.literal("⊕ Add a Longevity Apple to double all durations.").withStyle(ChatFormatting.DARK_GREEN));
                     return;
                 }
-                FoodProperties food = item.getFoodProperties();
-                if (food != null && !food.getEffects().isEmpty()) {
+                FoodProperties food = stack.get(DataComponents.FOOD);
+                if (food != null && !food.effects().isEmpty()) {
                     lines.add(Component.literal("Effects:").withStyle(ChatFormatting.GOLD));
-                    for (var pair : food.getEffects()) lines.add(formatEffect(pair.getFirst()));
+                    for (var possible : food.effects()) lines.add(formatEffect(possible.effect()));
                 }
             }
         });
@@ -89,19 +90,7 @@ public class FabricClientHandler {
             if (client.player == null) return;
             Player player = client.player;
 
-            // Dragon breath keybind — GLFW direct polling, bypassing KeyMapping.MAP.
-            // Both consumeClick() and isDown() rely on KeyMapping.set()/click(), which
-            // route through MAP.get(key) and update only the ONE keybind that wins the
-            // MAP slot for that physical key.  Left-click is also claimed by vanilla
-            // key.attack, so one of the two bindings is always starved.
-            // GLFW.glfwGetMouseButton / InputConstants.isKeyDown read the raw hardware
-            // state and are immune to this conflict.
-            // For mouse-button bindings: read GLFW state directly to bypass
-            // KeyMapping.MAP (both consumeClick and isDown only update the single
-            // MAP-winner for a given physical button; left-click conflicts with vanilla
-            // key.attack). matchesMouse(btn) checks the CURRENT user binding, so
-            // rebinding to a different mouse button is also handled correctly.
-            // Keyboard bindings have no MAP conflict → isDown() works fine there.
+            // Dragon breath keybind — GLFW direct polling for mouse buttons.
             long window = Minecraft.getInstance().getWindow().getWindow();
             boolean isFireDown = false;
             boolean isBoundToMouse = false;
@@ -116,14 +105,12 @@ public class FabricClientHandler {
                 isFireDown = FabricModClient.FIRE_DRAGON_BREATH_KEY.isDown();
             }
             if (isFireDown && !prevFireBreathDown) {
-                // Rising edge: key was just pressed this tick
                 boolean aimingAtEntity = client.hitResult instanceof net.minecraft.world.phys.EntityHitResult;
                 var mainHand = player.getMainHandItem();
                 boolean holdingMelee = mainHand.getItem() instanceof net.minecraft.world.item.SwordItem
                     || mainHand.getItem() instanceof net.minecraft.world.item.AxeItem;
                 if (!(aimingAtEntity && holdingMelee)) {
-                    // Fabric 1.20.1 channel-based packet send (no CustomPacketPayload)
-                    ClientPlayNetworking.send(FireDragonBreathPayload.CHANNEL, PacketByteBufs.empty());
+                    ClientPlayNetworking.send(new FabricFireDragonBreathPayload());
                 }
             }
             prevFireBreathDown = isFireDown;
@@ -146,7 +133,7 @@ public class FabricClientHandler {
         int amp = eff.getAmplifier();
         int dur = eff.getDuration();
         MutableComponent line = Component.literal("  ")
-            .append(eff.getEffect().getDisplayName().copy().withStyle(ChatFormatting.GRAY));
+            .append(eff.getEffect().value().getDisplayName().copy().withStyle(ChatFormatting.GRAY));
         if (amp > 0) line.append(Component.literal(" " + toRoman(amp + 1)).withStyle(ChatFormatting.GRAY));
         line.append(Component.literal(" (" + formatDuration(dur) + ")").withStyle(ChatFormatting.DARK_GRAY));
         return line;
