@@ -89,13 +89,16 @@ public class OrchardCallerItem extends Item {
             .orElse("");
 
         // cherry must be checked before grove — "cherry_grove" contains both substrings
-        if (biome.contains("cherry"))  return TreeFeatures.CHERRY;
-        if (biome.contains("birch"))   return TreeFeatures.BIRCH;
-        if (biome.contains("jungle"))  return TreeFeatures.JUNGLE_TREE;
+        if (biome.contains("cherry"))      return TreeFeatures.CHERRY;
+        if (biome.contains("birch"))       return TreeFeatures.BIRCH;
+        // large 2×2 jungle tree for jungle biomes
+        if (biome.contains("jungle"))      return TreeFeatures.MEGA_JUNGLE_TREE;
         // all taiga variants, plus grove and snowy_slopes, have natural spruce trees
         if (biome.contains("taiga") || biome.contains("grove")
                 || biome.contains("snowy_slopes")) return TreeFeatures.SPRUCE;
-        if (biome.contains("savanna")) return TreeFeatures.ACACIA;
+        if (biome.contains("savanna"))     return TreeFeatures.ACACIA;
+        // dark_forest (Zauberwald) → 2×2 dark oak
+        if (biome.contains("dark_forest")) return TreeFeatures.DARK_OAK;
         return TreeFeatures.OAK;
     }
 
@@ -170,7 +173,7 @@ public class OrchardCallerItem extends Item {
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§aEating this apple calls an orchard!")
             .withStyle(ChatFormatting.GREEN));
-        components.add(Component.literal("§7Spawns up to 4 oak trees around you.")
+        components.add(Component.literal("§7Spawns up to 4 trees suited to your biome.")
             .withStyle(ChatFormatting.GRAY));
     }
 }

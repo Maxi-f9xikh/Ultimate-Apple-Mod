@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:smithing_transform",
   "template": {
     "item": "minecraft:netherite_upgrade_smithing_template"
@@ -10,6 +10,6 @@
     "item": "minecraft:netherite_ingot"
   },
   "result": {
-    "item": "ultimate_apple_mod:netherite_apple"
+    "id": "ultimate_apple_mod:netherite_apple"
   }
 }

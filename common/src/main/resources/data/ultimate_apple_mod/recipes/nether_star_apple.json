@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "GGG",
@@ -11,7 +11,7 @@
     "N": { "item": "minecraft:nether_star" }
   },
   "result": {
-    "item": "ultimate_apple_mod:nether_star_apple",
+    "id": "ultimate_apple_mod:nether_star_apple",
     "count": 1
   }
 }

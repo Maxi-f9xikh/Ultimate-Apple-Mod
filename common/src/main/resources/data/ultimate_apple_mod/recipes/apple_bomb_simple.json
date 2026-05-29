@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     { "item": "minecraft:gunpowder" },
@@ -7,7 +7,7 @@
     { "item": "minecraft:apple" }
   ],
   "result": {
-    "item": "ultimate_apple_mod:apple_bomb",
+    "id": "ultimate_apple_mod:apple_bomb",
     "count": 1
   }
 }

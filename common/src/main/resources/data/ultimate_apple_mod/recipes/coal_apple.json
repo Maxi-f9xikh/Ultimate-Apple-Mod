@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "CCC",
@@ -14,6 +14,6 @@
     }
   },
   "result": {
-    "item": "ultimate_apple_mod:coal_apple"
+    "id": "ultimate_apple_mod:coal_apple"
   }
 }

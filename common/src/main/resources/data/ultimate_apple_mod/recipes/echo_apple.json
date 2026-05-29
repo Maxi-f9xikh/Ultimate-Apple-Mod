@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "EAE",
@@ -11,6 +11,6 @@
     "P": { "item": "minecraft:apple" }
   },
   "result": {
-    "item": "ultimate_apple_mod:echo_apple"
+    "id": "ultimate_apple_mod:echo_apple"
   }
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "DDD",
@@ -10,6 +10,6 @@
     "A": { "item": "minecraft:apple" }
   },
   "result": {
-    "item": "ultimate_apple_mod:dragon_apple"
+    "id": "ultimate_apple_mod:dragon_apple"
   }
 }

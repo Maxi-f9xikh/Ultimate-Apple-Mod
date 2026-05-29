@@ -20,9 +20,10 @@ public class CoalAppleItem extends Item {
 
     /**
      * Burn time in ticks when used directly as furnace fuel.
-     * 6 400 t = 32 items smelted (same as a block of coal).
+     * 11 200 t = 56 items smelted — less than a coal block (80 items / 16 000 t)
+     * but significantly more than a single coal (8 items / 1 600 t).
      */
-    public static final int BURN_TIME = 6_400;
+    public static final int BURN_TIME = 11_200;
 
     /**
      * Burn time of a coal-infused shake in ticks.

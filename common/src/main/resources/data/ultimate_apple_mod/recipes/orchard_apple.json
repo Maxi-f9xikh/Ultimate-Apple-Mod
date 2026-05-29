@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "FFF",
@@ -10,7 +10,7 @@
     "D": { "item": "ultimate_apple_mod:dirt_apple" }
   },
   "result": {
-    "item": "ultimate_apple_mod:orchard_apple",
+    "id": "ultimate_apple_mod:orchard_apple",
     "count": 1
   }
 }

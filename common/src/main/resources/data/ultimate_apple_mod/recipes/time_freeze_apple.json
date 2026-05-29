@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "BCB",
@@ -11,6 +11,6 @@
     "A": { "item": "minecraft:golden_apple" }
   },
   "result": {
-    "item": "ultimate_apple_mod:time_freeze_apple"
+    "id": "ultimate_apple_mod:time_freeze_apple"
   }
 }

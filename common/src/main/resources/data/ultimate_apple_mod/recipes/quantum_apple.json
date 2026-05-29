@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     { "item": "minecraft:apple" },
@@ -8,6 +8,6 @@
     { "item": "minecraft:fermented_spider_eye" }
   ],
   "result": {
-    "item": "ultimate_apple_mod:quantum_apple"
+    "id": "ultimate_apple_mod:quantum_apple"
   }
 }

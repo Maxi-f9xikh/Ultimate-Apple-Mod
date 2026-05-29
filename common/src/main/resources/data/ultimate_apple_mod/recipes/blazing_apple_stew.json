@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "   ",
@@ -12,7 +12,7 @@
     "D": { "item": "minecraft:blaze_rod" }
   },
   "result": {
-    "item": "ultimate_apple_mod:blazing_apple_stew",
+    "id": "ultimate_apple_mod:blazing_apple_stew",
     "count": 1
   }
 }

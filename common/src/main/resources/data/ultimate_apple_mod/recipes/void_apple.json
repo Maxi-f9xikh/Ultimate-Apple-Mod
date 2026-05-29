@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "CCC",
@@ -10,6 +10,6 @@
     "A": { "item": "minecraft:golden_apple" }
   },
   "result": {
-    "item": "ultimate_apple_mod:void_apple"
+    "id": "ultimate_apple_mod:void_apple"
   }
 }

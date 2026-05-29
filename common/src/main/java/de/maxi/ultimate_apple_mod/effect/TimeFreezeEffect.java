@@ -86,8 +86,8 @@ public class TimeFreezeEffect extends MobEffect {
             if (target instanceof Mob mob) {
                 // Disable AI — this stops all movement, pathfinding, attacks, etc.
                 mob.setNoAi(true);
-                // Mark so we can restore it when the effect expires
-                FrozenMobCache.freeze(mob.getUUID());
+                // Track per-caster so the cleanup handler can restore AI on expiry
+                FrozenMobCache.freeze(caster.getUUID(), mob.getUUID());
             } else if (target instanceof Player) {
                 // Players cannot have their AI removed; use max Slowness instead
                 target.addEffect(new MobEffectInstance(
