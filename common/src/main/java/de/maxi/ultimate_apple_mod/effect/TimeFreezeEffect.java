@@ -85,8 +85,8 @@ public class TimeFreezeEffect extends MobEffect {
             if (target instanceof Mob mob) {
                 // Disable AI — this stops all movement, pathfinding, attacks, etc.
                 mob.setNoAi(true);
-                // Mark so we can restore it when the effect expires
-                FrozenMobCache.freeze(mob.getUUID());
+                // Track per-caster so the cleanup handler can restore AI on expiry
+                FrozenMobCache.freeze(caster.getUUID(), mob.getUUID());
             } else if (target instanceof Player) {
                 // Players cannot have their AI removed; use max Slowness instead
                 target.addEffect(new MobEffectInstance(
@@ -97,9 +97,9 @@ public class TimeFreezeEffect extends MobEffect {
     }
 
     /**
-     * MC 1.20.4: removeAttributeModifiers no longer provides entity access.
-     * Frozen mob AI restoration is a known limitation on this branch.
-     * In practice, mobs will regain AI after the server restarts or via FrozenMobCache.unfreeze.
+     * removeAttributeModifiers() lost its entity parameter in MC 1.20.4, so we
+     * cannot unfreeze mobs here.  Cleanup is handled by the platform tick handlers
+     * (Forge PlayerTickEvent / Fabric ServerTickEvents) instead.
      */
     @Override
     public void removeAttributeModifiers(AttributeMap attributeMap) {

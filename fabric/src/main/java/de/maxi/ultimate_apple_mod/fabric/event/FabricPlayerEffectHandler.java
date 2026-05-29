@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.fabric.event;
 
+import de.maxi.ultimate_apple_mod.FrozenMobCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -10,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -87,6 +89,27 @@ public class FabricPlayerEffectHandler {
             if (server.overworld().getGameTime() % 20 == 0) {
                 for (ServerLevel level : server.getAllLevels()) {
                     RewindPositionCache.recordAll(level.players());
+                }
+            }
+        });
+
+        // ── Time Freeze cleanup: restore mob AI when effect expires ───────────
+        // removeAttributeModifiers() lost its entity parameter in MC 1.20.4, so we
+        // detect expiry here and re-enable AI for every mob the player froze.
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (ServerLevel level : server.getAllLevels()) {
+                for (ServerPlayer player : level.players()) {
+                    if (!FrozenMobCache.hasFrozenMobs(player.getUUID())) continue;
+                    boolean hasFreeze;
+                    try { hasFreeze = player.hasEffect(ModRegistries.TIME_FREEZE.get()); }
+                    catch (NullPointerException e) { hasFreeze = false; }
+                    if (!hasFreeze) {
+                        level.getEntitiesOfClass(Mob.class,
+                                player.getBoundingBox().inflate(200),
+                                mob -> FrozenMobCache.isFrozen(mob.getUUID()))
+                            .forEach(mob -> mob.setNoAi(false));
+                        FrozenMobCache.clearPlayer(player.getUUID());
+                    }
                 }
             }
         });

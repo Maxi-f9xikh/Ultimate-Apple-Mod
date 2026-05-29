@@ -1,5 +1,6 @@
 package de.maxi.ultimate_apple_mod.forge.event;
 
+import de.maxi.ultimate_apple_mod.FrozenMobCache;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -82,6 +84,21 @@ public class PlayerEffectEventHandler {
             }
         } catch (NullPointerException ignored) {}
 
+        // ── Time Freeze cleanup: restore mob AI when effect expires ───────────
+        // removeAttributeModifiers() lost its entity parameter in MC 1.20.4, so we
+        // detect expiry here and call setNoAi(false) for every mob this player froze.
+        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        if (!FrozenMobCache.hasFrozenMobs(player.getUUID())) return;
+        boolean hasFreeze;
+        try { hasFreeze = player.hasEffect(ultimate_apple_modForge.TIME_FREEZE_EFFECT.get()); }
+        catch (NullPointerException e) { hasFreeze = false; }
+        if (!hasFreeze) {
+            serverLevel.getEntitiesOfClass(Mob.class,
+                    player.getBoundingBox().inflate(200),
+                    mob -> FrozenMobCache.isFrozen(mob.getUUID()))
+                .forEach(mob -> mob.setNoAi(false));
+            FrozenMobCache.clearPlayer(player.getUUID());
+        }
     }
 
     // ── Totem Apple — cancel death ────────────────────────────────────────────
