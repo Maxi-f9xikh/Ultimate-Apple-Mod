@@ -61,28 +61,22 @@ public class OrchardCallerItem extends Item {
     }
 
     /**
-     * Plants up to {@code maxTrees} oak trees around {@code center}.
-     * Returns the number of trees actually planted.
-     * Called both from eating the Orchard Apple directly and from shakes/bombs.
-     */
-    /**
-     * Picks the appropriate tree type for the biome at {@code pos}.
-     * The goal is to match the trees that naturally grow in that biome.
-     * Falls back to Oak for biomes without natural trees (beach, ocean, desert …).
+     * Picks a tree type for the given biome, using {@code rng} for biomes that
+     * naturally contain multiple tree species.
      *
      * <ul>
-     *   <li>cherry / cherry_grove → Cherry</li>
-     *   <li>birch / old_growth_birch_forest → Birch</li>
-     *   <li>jungle / bamboo_jungle / sparse_jungle → Jungle tree (small)</li>
-     *   <li>taiga / snowy_taiga / old_growth_*_taiga → Spruce</li>
-     *   <li>grove / snowy_slopes → Spruce (spruce grows here naturally)</li>
-     *   <li>savanna / savanna_plateau / windswept_savanna → Acacia</li>
-     *   <li>everything else (forest, dark_forest, swamp, plains,
-     *       beach, ocean, desert …) → Oak</li>
+     *   <li>cherry / cherry_grove    → Cherry (100 %)</li>
+     *   <li>birch biomes             → Birch (100 %)</li>
+     *   <li>jungle biomes            → Mega Jungle (60 %) | small Jungle (40 %)</li>
+     *   <li>taiga / grove / snowy    → Spruce (100 %)</li>
+     *   <li>savanna                  → Acacia (100 %)</li>
+     *   <li>dark_forest (Zauberwald) → Dark Oak (70 %) | Oak (30 %)</li>
+     *   <li>forest / flower_forest   → Oak (70 %) | Birch (30 %)</li>
+     *   <li>everything else          → Oak (100 %)</li>
      * </ul>
      */
     private static ResourceKey<ConfiguredFeature<?, ?>> treeTypeForBiome(
-            ServerLevel level, BlockPos pos) {
+            ServerLevel level, BlockPos pos, RandomSource rng) {
         Holder<Biome> biomeHolder = level.getBiome(pos);
         String biome = biomeHolder.unwrapKey()
             .map(k -> k.location().getPath())
@@ -90,33 +84,26 @@ public class OrchardCallerItem extends Item {
 
         // cherry must be checked before grove — "cherry_grove" contains both substrings
         if (biome.contains("cherry"))      return TreeFeatures.CHERRY;
+        // birch must be checked before generic "forest" below
         if (biome.contains("birch"))       return TreeFeatures.BIRCH;
-        // large 2×2 jungle tree for jungle biomes
-        if (biome.contains("jungle"))      return TreeFeatures.MEGA_JUNGLE_TREE;
+        // jungle: big trees are iconic, but small jungle trees also spawn naturally
+        if (biome.contains("jungle"))
+            return rng.nextFloat() < 0.6f ? TreeFeatures.MEGA_JUNGLE_TREE : TreeFeatures.JUNGLE_TREE;
         // all taiga variants, plus grove and snowy_slopes, have natural spruce trees
         if (biome.contains("taiga") || biome.contains("grove")
                 || biome.contains("snowy_slopes")) return TreeFeatures.SPRUCE;
         if (biome.contains("savanna"))     return TreeFeatures.ACACIA;
-        // dark_forest (Zauberwald) → 2×2 dark oak
-        if (biome.contains("dark_forest")) return TreeFeatures.DARK_OAK;
+        // dark_forest (Zauberwald): dominated by dark oak but regular oak also spawns
+        if (biome.contains("dark_forest"))
+            return rng.nextFloat() < 0.7f ? TreeFeatures.DARK_OAK : TreeFeatures.OAK;
+        // generic forest / flower_forest: mostly oak with occasional birch
+        if (biome.contains("forest"))
+            return rng.nextFloat() < 0.7f ? TreeFeatures.OAK : TreeFeatures.BIRCH;
         return TreeFeatures.OAK;
     }
 
     public static int plantTrees(ServerLevel serverLevel, BlockPos center,
                                   RandomSource rng, int maxTrees) {
-        ResourceKey<ConfiguredFeature<?, ?>> treeType = treeTypeForBiome(serverLevel, center);
-        var featureOpt = serverLevel.registryAccess()
-            .registry(Registries.CONFIGURED_FEATURE)
-            .flatMap(reg -> reg.getHolder(treeType));
-        // Fall back to oak if the biome-specific feature isn't available
-        if (featureOpt.isEmpty()) {
-            featureOpt = serverLevel.registryAccess()
-                .registry(Registries.CONFIGURED_FEATURE)
-                .flatMap(reg -> reg.getHolder(TreeFeatures.OAK));
-        }
-        if (featureOpt.isEmpty()) return 0;
-        var treeFeature = featureOpt.get().value();
-
         int treesPlanted = 0;
         int attempts     = 0;
         int maxAttempts  = maxTrees * 15;
@@ -149,8 +136,23 @@ public class OrchardCallerItem extends Item {
                     serverLevel.setBlock(groundPos, Blocks.GRASS_BLOCK.defaultBlockState(), 3);
                 }
 
+                // Pick the tree type fresh for each tree so mixed biomes (jungle,
+                // dark_forest, forest) produce visible variety in a single eating.
+                ResourceKey<ConfiguredFeature<?, ?>> treeType =
+                    treeTypeForBiome(serverLevel, treePos, rng);
+                var featureOpt = serverLevel.registryAccess()
+                    .registry(Registries.CONFIGURED_FEATURE)
+                    .flatMap(reg -> reg.getHolder(treeType));
+                // Fall back to oak if the biome-specific feature isn't registered
+                if (featureOpt.isEmpty()) {
+                    featureOpt = serverLevel.registryAccess()
+                        .registry(Registries.CONFIGURED_FEATURE)
+                        .flatMap(reg -> reg.getHolder(TreeFeatures.OAK));
+                }
+                if (featureOpt.isEmpty()) continue;
+
                 // Place the tree directly via ConfiguredFeature — no sapling, guaranteed growth
-                boolean grew = treeFeature.place(
+                boolean grew = featureOpt.get().value().place(
                     serverLevel,
                     serverLevel.getChunkSource().getGenerator(),
                     rng,
@@ -173,7 +175,7 @@ public class OrchardCallerItem extends Item {
                                  List<Component> components, TooltipFlag flag) {
         components.add(Component.literal("§aEating this apple calls an orchard!")
             .withStyle(ChatFormatting.GREEN));
-        components.add(Component.literal("§7Spawns up to 4 trees suited to your biome.")
+        components.add(Component.literal("§7Spawns up to 4 biome-native trees (mixed species where possible).")
             .withStyle(ChatFormatting.GRAY));
     }
 }
