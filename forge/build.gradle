@@ -20,7 +20,13 @@ configurations {
     }
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    // NOTE: developmentForge must NOT extend common here.
+    // Adding the common dev-JAR to developmentForge causes Architectury to list it in
+    // architectury.classpath, so Forge's module scanner sees both the original dev-JAR
+    // (module "ultimate.apple.mod.common") AND the transformer-generated fake-mod JAR
+    // (module "generated_XXXXXXX") at the same time — split-package ResolutionException.
+    // The Architectury transformer already adds the transformed JAR to Forge's runtime,
+    // so developmentForge does not need the raw dev-JAR.
 
     shadowBundle {
         canBeResolved = true
@@ -78,4 +84,46 @@ jar {
 // but IntelliJ counts [removal] warnings as "errors" in its Build panel.
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << '-Xlint:-removal'
+}
+
+// ── Fix Forge JPMS split-package crash ────────────────────────────────────────
+// Architectury Loom adds the common dev-JAR to architectury.classpath in
+// forge/.gradle/architectury/.properties.  At "Scanning mod candidates", Forge's
+// securemodules sees BOTH the raw dev-JAR (module "ultimate.apple.mod.common") AND
+// the Architectury-transformed fake-mod JAR (module "generated_XXXXXXX"), which
+// export the same packages → ResolutionException.
+//
+// Fix: remove the dev-JAR entry from architectury.classpath after ideaSyncTask
+// generates the file.  The Architectury transformer still uses .transforms to
+// inject the common module at runtime via the generated JAR.
+tasks.register("patchArchitecturyClasspath") {
+    group = "architectury"
+    description = "Remove common dev-JAR from architectury.classpath to prevent Forge split-package crash"
+
+    doLast {
+        def propFile = file(".gradle/architectury/.properties")
+        if (!propFile.exists()) {
+            logger.warn("patchArchitecturyClasspath: .properties not found, skipping")
+            return
+        }
+
+        def content = propFile.text
+        // Match the dev-JAR entry (Windows escaped backslashes in a .properties value)
+        def patched = content.replaceAll(
+            /E\\:.*?ultimate_apple_mod-common-[^;\\n]+-dev\.jar;?/,
+            ''
+        )
+
+        if (patched != content) {
+            propFile.text = patched
+            logger.lifecycle("patchArchitecturyClasspath: removed common dev-JAR from architectury.classpath")
+        } else {
+            logger.warn("patchArchitecturyClasspath: dev-JAR pattern not found in architectury.classpath (may already be clean)")
+        }
+    }
+}
+
+// Auto-run after every ideaSyncTask so the fix survives Gradle reloads
+tasks.matching { it.name == "ideaSyncTask" }.configureEach {
+    finalizedBy("patchArchitecturyClasspath")
 }
