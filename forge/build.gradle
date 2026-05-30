@@ -32,10 +32,13 @@ dependencies {
     forge "net.minecraftforge:forge:$rootProject.forge_version"
     modImplementation "dev.architectury:architectury-forge:$rootProject.architectury_api_version"
 
-    // Common-Projekt einbinden
+    // Common-Projekt einbinden.
+    // Only use the custom 'common' configuration — compileClasspath/runtimeClasspath/developmentForge
+    // already extend it (see above).  Adding implementation project(":common") on top would put the
+    // named JAR on Forge's module path TWICE (once as common-dev, once as common), causing a JPMS
+    // split-package ResolutionException at startup.
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'namedElements')
-    implementation project(":common")
 
     // JEI (Just Enough Items) — compile-only: mod works without it, integrates when present
     compileOnly "mezz.jei:jei-1.20.4-common-api:17.3.0.52"
