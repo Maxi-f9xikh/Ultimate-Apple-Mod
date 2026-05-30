@@ -69,3 +69,10 @@ jar {
         into "META-INF"
     }
 }
+
+// Suppress @Deprecated(forRemoval=true) warnings from Forge 49 APIs that have
+// not been updated yet — these are warnings not errors and the build succeeds,
+// but IntelliJ counts [removal] warnings as "errors" in its Build panel.
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-Xlint:-removal'
+}
