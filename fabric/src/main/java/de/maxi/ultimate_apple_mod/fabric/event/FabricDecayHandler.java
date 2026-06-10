@@ -1,6 +1,5 @@
 package de.maxi.ultimate_apple_mod.fabric.event;
 
-import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.event.DecayHelper;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.nbt.CompoundTag;
@@ -34,9 +33,9 @@ public class FabricDecayHandler {
                         long elapsed = now - tag.getLong(DecayHelper.DECAY_TAG);
                         if (elapsed < threshold) continue;
 
-                        // Decay: apple → rotten apple
-                        int count = stack.getCount();
-                        inv.setItem(i, new ItemStack(ModRegistries.ROTTEN_APPLE.get(), count));
+                        // Decay to the next stage down the chain
+                        // (enchanted golden → golden → apple → rotten apple)
+                        inv.setItem(i, DecayHelper.getDecayReplacement(stack));
                     }
                 }
             }
