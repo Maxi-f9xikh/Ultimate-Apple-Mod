@@ -1,8 +1,8 @@
 package de.maxi.ultimate_apple_mod;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Platform-neutral store for per-player echo apple position data.
@@ -23,7 +23,7 @@ public class EchoPositionCache {
         }
     }
 
-    private static final Map<UUID, SavedPosition> positions = new HashMap<>();
+    private static final Map<UUID, SavedPosition> positions = new ConcurrentHashMap<>();
 
     public static boolean hasPosition(UUID playerId) {
         return positions.containsKey(playerId);

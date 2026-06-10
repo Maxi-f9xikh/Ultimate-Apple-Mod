@@ -1,5 +1,9 @@
 package de.maxi.ultimate_apple_mod;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Mob;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -52,6 +56,27 @@ public class FrozenMobCache {
         Set<UUID> mobs = byPlayer.remove(playerId);
         if (mobs != null) {
             frozenMobs.removeAll(mobs);
+        }
+    }
+
+    /**
+     * Restore AI for every mob frozen by {@code playerId} and clear the tracking
+     * entry.  Mobs are looked up by UUID across all dimensions, so this works no
+     * matter how far the player travelled — or whether they disconnected — since
+     * freezing them.  Called on effect expiry (platform tick handlers) and on
+     * player logout.
+     */
+    public static void releaseAll(MinecraftServer server, UUID playerId) {
+        Set<UUID> mobs = byPlayer.remove(playerId);
+        if (mobs == null || mobs.isEmpty()) return;
+        frozenMobs.removeAll(mobs);
+        for (UUID mobId : mobs) {
+            for (ServerLevel level : server.getAllLevels()) {
+                if (level.getEntity(mobId) instanceof Mob mob) {
+                    mob.setNoAi(false);
+                    break;
+                }
+            }
         }
     }
 
