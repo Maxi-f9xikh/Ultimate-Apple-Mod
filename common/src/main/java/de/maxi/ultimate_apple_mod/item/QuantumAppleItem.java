@@ -118,9 +118,10 @@ public class QuantumAppleItem extends Item {
                                            ServerPlayer player, Level level) {
 
         if (chosen.clearsEffects()) {
-            // Honey Apple behaviour: clears all active effects, nothing added
+            // Honey Apple behaviour: clear active effects FIRST, then fall through
+            // so the contribution's own effects (e.g. Honey's Slowness) still apply —
+            // matching how ShakeItem handles cleansing shakes.
             player.removeAllEffects();
-            return;
         }
 
         // ── Standard mob effects ──────────────────────────────────────────
