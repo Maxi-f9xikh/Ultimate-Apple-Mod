@@ -83,10 +83,14 @@ public class TimeFreezeEffect extends MobEffect {
             }
 
             if (target instanceof Mob mob) {
-                // Disable AI — this stops all movement, pathfinding, attacks, etc.
-                mob.setNoAi(true);
-                // Track per-caster so the cleanup handler can restore AI on expiry
-                FrozenMobCache.freeze(caster.getUUID(), mob.getUUID());
+                // Disable AI once — this stops all movement, pathfinding, attacks, etc.
+                // Skip mobs that are already frozen so we don't redo the map writes
+                // for every mob in range on every single tick.
+                if (!FrozenMobCache.isFrozen(mob.getUUID())) {
+                    mob.setNoAi(true);
+                    // Track per-caster so the cleanup handler can restore AI on expiry
+                    FrozenMobCache.freeze(caster.getUUID(), mob.getUUID());
+                }
             } else if (target instanceof Player) {
                 // Players cannot have their AI removed; use max Slowness instead
                 target.addEffect(new MobEffectInstance(
