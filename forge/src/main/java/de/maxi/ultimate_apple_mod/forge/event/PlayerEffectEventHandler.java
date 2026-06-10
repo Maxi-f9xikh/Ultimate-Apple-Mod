@@ -1,9 +1,13 @@
 package de.maxi.ultimate_apple_mod.forge.event;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
+import de.maxi.ultimate_apple_mod.FrozenMobCache;
+import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import de.maxi.ultimate_apple_mod.forge.ultimate_apple_modForge;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -11,14 +15,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,40 +37,6 @@ public class PlayerEffectEventHandler {
      * what ClientPlayerRenderHandler does for the client player.
      */
     private static final WeakHashMap<Player, Boolean> serverRottenState = new WeakHashMap<>();
-
-    // ── Hitbox resize ─────────────────────────────────────────────────────────
-
-    /**
-     * Returns shrunken dimensions (0.25 × 0.6) whenever a player has Curse of Rotten.
-     * Fires whenever getDimensions(Pose) is called, so it covers both standing-height
-     * checks (for pose selection) and actual bounding-box updates.
-     */
-    /**
-     * Visual scale used for rendering (ClientPlayerRenderHandler) and physics (here).
-     * Keep in sync with the scale(0.35f) call in ClientPlayerRenderHandler.onRenderPlayerPre.
-     */
-    private static final float ROTTEN_SCALE = 0.35f;
-
-    @SubscribeEvent
-    public static void onEntitySize(EntityEvent.Size event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        try {
-            if (player.hasEffect(ultimate_apple_modForge.CURSE_OF_ROTTEN.get())) {
-                // Shrink the physics bounding box to 0.25 × 0.6
-                event.setNewSize(EntityDimensions.scalable(0.25f, 0.6f));
-                // Lower the first-person camera to match the visual render scale.
-                // Entity.getEyeHeight() (no-arg, final) returns the cached eyeHeight
-                // field that refreshDimensions() writes from event.getNewEyeHeight(),
-                // so this correctly lowers the camera for the local player.
-                // Use a fixed standing-height-based value (1.62 * scale = 0.567)
-                // so the eye height never depends on the current pose (SWIMMING eye height
-                // is only 0.4, which would put the camera in the floor when scaled).
-                event.setNewEyeHeight(1.62f * ROTTEN_SCALE);
-            }
-        } catch (NullPointerException ignored) {
-            // EntityEvent.Size fires during entity construction before activeEffects is initialized
-        }
-    }
 
     /**
      * Server-side mirror of ClientPlayerRenderHandler.onClientTick.
@@ -107,7 +76,7 @@ public class PlayerEffectEventHandler {
     public static void onServerPlayerTickEnd(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         Player player = event.player;
-        if (!(player.level() instanceof ServerLevel)) return;
+        if (!(player.level() instanceof ServerLevel serverLevel)) return;
 
         // ── Rotten Apple: fix swimming pose ──────────────────────────────────
         try {
@@ -118,6 +87,35 @@ public class PlayerEffectEventHandler {
             }
         } catch (NullPointerException ignored) {}
 
+        // ── Time Freeze cleanup: restore mob AI when effect expires ───────────
+        // removeAttributeModifiers() lost its entity parameter in MC 1.20.4, so we
+        // detect expiry here.  releaseAll() finds the mobs by UUID across all
+        // dimensions, so it works even when the player travelled far away.
+        if (!FrozenMobCache.hasFrozenMobs(player.getUUID())) return;
+        boolean hasFreeze;
+        try { hasFreeze = player.hasEffect(ultimate_apple_modForge.TIME_FREEZE_EFFECT.get()); }
+        catch (NullPointerException e) { hasFreeze = false; }
+        if (!hasFreeze) {
+            FrozenMobCache.releaseAll(serverLevel.getServer(), player.getUUID());
+        }
+    }
+
+    // ── Disconnect cleanup ────────────────────────────────────────────────────
+
+    /**
+     * When a player disconnects: release every mob they froze (otherwise those
+     * mobs would stand AI-less forever) and drop their per-player cache entries
+     * so the static caches can't grow unbounded over the server's lifetime.
+     */
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        MinecraftServer server = player.getServer();
+        if (server != null) {
+            FrozenMobCache.releaseAll(server, player.getUUID());
+        }
+        DragonChargesCache.clearOnDisconnect(player.getUUID());
+        RewindPositionCache.clearPlayer(player.getUUID());
     }
 
     // ── Totem Apple — cancel death ────────────────────────────────────────────

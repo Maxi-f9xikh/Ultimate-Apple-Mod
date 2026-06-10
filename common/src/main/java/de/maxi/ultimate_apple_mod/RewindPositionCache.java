@@ -5,9 +5,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Platform-neutral position history store.
@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class RewindPositionCache {
 
-    private static final Map<UUID, ArrayDeque<Vec3>> history = new HashMap<>();
+    private static final Map<UUID, ArrayDeque<Vec3>> history = new ConcurrentHashMap<>();
 
     /** Called once per second by each platform's server-tick handler. */
     public static void recordAll(Iterable<? extends Player> players) {
@@ -32,5 +32,10 @@ public class RewindPositionCache {
         ArrayDeque<Vec3> q = history.get(player.getUUID());
         if (q == null || q.isEmpty()) return null;
         return q.peekFirst();
+    }
+
+    /** Drops a player's history.  Called when the player disconnects. */
+    public static void clearPlayer(UUID playerId) {
+        history.remove(playerId);
     }
 }

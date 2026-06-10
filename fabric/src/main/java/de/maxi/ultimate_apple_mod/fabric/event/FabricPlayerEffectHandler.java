@@ -1,9 +1,12 @@
 package de.maxi.ultimate_apple_mod.fabric.event;
 
+import de.maxi.ultimate_apple_mod.DragonChargesCache;
+import de.maxi.ultimate_apple_mod.FrozenMobCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 public class FabricPlayerEffectHandler {
@@ -82,34 +86,57 @@ public class FabricPlayerEffectHandler {
                 4, 0.4, 0.15, 0.4, 0.0);
         });
 
-        // ── Rewind position tracking: record player positions every second ─────
+        // ── Combined per-tick handling: rewind history, Time Freeze cleanup, ──
+        // ── CurseOfRotten dimensions/pose — one pass over all players/tick ────
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if (server.overworld().getGameTime() % 20 == 0) {
-                for (ServerLevel level : server.getAllLevels()) {
+            boolean recordRewind = server.overworld().getGameTime() % 20 == 0;
+            for (ServerLevel level : server.getAllLevels()) {
+                // Rewind position tracking: record player positions every second
+                if (recordRewind) {
                     RewindPositionCache.recordAll(level.players());
                 }
-            }
-        });
 
-        // ── CurseOfRotten: refreshDimensions + pose fix (server-side) ─────────
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (ServerLevel level : server.getAllLevels()) {
                 for (ServerPlayer player : level.players()) {
-                    boolean hasEffect;
-                    try { hasEffect = player.hasEffect(ModRegistries.CURSE_OF_ROTTEN.get()); }
+                    // Time Freeze cleanup: restore mob AI when the effect expires.
+                    // removeAttributeModifiers() lost its entity parameter in MC
+                    // 1.20.4, so we detect expiry here.  releaseAll() finds the
+                    // mobs by UUID across all dimensions.
+                    if (FrozenMobCache.hasFrozenMobs(player.getUUID())) {
+                        boolean hasFreeze;
+                        try { hasFreeze = player.hasEffect(ModRegistries.TIME_FREEZE.get()); }
+                        catch (NullPointerException e) { hasFreeze = false; }
+                        if (!hasFreeze) {
+                            FrozenMobCache.releaseAll(server, player.getUUID());
+                        }
+                    }
+
+                    // CurseOfRotten: refreshDimensions + pose fix (server-side)
+                    boolean hasRotten;
+                    try { hasRotten = player.hasEffect(ModRegistries.CURSE_OF_ROTTEN.get()); }
                     catch (NullPointerException ignored) { continue; }
 
                     Boolean prev = serverRottenState.get(player);
-                    if (prev == null || prev != hasEffect) {
-                        serverRottenState.put(player, hasEffect);
+                    if (prev == null || prev != hasRotten) {
+                        serverRottenState.put(player, hasRotten);
                         player.refreshDimensions();
                     }
                     // Fix swimming pose on land
-                    if (hasEffect && player.getPose() == Pose.SWIMMING && !player.isInWater()) {
+                    if (hasRotten && player.getPose() == Pose.SWIMMING && !player.isInWater()) {
                         player.setPose(Pose.STANDING);
                     }
                 }
             }
+        });
+
+        // ── Disconnect cleanup ────────────────────────────────────────────────
+        // Release every mob the leaving player froze (otherwise those mobs would
+        // stand AI-less forever) and drop the per-player cache entries so the
+        // static caches can't grow unbounded over the server's lifetime.
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            UUID id = handler.player.getUUID();
+            FrozenMobCache.releaseAll(server, id);
+            DragonChargesCache.clearOnDisconnect(id);
+            RewindPositionCache.clearPlayer(id);
         });
     }
 }

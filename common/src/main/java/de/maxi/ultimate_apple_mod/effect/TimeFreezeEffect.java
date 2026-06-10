@@ -1,6 +1,7 @@
 package de.maxi.ultimate_apple_mod.effect;
 
 import de.maxi.ultimate_apple_mod.FrozenMobCache;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,18 +19,20 @@ import java.util.List;
 /**
  * Time Freeze — the caster moves at 3× speed while the world around them grinds to a halt.
  *
- * Freeze mechanism (runs every 5 ticks inside the 40-block radius):
- *   • Mobs:    AI is disabled via setNoAi(true), velocity zeroed, tagged with
- *              {@code "uam:time_frozen"} in their persistent data so we can restore them later.
+ * Freeze mechanism (runs every tick inside the 40-block radius):
+ *   • Mobs:    AI is disabled via setNoAi(true), velocity zeroed, tracked per caster
+ *              in {@link FrozenMobCache} so we can restore them later.
  *   • Players: Cannot have their AI removed, so extreme Slowness (127) + velocity zeroed
  *              is used instead — they are effectively unable to move.
  *
  * On effect removal ({@link #removeAttributeModifiers}):
- *   All mobs within 40 blocks that carry the {@code "uam:time_frozen"} tag have their
- *   AI restored and the tag cleared.
+ *   {@link FrozenMobCache#releaseAll} restores AI for every mob this caster froze,
+ *   looked up by UUID across all dimensions — works no matter how far the caster
+ *   travelled while the effect was active.
  *
- * Unloaded chunks: entities there are not ticked server-side and cannot be frozen —
- * accepted limitation.
+ * Player disconnect with the effect still active is handled by the platform
+ * logout handlers (Forge PlayerLoggedOutEvent / Fabric DISCONNECT), which also
+ * call releaseAll().
  */
 public class TimeFreezeEffect extends MobEffect {
 
@@ -83,10 +86,14 @@ public class TimeFreezeEffect extends MobEffect {
             }
 
             if (target instanceof Mob mob) {
-                // Disable AI — this stops all movement, pathfinding, attacks, etc.
-                mob.setNoAi(true);
-                // Mark so we can restore it when the effect expires
-                FrozenMobCache.freeze(mob.getUUID());
+                // Disable AI once — this stops all movement, pathfinding, attacks, etc.
+                // Skip mobs that are already frozen so we don't redo the map writes
+                // for every mob in range on every single tick.
+                if (!FrozenMobCache.isFrozen(mob.getUUID())) {
+                    mob.setNoAi(true);
+                    // Track per-caster so cleanup can restore AI on expiry
+                    FrozenMobCache.freeze(caster.getUUID(), mob.getUUID());
+                }
             } else if (target instanceof Player) {
                 // Players cannot have their AI removed; use max Slowness instead
                 target.addEffect(new MobEffectInstance(
@@ -98,19 +105,16 @@ public class TimeFreezeEffect extends MobEffect {
 
     /**
      * Restore AI to all mobs we froze when the effect expires naturally or is removed.
+     * releaseAll() finds the mobs by UUID across all dimensions, so this also works
+     * when the caster ran far away (3× speed!) or switched dimensions meanwhile.
      */
     @Override
     public void removeAttributeModifiers(LivingEntity caster, AttributeMap attributeMap, int amplifier) {
         super.removeAttributeModifiers(caster, attributeMap, amplifier);
         if (!caster.level().isClientSide()) {
-            List<Mob> frozen = caster.level().getEntitiesOfClass(
-                Mob.class,
-                caster.getBoundingBox().inflate(RADIUS),
-                mob -> FrozenMobCache.isFrozen(mob.getUUID())
-            );
-            for (Mob mob : frozen) {
-                mob.setNoAi(false);
-                FrozenMobCache.unfreeze(mob.getUUID());
+            MinecraftServer server = caster.level().getServer();
+            if (server != null) {
+                FrozenMobCache.releaseAll(server, caster.getUUID());
             }
         }
     }

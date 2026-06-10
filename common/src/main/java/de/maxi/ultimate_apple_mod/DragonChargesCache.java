@@ -1,8 +1,8 @@
 package de.maxi.ultimate_apple_mod;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Platform-neutral store for per-player dragon breath charges.
@@ -11,7 +11,9 @@ import java.util.UUID;
  */
 public class DragonChargesCache {
 
-    private static final Map<UUID, Integer> charges = new HashMap<>();
+    // ConcurrentHashMap: written from the server thread, but read paths can be
+    // reached from packet handling — keep it safe against concurrent access.
+    private static final Map<UUID, Integer> charges = new ConcurrentHashMap<>();
 
     public static int getCharges(UUID playerId) {
         return charges.getOrDefault(playerId, 0);
