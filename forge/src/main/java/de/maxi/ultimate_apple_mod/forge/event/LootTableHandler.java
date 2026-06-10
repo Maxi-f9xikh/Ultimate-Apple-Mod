@@ -35,7 +35,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
  *  Phantom        → Moon Apple         10 %  ← loot table (JER visible)
  *  Iron Golem     → Iron Apple         20 %  ← loot table (JER visible)
  *  Pillager       → Apple Bomb          5 %  ← loot table (JER visible)
- *  Evoker         → Totem Apple        50 %  (MobDropEventHandler, event only)
+ *  Evoker         → Totem Apple        30 %  (MobDropEventHandler, event only)
  *  Wither Skeleton→ Wither Apple      6.7 %  ← loot table (JER visible)
  *  Wither (boss)  → Wither Apple +         (MobDropEventHandler, 50 % both together)
  *                   Nether Star Apple  50 %

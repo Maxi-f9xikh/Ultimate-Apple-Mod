@@ -295,7 +295,7 @@ public class ShakeItem extends Item {
             components.add(Component.literal("§9⬆ Void Launch on drink!"));
         }
         if (tag.getBoolean("rewindEffect")) {
-            components.add(Component.literal("§b⏪ Rewinds you 5 seconds on drink"));
+            components.add(Component.literal("§b⏪ Rewinds you 10 seconds on drink"));
         }
         if (tag.getBoolean("orchardSpawn")) {
             components.add(Component.literal("§2🌳 Spawns up to 6 trees on drink"));

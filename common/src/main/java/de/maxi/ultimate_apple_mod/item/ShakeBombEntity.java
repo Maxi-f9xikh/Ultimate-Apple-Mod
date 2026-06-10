@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
  * Special flags behave as follows when applied to a target:
  *  - voidLaunch   : launches the hit entity upward (any LivingEntity)
  *  - orchardSpawn : plants up to 6 trees at the impact location (ServerLevel)
- *  - rewindEffect : teleports the hit player back 5 s in position history
+ *  - rewindEffect : teleports the hit player back 10 s in position history
  *  - enderTeleport: teleports the hit player in their current look direction
  *  - witherCurse  : applies Wither II to the hit entity
  *  - lifesteal    : grants Lifesteal to the THROWER (the entity that owns this)
@@ -107,9 +107,11 @@ public class ShakeBombEntity extends ThrowableItemProjectile {
         if (tag == null || !(level() instanceof ServerLevel serverLevel)) return;
 
         // ── clearsEffects ────────────────────────────────────────────────────
+        // Cleanse first; the shake's OWN stored effects (e.g. Honey's Slowness)
+        // are still applied below — same behaviour as drinking via ShakeItem.
+        // Special flags were already zeroed by the Mixer when clearsEffects is set.
         if (tag.getBoolean("clearsEffects")) {
             target.removeAllEffects();
-            return; // nothing else
         }
 
         // ── Regular mob effects ──────────────────────────────────────────────

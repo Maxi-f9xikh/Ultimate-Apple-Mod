@@ -47,7 +47,7 @@ public final class MixerRecipes {
          */
         boolean voidLaunch,
         /**
-         * When true, drinking the shake teleports the player back 5 seconds in time
+         * When true, drinking the shake teleports the player back 10 seconds in time
          * using the RewindPositionCache position history (same as Rewind Apple).
          */
         boolean rewindEffect,
@@ -328,7 +328,7 @@ public final class MixerRecipes {
 
         // ── Special behaviour contributors ─────────────────────────────────────
 
-        // Rewind Apple shake: teleports the drinker back 5 seconds using position history.
+        // Rewind Apple shake: teleports the drinker back 10 seconds using position history.
         registerRewind("rewind_apple");
 
         // Orchard Apple shake: plants up to 6 oak trees at the drink/impact location.
@@ -451,7 +451,7 @@ public final class MixerRecipes {
             new ShakeContribution(effects, 0, false, false, false, 1.0, true, false, false, false, false, false));
     }
 
-    /** Register a mod item whose shake rewinds the drinker 5 seconds back in time. */
+    /** Register a mod item whose shake rewinds the drinker 10 seconds back in time. */
     private static void registerRewind(String itemName) {
         REGISTRY.put(mod(itemName),
             new ShakeContribution(List.of(), 0, false, false, false, 1.0, false, true, false, false, false, false));

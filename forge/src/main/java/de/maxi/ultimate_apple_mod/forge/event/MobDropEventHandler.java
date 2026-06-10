@@ -23,7 +23,7 @@ import java.util.Random;
  *
  * Remaining event-only drops:
  *   Baby Zombie → Rotten Apple  10 %  (babyzombiedroppt.java - kept as backup)
- *   Evoker      → Totem of Undying OR Totem Apple  50/50
+ *   Evoker      → Totem of Undying (70 %) OR Totem Apple (30 %)
  *                 (replaces the vanilla guaranteed Totem of Undying drop)
  *   Wither      → Wither Apple + Nether Star Apple  50 % (both together or neither)
  *                 (vanilla always drops 1 Nether Star regardless)

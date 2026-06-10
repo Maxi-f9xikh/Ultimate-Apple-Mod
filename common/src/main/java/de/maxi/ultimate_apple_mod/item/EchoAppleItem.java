@@ -6,6 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -29,6 +31,25 @@ public class EchoAppleItem extends Item {
             List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line1"));
         tooltipComponents.add(Component.translatable("tooltip.ultimate_apple_mod.echo_apple.line2"));
+    }
+
+    /**
+     * Refuse to even start eating when the saved return point lies in another
+     * dimension — the server blocks the use immediately and shows the message,
+     * instead of letting the player chew through the full animation for nothing.
+     */
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (!level.isClientSide() && EchoPositionCache.hasPosition(player.getUUID())) {
+            EchoPositionCache.SavedPosition saved = EchoPositionCache.getPosition(player.getUUID());
+            if (saved != null
+                    && !saved.dimension.equals(level.dimension().location().toString())) {
+                player.displayClientMessage(
+                    Component.translatable("message.ultimate_apple_mod.echo_wrong_dim"), true);
+                return InteractionResultHolder.fail(player.getItemInHand(hand));
+            }
+        }
+        return super.use(level, player, hand);
     }
 
     @Override
