@@ -7,6 +7,7 @@ public class FabricEventRegistrar {
         FabricLootTableHandler.register();
         FabricDecayHandler.register();
         FabricTntAppleHandler.register();
-        FabricBabyZombieHandler.register();
+        // Baby zombie rotten-apple drop is handled by the loot-table pool in
+        // FabricLootTableHandler — a separate death-event handler would double it.
     }
 }
