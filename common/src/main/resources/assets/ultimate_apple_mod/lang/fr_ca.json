@@ -26,7 +26,7 @@
   "tooltip.ultimate_apple_mod.tnt_apple.line1": "§6Lancer pour creer une explosion TNT.",
   "tooltip.ultimate_apple_mod.echo_apple.line1": "§6Premiere utilisation : definit un point de retour.",
   "tooltip.ultimate_apple_mod.echo_apple.line2": "§7Deuxieme utilisation : teleportation vers ce point.",
-  "tooltip.ultimate_apple_mod.rewind_apple.line1": "§6Te teleporte a ta position il y a 5 secondes.",
+  "tooltip.ultimate_apple_mod.rewind_apple.line1": "§6Te teleporte a ta position il y a 10 secondes.",
   "tooltip.ultimate_apple_mod.rewind_apple.line2": "§7Position enregistree chaque seconde. Prudence !",
   "tooltip.ultimate_apple_mod.wither_apple.line1": "§6Maudit les mobs proches avec Wither II et donne Vol de vie.",
   "tooltip.ultimate_apple_mod.wither_apple.line2": "§7Chaque kill soigne 1 coeur. Effet dure 1 minute.",

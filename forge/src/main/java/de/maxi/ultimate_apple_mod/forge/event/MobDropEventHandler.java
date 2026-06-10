@@ -21,7 +21,6 @@ import java.util.Random;
  * using {@code LootTableLoadEvent} so that JER can display them automatically.
  *
  * Remaining event-only drops:
- *   Baby Zombie → Rotten Apple  10 %  (babyzombiedroppt.java - kept as backup)
  *   Evoker      → Totem of Undying (70 %) OR Totem Apple (30 %)
  *                 (replaces the vanilla guaranteed Totem of Undying drop)
  *   Wither      → Wither Apple + Nether Star Apple  50 % (both together or neither)
