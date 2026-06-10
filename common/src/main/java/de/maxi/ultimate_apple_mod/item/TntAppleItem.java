@@ -56,7 +56,9 @@ public class TntAppleItem extends Item {
     }
 
     public static void grantAdvancement(ServerPlayer player, String name) {
-        ResourceLocation id = new ResourceLocation("ultimate_apple_mod", name);
+        // tryParse instead of the (Forge-deprecated) two-arg constructor
+        ResourceLocation id = ResourceLocation.tryParse("ultimate_apple_mod:" + name);
+        if (id == null) return;
         AdvancementHolder adv = player.getServer().getAdvancements().get(id);
         if (adv == null) return;
         AdvancementProgress progress = player.getAdvancements().getOrStartProgress(adv);
