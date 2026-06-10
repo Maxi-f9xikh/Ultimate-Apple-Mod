@@ -1,6 +1,5 @@
 package de.maxi.ultimate_apple_mod.forge.event;
 
-import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.event.DecayHelper;
 import de.maxi.ultimate_apple_mod.ultimate_apple_mod;
 import net.minecraft.nbt.CompoundTag;
@@ -8,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -36,8 +34,8 @@ public class DecayEventHandler {
     public static final String DECAY_TAG = DecayHelper.DECAY_TAG;
 
     public static final long APPLE_DECAY_TICKS              = DecayHelper.APPLE_DECAY_TICKS;
-    public static final long GOLDEN_APPLE_DECAY_TICKS       = 20L * 60 * 45;  // 45 min
-    public static final long ENCHANTED_APPLE_DECAY_TICKS    = 20L * 60 * 60;  // 60 min
+    public static final long GOLDEN_APPLE_DECAY_TICKS       = DecayHelper.GOLDEN_APPLE_DECAY_TICKS;
+    public static final long ENCHANTED_APPLE_DECAY_TICKS    = DecayHelper.ENCHANTED_APPLE_DECAY_TICKS;
 
     /** Returns the decay threshold in ticks for the given item, or 0 if it does not decay. */
     public static long getDecayThreshold(net.minecraft.world.item.Item item) {
@@ -77,17 +75,8 @@ public class DecayEventHandler {
             if (elapsed < threshold) continue;
 
             // Time's up — replace with the next decay stage
-            ItemStack replacement = getDecayReplacement(stack);
-            inv.setItem(i, replacement);
+            // (enchanted golden → golden → apple → rotten apple)
+            inv.setItem(i, DecayHelper.getDecayReplacement(stack));
         }
-    }
-
-    /** Returns what this apple decays INTO. */
-    private static ItemStack getDecayReplacement(ItemStack original) {
-        int count = original.getCount();
-        if (original.getItem() == Items.APPLE) {
-            return new ItemStack(ModRegistries.ROTTEN_APPLE.get(), count);
-        }
-        return ItemStack.EMPTY;
     }
 }
