@@ -129,11 +129,17 @@ public class ShakeItem extends Item {
         if (savedTag != null) savedTag = savedTag.copy();
 
         // Super handles: hunger/saturation restore, eat sound, stack decrement
-        super.finishUsingItem(stack, level, entity);
+        ItemStack result = super.finishUsingItem(stack, level, entity);
 
         // Apply the shake's custom effects on the server
         if (!level.isClientSide && entity instanceof ServerPlayer player) {
             applyShakeEffects(savedTag, player, level);
+        }
+
+        // Creative players don't consume the shake — keep it instead of
+        // swapping in a cup (which would silently destroy the shake)
+        if (entity instanceof Player p && p.getAbilities().instabuild) {
+            return result;
         }
 
         // Return an empty cup so it stays in the player's hand / inventory
