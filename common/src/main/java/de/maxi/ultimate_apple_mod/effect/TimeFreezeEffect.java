@@ -88,6 +88,9 @@ public class TimeFreezeEffect extends MobEffect {
                 // for every mob in range on every single tick.
                 if (!FrozenMobCache.isFrozen(mob.getUUID())) {
                     mob.setNoAi(true);
+                    // Persisted marker — lets the entity-load handlers restore AI
+                    // even after a server restart or chunk unload orphaned the cache
+                    mob.addTag(FrozenMobCache.PERSIST_TAG);
                     // Track per-caster so the cleanup handler can restore AI on expiry
                     FrozenMobCache.freeze(caster.getUUID(), mob.getUUID());
                 }
