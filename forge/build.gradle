@@ -7,6 +7,12 @@ architectury {
     neoForge()
 }
 
+// The subproject directory is still named "forge", but on 1.21.1 it contains
+// NeoForge code — name the built jar accordingly so users grab the right file.
+base {
+    archivesName = "$rootProject.archives_name-neoforge"
+}
+
 configurations {
     common {
         canBeResolved = true
