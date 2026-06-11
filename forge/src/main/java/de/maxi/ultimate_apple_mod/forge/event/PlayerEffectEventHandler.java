@@ -16,10 +16,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -116,6 +118,23 @@ public class PlayerEffectEventHandler {
         }
         DragonChargesCache.clearOnDisconnect(player.getUUID());
         RewindPositionCache.clearPlayer(player.getUUID());
+    }
+
+    /**
+     * Safety net for orphaned frozen mobs: if the server stopped (or the chunk
+     * unloaded) while a mob was frozen, the in-memory cache is gone but NoAI is
+     * persisted in the mob's NBT — it would stand still forever.  The persisted
+     * command tag identifies such mobs when their chunk loads again.
+     */
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getLevel().isClientSide()) return;
+        if (!(event.getEntity() instanceof Mob mob)) return;
+        if (!mob.getTags().contains(FrozenMobCache.PERSIST_TAG)) return;
+        // Still actively frozen by an online player? releaseAll will handle it.
+        if (FrozenMobCache.isFrozen(mob.getUUID())) return;
+        mob.setNoAi(false);
+        mob.removeTag(FrozenMobCache.PERSIST_TAG);
     }
 
     // ── Totem Apple — cancel death ────────────────────────────────────────────
