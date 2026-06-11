@@ -5,6 +5,7 @@ import de.maxi.ultimate_apple_mod.FrozenMobCache;
 import de.maxi.ultimate_apple_mod.ModRegistries;
 import de.maxi.ultimate_apple_mod.RewindPositionCache;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -137,6 +139,20 @@ public class FabricPlayerEffectHandler {
             FrozenMobCache.releaseAll(server, id);
             DragonChargesCache.clearOnDisconnect(id);
             RewindPositionCache.clearPlayer(id);
+        });
+
+        // ── Orphaned frozen mobs: restore AI on chunk load ────────────────────
+        // If the server stopped (or the chunk unloaded) while a mob was frozen,
+        // the in-memory cache is gone but NoAI is persisted in the mob's NBT —
+        // it would stand still forever.  The persisted command tag identifies
+        // such mobs when their chunk loads again.
+        ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+            if (!(entity instanceof Mob mob)) return;
+            if (!mob.getTags().contains(FrozenMobCache.PERSIST_TAG)) return;
+            // Still actively frozen by an online player? releaseAll will handle it.
+            if (FrozenMobCache.isFrozen(mob.getUUID())) return;
+            mob.setNoAi(false);
+            mob.removeTag(FrozenMobCache.PERSIST_TAG);
         });
     }
 }

@@ -20,6 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FrozenMobCache {
 
+    /**
+     * Vanilla command tag added to a mob's persisted NBT while it is frozen.
+     * The in-memory cache dies with the JVM — after a server restart or a chunk
+     * unload there would be nobody left to call setNoAi(false).  The platform
+     * entity-load handlers check this tag and restore AI for orphaned mobs.
+     */
+    public static final String PERSIST_TAG = "uam_time_frozen";
+
     /** Fast "is this mob currently frozen?" lookup. */
     private static final Set<UUID> frozenMobs =
             Collections.synchronizedSet(new HashSet<>());
@@ -74,6 +82,7 @@ public class FrozenMobCache {
             for (ServerLevel level : server.getAllLevels()) {
                 if (level.getEntity(mobId) instanceof Mob mob) {
                     mob.setNoAi(false);
+                    mob.removeTag(PERSIST_TAG);
                     break;
                 }
             }
